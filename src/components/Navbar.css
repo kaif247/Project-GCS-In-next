@@ -1,0 +1,397 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px 0 var(--shadow);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.dark-mode .navbar {
+  background-color: var(--bg-surface);
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 12px 16px;
+  height: 64px;
+  box-sizing: border-box;
+}
+
+/* Left Section */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  min-width: fit-content;
+  margin-left: 20px; /* add space from left side */
+}
+
+.navbar-logo {
+  width: auto; /* allow logo to take its natural width */
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0; /* remove circular background for rectangular logo */
+  background-color: transparent; /* remove background since logo is full image */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dark-mode .navbar-logo {
+  background-color: transparent; /* keep transparent in dark mode */
+}
+
+/* Remove hover effect to avoid awkward rectangle hover */
+.navbar-logo:hover {
+  background-color: transparent; /* no background on hover */
+}
+
+.dark-mode .navbar-logo:hover {
+  background-color: transparent; /* no background on hover in dark mode */
+}
+
+/* Ensure logo displays full (not circular) and keeps aspect ratio */
+.navbar-logo-img {
+  height: 44px;        /* adjust height as needed */
+  width: auto;         /* keep original aspect ratio */
+  object-fit: contain;
+  border-radius: 0;    /* remove any circular style */
+  display: block;
+}
+
+/* Remove any parent styles that could force a circle */
+.navbar-logo,
+.navbar-logo > * {
+  border-radius: 0 !important;
+  overflow: visible;
+}
+
+.navbar-search {
+  position: relative;
+  width: 200px; /* reduced width to prevent overlapping */
+  transition: width 0.2s;
+}
+
+.navbar-search.focused {
+  width: 240px; /* reduced focused width */
+}
+
+.navbar-search input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.dark-mode .navbar-search input {
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+}
+
+.navbar-search input:focus {
+  background-color: var(--bg-surface);
+  box-shadow: 0 0 0 2px rgba(238, 186, 66, 0.35);
+}
+
+.dark-mode .navbar-search input:focus {
+  background-color: var(--bg-surface);
+  box-shadow: 0 0 0 2px rgba(238, 186, 66, 0.35);
+}
+
+.navbar-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.dark-mode .navbar-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+/* Center Section - Navigation */
+.navbar-center {
+  display: flex;
+  gap: 0;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s;
+  padding-bottom: 10px;
+  margin: 0 8px;
+  white-space: nowrap;
+}
+ /* hover effect of nav center */
+ .nav-item:hover {
+  color: #E38F12;
+}
+.dark-mode .nav-item:hover{
+  color: #E38F12;
+}
+.dark-mode .nav-item {
+  color: var(--text-muted);
+}
+
+.nav-icon {
+  font-size: 18px;
+}
+
+
+.nav-item.active {
+  color: #E38F12;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #E38F12;
+  border-radius: 2px 2px 0 0;
+}
+
+.nav-icon {
+  font-size: 18px;
+}
+
+/* Right Section */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.navbar-icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--bg-muted);
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.navbar-profile {
+  position: relative;
+}
+
+.navbar-notifications {
+  position: relative;
+}
+
+.navbar-menu {
+  position: relative;
+}
+
+.dark-mode .navbar-icon-btn {
+  background-color: var(--bg-muted);
+  color: #E38F12;
+}
+
+.navbar-icon-btn:hover {
+  background-color: var(--bg-hover);
+  color: #E38F12;
+}
+
+.dark-mode .navbar-icon-btn:hover {
+  background-color: var(--bg-hover);
+  color: #E38F12;
+}
+
+.navbar-icon-btn:active {
+  transform: scale(0.95);
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #f02849;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border: 2px solid var(--bg-surface);
+}
+
+.dark-mode .badge {
+  border-color: var(--bg-surface);
+}
+
+.notification-badge {
+  background-color: #f02849;
+}
+
+.theme-toggle {
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar-center {
+    display: none;
+  }
+
+  .navbar-container {
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .navbar-search {
+    width: 200px;
+  }
+
+  .navbar-search.focused {
+    width: 240px;
+  }
+
+  .nav-item {
+    font-size: 12px;
+    padding: 8px 8px;
+    margin: 0 4px;
+  }
+
+  .nav-icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding-top: 23px;
+  }
+
+  .navbar-logo {
+    width: 36px;
+    height: 36px;
+    padding-left: 23px;
+  }
+
+  .navbar-logo svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar-search {
+    width: 120px;
+    display: none;
+  }
+
+  .navbar-center {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: var(--bg-surface);
+    border-top: 1px solid var(--border-color);
+    height: 50px;
+    z-index: 101;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  .dark-mode .navbar-center {
+    background-color: var(--bg-surface);
+    border-top-color: var(--border-color);
+  }
+
+  .nav-item {
+    flex: 1;
+    margin: 0;
+    padding: 8px 8px;
+    padding-bottom: 8px;
+    font-size: 12px;
+    gap: 4px;
+  }
+
+  .nav-item.active::after {
+    bottom: -10px;
+    height: 2px;
+  }
+
+  .navbar-container {
+    height: 64px;
+    padding-bottom: 60px;
+  }
+
+  .navbar-right {
+    gap: 4px;
+  }
+
+  .navbar-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .profile-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}

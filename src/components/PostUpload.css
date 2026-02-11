@@ -1,0 +1,77 @@
+.post-upload {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 2px var(--shadow);
+}
+
+.post-upload__top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.post-upload__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-upload__top input {
+  flex: 1;
+  border: none;
+  background: var(--bg-muted);
+  border-radius: 20px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.post-upload__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+.post-upload__action {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.post-upload__action:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
+.post-upload__icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.post-upload__icon--live {
+  background: #f02849;
+}
+
+.post-upload__icon--photo {
+  background: #45bd62;
+}
+
+.post-upload__icon--emoji {
+  background: #f7b928;
+}

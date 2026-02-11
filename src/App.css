@@ -1,0 +1,44 @@
+.app {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  transition: background-color 0.3s;
+}
+
+.dark-mode .app {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.app-container {
+  display: flex;
+  gap: 0;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1440px) {
+  .app-container {
+    gap: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app-container {
+    gap: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    min-height: 100vh;
+    padding-bottom: 50px;
+  }
+
+  .app-container {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+

@@ -1,0 +1,32 @@
+/* Neutral Facebook-like theme (light/dark) */
+:root {
+  /* Light mode */
+  --bg-page: #f0f2f5;
+  --bg-surface: #ffffff;
+  --bg-muted: #f0f2f5;
+  --bg-hover: #e4e6eb;
+  --text-primary: #050505;
+  --text-secondary: #1c1e21;
+  --text-muted: #65676b;
+  --border-color: #e5e7eb;
+  --accent: #1877f2;
+  --accent-hover: #166fe5;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --shadow-strong: rgba(0, 0, 0, 0.2);
+}
+
+html.dark-mode {
+  /* Dark mode */
+  --bg-page: #1a1a1a;
+  --bg-surface: #242526;
+  --bg-muted: #3a3b3c;
+  --bg-hover: #3a3a3a;
+  --text-primary: #e4e6eb;
+  --text-secondary: #b0b3b8;
+  --text-muted: #b0b3b8;
+  --border-color: #3a3a3a;
+  --accent: #1877f2;
+  --accent-hover: #166fe5;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --shadow-strong: rgba(0, 0, 0, 0.55);
+}

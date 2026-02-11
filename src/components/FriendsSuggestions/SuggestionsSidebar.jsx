@@ -1,0 +1,42 @@
+import React, { useState } from 'react';
+import SuggestionCard from './SuggestionCard';
+import styles from './friendsSuggestions.module.css';
+
+const SuggestionsSidebar = ({ suggestions, selectedId, onSelect, onRemove, onToggleRequest }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ''}`}>
+      <div className={styles.sidebarHeader}>
+        <div>
+          <div className={styles.heading}>Friends</div>
+          <div className={styles.subheading}>Suggestions</div>
+          <div className={styles.label}>People you may know</div>
+        </div>
+        <button
+          className={styles.collapseBtn}
+          type="button"
+          onClick={() => setIsCollapsed((prev) => !prev)}
+          aria-label="Toggle sidebar"
+        >
+          {isCollapsed ? '›' : '‹'}
+        </button>
+      </div>
+
+      <div className={styles.suggestionsList} role="list">
+        {suggestions.map((item) => (
+          <SuggestionCard
+            key={item.id}
+            suggestion={item}
+            isSelected={item.id === selectedId}
+            onClick={() => onSelect(item.id)}
+            onRemove={() => onRemove(item.id)}
+            onToggleRequest={() => onToggleRequest(item.id)}
+          />
+        ))}
+      </div>
+    </aside>
+  );
+};
+
+export default React.memo(SuggestionsSidebar);
