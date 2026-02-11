@@ -1,0 +1,99 @@
+import React, { useEffect, useRef, useState } from 'react';
+
+const ChatsMain = ({ chat, onSend, onBack, showBack }) => {
+  const [message, setMessage] = useState('');
+  const threadRef = useRef(null);
+
+  useEffect(() => {
+    if (threadRef.current) {
+      threadRef.current.scrollTop = threadRef.current.scrollHeight;
+    }
+  }, [chat]);
+
+  if (!chat) {
+    return (
+      <section className="chats-main">
+        <div className="chats-thread chats-thread--empty">
+          Select a chat to start messaging.
+        </div>
+      </section>
+    );
+  }
+
+  const handleSend = () => {
+    const trimmed = message.trim();
+    if (!trimmed) return;
+    onSend(chat.id, trimmed);
+    setMessage('');
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <section className="chats-main">
+      <div className="chats-main__card">
+        <div className="chats-main__header">
+          {showBack && (
+            <button className="chats-back" type="button" onClick={onBack} aria-label="Back">
+              ←
+            </button>
+          )}
+          <img src={chat.avatar} alt={chat.name} />
+          <div>
+            <div className="chats-main__title">{chat.name}</div>
+            <div className="chats-main__meta">{chat.meta}</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="chats-thread" ref={threadRef}>
+        {chat.messages.map((message) => (
+          <article
+            key={message.id}
+            className={`chats-message ${message.from === 'me' ? 'chats-message--outgoing' : ''}`}
+          >
+            {message.from !== 'me' && (
+              <div className="chats-message__header">
+                <img src={chat.avatar} alt={chat.name} />
+                <div>
+                  <div className="chats-message__title">{chat.name}</div>
+                  {message.time && <div className="chats-message__meta">{message.time}</div>}
+                </div>
+              </div>
+            )}
+            <div className="chats-message__body">
+              <div className={`chats-bubble ${message.from === 'me' ? 'chats-bubble--outgoing' : ''}`}>
+                {message.image && <img src={message.image} alt={message.text || 'Attachment'} />}
+                {message.text && <p>{message.text}</p>}
+              </div>
+            </div>
+          </article>
+        ))}
+        {message.trim().length > 0 && (
+          <div className="chats-typing">Typing…</div>
+        )}
+      </div>
+
+      <div className="chats-input">
+        <button className="chats-input__icon" aria-label="Add">＋</button>
+        <input
+          type="text"
+          placeholder="Type a message"
+          aria-label="Type a message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button className="chats-input__icon" aria-label="Emoji">🙂</button>
+        <button className="chats-input__send" aria-label="Send" onClick={handleSend}>➤</button>
+      </div>
+    </section>
+  );
+};
+
+export default ChatsMain;

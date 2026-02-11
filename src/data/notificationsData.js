@@ -1,0 +1,42 @@
+export const notificationsData = [
+  {
+    id: 1,
+    name: 'Haroun Anayat Ullah Rathore',
+    message: 'shared a reel',
+    timeAgo: '5h',
+    isRead: false,
+    type: 'reel',
+  },
+  {
+    id: 2,
+    name: 'ARY Digital',
+    message: 'An event is happening soon',
+    timeAgo: '17h',
+    isRead: false,
+    type: 'event',
+  },
+  {
+    id: 3,
+    name: 'Hasan Jadoon',
+    message: 'has birthday today',
+    timeAgo: '19h',
+    isRead: true,
+    type: 'birthday',
+  },
+  {
+    id: 4,
+    name: 'أسد علي بلوچ',
+    message: 'accepted your friend request',
+    timeAgo: '15h',
+    isRead: true,
+    type: 'friend',
+  },
+  {
+    id: 5,
+    name: 'Haider Shah',
+    message: 'posted a new reel',
+    timeAgo: '21h',
+    isRead: true,
+    type: 'reel',
+  },
+];
