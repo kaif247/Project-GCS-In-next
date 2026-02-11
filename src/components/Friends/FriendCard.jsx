@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const FriendCard = ({ friend }) => {
+  const { t } = useContext(LanguageContext);
   return (
     <article className="friends-card">
       <div className="friends-card__image-wrap">
@@ -17,10 +19,10 @@ const FriendCard = ({ friend }) => {
               <path d="M13.5 19a4 4 0 0 1 7 0v1h-7z" fill="currentColor" />
             </svg>
           </span>
-          {friend.mutualFriends} mutual friends
+          {friend.mutualFriends} {t('mutual friends')}
         </div>
-        <button className=" friends-card__btn--primary">Add friend</button>
-        <button className="friends-card__btn">Remove</button>
+        <button className=" friends-card__btn--primary">{t('Add friend')}</button>
+        <button className="friends-card__btn">{t('Remove')}</button>
       </div>
     </article>
   );

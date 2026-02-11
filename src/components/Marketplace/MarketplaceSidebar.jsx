@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Icon from '../Icon';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const SettingsIcon = () => (
   <svg viewBox="0 0 24 24" className="marketplace-icon" aria-hidden="true">
@@ -32,11 +33,12 @@ const MarketplaceSidebar = ({
   activeCategory,
   onCategoryChange,
 }) => {
+  const { t } = useContext(LanguageContext);
   return (
     <aside className="marketplace-sidebar">
       <div className="marketplace-sidebar__header">
-        <h1>MarketPlace</h1>
-        <button className="marketplace-sidebar__icon-btn" aria-label="Settings">
+        <h1>{t('MarketPlace')}</h1>
+        <button className="marketplace-sidebar__icon-btn" aria-label={t('Settings')}>
           <SettingsIcon />
         </button>
       </div>
@@ -45,10 +47,10 @@ const MarketplaceSidebar = ({
         <Icon name="search (1)" size={14} className="search-icon" aria-hidden="true" />
         <input
           type="text"
-          placeholder="Search Marketplace"
+          placeholder={t('Search Marketplace')}
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          aria-label="Search Marketplace"
+          aria-label={t('Search Marketplace')}
         />
       </div>
 
@@ -60,25 +62,25 @@ const MarketplaceSidebar = ({
           <span className="marketplace-sidebar__icon">
             <Icon name="browse-all" size={18} />
           </span>
-          <span>Browse all</span>
+          <span>{t('Browse all')}</span>
         </button>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="notification" size={18} />
           </span>
-          <span>Notifications</span>
+          <span>{t('Notifications')}</span>
         </button>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="inbox" size={18} />
           </span>
-          <span>Inbox</span>
+          <span>{t('Inbox')}</span>
         </button>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="marketplace-access" size={18} />
           </span>
-          <span>Marketplace access</span>
+          <span>{t('Marketplace access')}</span>
         </button>
       </nav>
 
@@ -87,29 +89,29 @@ const MarketplaceSidebar = ({
           <span className="marketplace-sidebar__icon">
             <Icon name="buy_10982864" size={18} />
           </span>
-          <span>Buying</span>
+          <span>{t('Buying')}</span>
           <ChevronIcon />
         </button>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="selling" size={18} />
           </span>
-          <span>Selling</span>
+          <span>{t('Selling')}</span>
           <ChevronIcon />
         </button>
       </div>
 
-      <button className="marketplace-sidebar__primary-btn">+ Create new listing</button>
+      <button className="marketplace-sidebar__primary-btn">+ {t('Create new listing')}</button>
 
       <div className="marketplace-sidebar__location">
         <span className="marketplace-sidebar__icon">
           <Icon name="map-location" size={18} />
         </span>
-        <span>Muzaffarabad · Within 65 km</span>
+        <span>{t('Muzaffarabad')} · {t('Within 65 km')}</span>
       </div>
 
       <div className="marketplace-sidebar__section">
-        <h3>Categories</h3>
+        <h3>{t('Categories')}</h3>
         <div className="marketplace-sidebar__categories">
           {categories.map((category) => (
             <button
@@ -120,7 +122,7 @@ const MarketplaceSidebar = ({
               <span className="marketplace-sidebar__icon">
                 <Icon name={categoryIconMap[category]} size={18} />
               </span>
-              <span>{category}</span>
+              <span>{t(category)}</span>
             </button>
           ))}
         </div>

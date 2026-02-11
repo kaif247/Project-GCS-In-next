@@ -1,3 +1,9 @@
 import React from 'react';
-const Saved = () => <div>Saved Posts Page</div>;
+import React, { useContext } from 'react';
+import { LanguageContext } from '../context/LanguageContext';
+
+const Saved = () => {
+  const { t } = useContext(LanguageContext);
+  return <div>{t('Saved Posts Page')}</div>;
+};
 export default Saved;

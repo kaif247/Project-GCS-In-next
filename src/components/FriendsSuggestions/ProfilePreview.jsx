@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MutualFriends from './MutualFriends';
 import PhotosPreview from './PhotosPreview';
 import PostsPreview from './PostsPreview';
 import styles from './friendsSuggestions.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const ProfilePreview = ({ profile, onToggleRequest, onMessage }) => {
   const coverImage = profile.cover || profile.photos?.[0];
+  const { t } = useContext(LanguageContext);
 
   return (
     <section className={styles.profilePreview}>
@@ -18,35 +20,35 @@ const ProfilePreview = ({ profile, onToggleRequest, onMessage }) => {
         <div className={styles.profileMeta}>
           <h2>{profile.name}</h2>
           <div className={styles.profileCounts}>
-            {profile.friendsCount} friends · {profile.mutualFriends} mutual
+            {profile.friendsCount} {t('Friends')} · {profile.mutualFriends} {t('mutual')}
           </div>
-          <div className={styles.profileSubtitle}>Digital creator</div>
+          <div className={styles.profileSubtitle}>{t('Digital creator')}</div>
           <MutualFriends count={profile.mutualFriends} avatars={profile.photos?.slice(0, 3)} />
         </div>
         <div className={styles.profileActions}>
           <button className={styles.secondaryBtn} type="button" onClick={() => onMessage?.(profile)}>
-            Message
+            {t('Message')}
           </button>
           <button className={styles.primaryBtn} type="button" onClick={onToggleRequest}>
-            {profile.isRequestSent ? 'Cancel request' : 'Add friend'}
+            {profile.isRequestSent ? t('Cancel request') : t('Add friend')}
           </button>
           <button className={styles.secondaryBtn} type="button">
-            Search
+            {t('Search')}
           </button>
-          <button className={styles.moreBtn} type="button" aria-label="More">
+          <button className={styles.moreBtn} type="button" aria-label={t('More')}>
             ⋯
           </button>
         </div>
       </div>
 
       <div className={styles.profileTabs}>
-        <button className={`${styles.tabBtn} ${styles.tabActive}`} type="button">All</button>
-        <button className={styles.tabBtn} type="button">About</button>
-        <button className={styles.tabBtn} type="button">Photos</button>
-        <button className={styles.tabBtn} type="button">Friends</button>
-        <button className={styles.tabBtn} type="button">Reels</button>
-        <button className={styles.tabBtn} type="button">More</button>
-        <button className={styles.moreBtn} type="button" aria-label="Menu">
+        <button className={`${styles.tabBtn} ${styles.tabActive}`} type="button">{t('All')}</button>
+        <button className={styles.tabBtn} type="button">{t('About')}</button>
+        <button className={styles.tabBtn} type="button">{t('Photos')}</button>
+        <button className={styles.tabBtn} type="button">{t('Friends')}</button>
+        <button className={styles.tabBtn} type="button">{t('Reels')}</button>
+        <button className={styles.tabBtn} type="button">{t('More')}</button>
+        <button className={styles.moreBtn} type="button" aria-label={t('Menu')}>
           ⋯
         </button>
       </div>
@@ -54,18 +56,18 @@ const ProfilePreview = ({ profile, onToggleRequest, onMessage }) => {
       <div className={styles.profileDetails}>
         <div className={styles.profileSide}>
           <div className={styles.detailCard}>
-            <h3>Personal details</h3>
+            <h3>{t('Personal details')}</h3>
             <div className={styles.detailRow}>
               <span className={styles.detailIcon}>🎂</span>
-              <span>{profile.details.birthday}</span>
+              <span>{t(profile.details.birthday)}</span>
             </div>
             <div className={styles.detailRow}>
               <span className={styles.detailIcon}>📍</span>
-              <span>{profile.details.location}</span>
+              <span>{t(profile.details.location)}</span>
             </div>
             <div className={styles.detailRow}>
               <span className={styles.detailIcon}>🎓</span>
-              <span>{profile.details.education}</span>
+              <span>{t(profile.details.education)}</span>
             </div>
           </div>
           <PhotosPreview photos={profile.photos} />
@@ -80,3 +82,11 @@ const ProfilePreview = ({ profile, onToggleRequest, onMessage }) => {
 };
 
 export default ProfilePreview;
+
+
+
+
+
+
+
+

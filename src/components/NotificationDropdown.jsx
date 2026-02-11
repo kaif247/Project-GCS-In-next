@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
+import { LanguageContext } from '../context/LanguageContext';
 
 const iconMap = {
   reel: '▶',
@@ -10,6 +11,7 @@ const iconMap = {
 const NotificationDropdown = ({ open, onClose, initialNotifications }) => {
   const [notifications, setNotifications] = useState(initialNotifications);
   const dropdownRef = useRef(null);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     setNotifications(initialNotifications);
@@ -41,10 +43,10 @@ const NotificationDropdown = ({ open, onClose, initialNotifications }) => {
   if (!open) return null;
 
   return (
-    <div ref={dropdownRef} className="notifications-dropdown" role="menu" aria-label="Notifications">
+    <div ref={dropdownRef} className="notifications-dropdown" role="menu" aria-label={t('Notifications')}>
       <div className="notifications-dropdown__section">
         <div className="notifications-dropdown__title">
-          New <span>({newNotifications.length})</span>
+          {t('New')} <span>({newNotifications.length})</span>
         </div>
         {newNotifications.map((notif) => (
           <button
@@ -57,8 +59,8 @@ const NotificationDropdown = ({ open, onClose, initialNotifications }) => {
               {iconMap[notif.type] || '•'}
             </span>
             <span className="notification-content">
-              <strong>{notif.name}</strong> {notif.message}
-              <span className="notification-time">{notif.timeAgo}</span>
+              <strong>{notif.name}</strong> {t(notif.message)}
+              <span className="notification-time">{t(notif.timeAgo)}</span>
             </span>
             {!notif.isRead && <span className="notification-dot" />}
           </button>
@@ -67,7 +69,7 @@ const NotificationDropdown = ({ open, onClose, initialNotifications }) => {
 
       <div className="notifications-dropdown__section">
         <div className="notifications-dropdown__title">
-          Earlier <span>({earlierNotifications.length})</span>
+          {t('Earlier')} <span>({earlierNotifications.length})</span>
         </div>
         {earlierNotifications.map((notif) => (
           <button
@@ -80,15 +82,15 @@ const NotificationDropdown = ({ open, onClose, initialNotifications }) => {
               {iconMap[notif.type] || '•'}
             </span>
             <span className="notification-content">
-              <strong>{notif.name}</strong> {notif.message}
-              <span className="notification-time">{notif.timeAgo}</span>
+              <strong>{notif.name}</strong> {t(notif.message)}
+              <span className="notification-time">{t(notif.timeAgo)}</span>
             </span>
           </button>
         ))}
       </div>
 
       <div className="notifications-dropdown__footer">
-        See previous notifications
+        {t('See previous notifications')}
       </div>
     </div>
   );

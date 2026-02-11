@@ -1,11 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import ChatsSidebar from '../components/Chats/ChatsSidebar';
 import ChatsMain from '../components/Chats/ChatsMain';
 import { chatsFeed } from '../data/chatsFeed';
 import ToggleButton from '../components/ToggleButton';
+import { LanguageContext } from '../context/LanguageContext';
 
 const ChatsPage = () => {
+  const { t } = useContext(LanguageContext);
   const router = useRouter();
   const [chats, setChats] = useState(chatsFeed);
   const [activeChatId, setActiveChatId] = useState(chatsFeed[0]?.id);
@@ -79,7 +81,7 @@ const ChatsPage = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle chats list"
+          label={t('Toggle chats list')}
         />
       )}
       <div className={`chats-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>

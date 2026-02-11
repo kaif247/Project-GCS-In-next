@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import Link from 'next/link';
+import { LanguageContext } from '../context/LanguageContext';
 
 const MenuRow = ({ icon, label, meta, onClick }) => (
   <button className="profile-menu__item" onClick={onClick} type="button">
@@ -19,6 +20,7 @@ const ChevronIcon = () => (
 
 const ProfileMenu = ({ open, onClose, user }) => {
   const menuRef = useRef(null);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -34,13 +36,13 @@ const ProfileMenu = ({ open, onClose, user }) => {
   if (!open) return null;
 
   return (
-    <div ref={menuRef} className="profile-menu" role="menu" aria-label="Profile menu">
+    <div ref={menuRef} className="profile-menu" role="menu" aria-label={t('Profile menu')}>
       <div className="profile-menu__header">
         <img src={user.avatar} alt={user.name} />
         <div>
           <div className="profile-menu__name">{user.name}</div>
           <Link href="/profiles" className="profile-menu__profiles" onClick={onClose}>
-            See all profiles
+            {t('See all profiles')}
           </Link>
         </div>
       </div>
@@ -48,28 +50,28 @@ const ProfileMenu = ({ open, onClose, user }) => {
       <div className="profile-menu__section">
         <MenuRow
           icon={<ChevronIcon />}
-          label="Settings & privacy"
+          label={t('Settings & privacy')}
           onClick={onClose}
         />
         <MenuRow
           icon={<ChevronIcon />}
-          label="Help & support"
+          label={t('Help & support')}
           onClick={onClose}
         />
         <MenuRow
           icon={<ChevronIcon />}
-          label="Display & accessibility"
+          label={t('Display & accessibility')}
           onClick={onClose}
         />
         <MenuRow
           icon={<ChevronIcon />}
-          label="Give feedback"
+          label={t('Give feedback')}
           meta="CTRL + B"
           onClick={onClose}
         />
         <MenuRow
           icon={<ChevronIcon />}
-          label="Log out"
+          label={t('Log out')}
           onClick={() => {
             console.log('Logged out');
             onClose();
@@ -78,17 +80,17 @@ const ProfileMenu = ({ open, onClose, user }) => {
       </div>
 
       <div className="profile-menu__footer">
-        <button type="button">Privacy</button>
+        <button type="button">{t('Privacy')}</button>
         <span>·</span>
-        <button type="button">Terms</button>
+        <button type="button">{t('Terms')}</button>
         <span>·</span>
-        <button type="button">Advertising</button>
+        <button type="button">{t('Advertising')}</button>
         <span>·</span>
-        <button type="button">Ad choices</button>
+        <button type="button">{t('Ad choices')}</button>
         <span>·</span>
-        <button type="button">Cookies</button>
+        <button type="button">{t('Cookies')}</button>
         <span>·</span>
-        <button type="button">More</button>
+        <button type="button">{t('More')}</button>
       </div>
     </div>
   );

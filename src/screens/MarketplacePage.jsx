@@ -1,8 +1,9 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useContext } from 'react';
 import MarketplaceSidebar from '../components/Marketplace/MarketplaceSidebar';
 import MarketplaceGrid from '../components/Marketplace/MarketplaceGrid';
 import { marketplaceProducts } from '../data/marketplaceProducts';
 import ToggleButton from '../components/ToggleButton';
+import { LanguageContext } from '../context/LanguageContext';
 
 const categories = [
   'Vehicles',
@@ -16,6 +17,7 @@ const categories = [
 ];
 
 const MarketplacePage = () => {
+  const { t } = useContext(LanguageContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Browse all');
   const [isMobile, setIsMobile] = useState(false);
@@ -49,7 +51,7 @@ const MarketplacePage = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle marketplace sidebar"
+          label={t('Toggle marketplace sidebar')}
         />
       )}
       <div className={`marketplace-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FaUserFriends, FaUsers, FaStore, FaTv, FaBookmark, FaClock, FaCalendarAlt, FaChevronDown } from 'react-icons/fa';
@@ -6,6 +6,7 @@ import { MdGroups, MdEvent, MdFeed } from 'react-icons/md';
 import { CgFeed } from 'react-icons/cg';
 import { AuthContext } from '../../context/AuthContext';
 import styles from './Sidebar.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const sidebarItems = [
   { to: '/profile', icon: <FaUserFriends />, label: 'Profile' },
@@ -21,6 +22,7 @@ const sidebarItems = [
 
 const Sidebar = () => {
   const router = useRouter();
+  const { t } = useContext(LanguageContext);
   // ...existing code for user context if needed...
   return (
     <aside className={styles.sidebar}>
@@ -30,15 +32,15 @@ const Sidebar = () => {
             key={item.to}
             href={item.to}
             className={`${styles.menuItem} ${router.pathname === item.to ? styles.active : ''}`}
-            aria-label={item.label}
+            aria-label={t(item.label)}
           >
             <span className={styles.icon}>{item.icon}</span>
-            <span className={styles.label}>{item.label}</span>
+            <span className={styles.label}>{t(item.label)}</span>
           </Link>
         ))}
-        <button className={styles.menuItem} aria-label="See more">
+        <button className={styles.menuItem} aria-label={t('See more')}>
           <span className={styles.icon}><FaChevronDown /></span>
-          <span className={styles.label}>See more</span>
+          <span className={styles.label}>{t('See more')}</span>
         </button>
       </nav>
     </aside>

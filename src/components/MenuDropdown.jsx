@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import Link from 'next/link';
 import Icon from './Icon';
+import { LanguageContext } from '../context/LanguageContext';
 
 const socialItems = [
   { name: 'Meta AI', icon: 'meta', link: '/meta' },
@@ -18,6 +19,7 @@ const createItems = [
 
 const MenuDropdown = ({ open, onClose }) => {
   const menuRef = useRef(null);
+  const { t } = useContext(LanguageContext);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -33,9 +35,9 @@ const MenuDropdown = ({ open, onClose }) => {
   if (!open) return null;
 
   return (
-    <div ref={menuRef} className="menu-dropdown" role="menu" aria-label="Menu">
+    <div ref={menuRef} className="menu-dropdown" role="menu" aria-label={t('Menu')}>
       <div className="menu-dropdown__section">
-        <div className="menu-dropdown__title">Social</div>
+        <div className="menu-dropdown__title">{t('Social')}</div>
         {socialItems.map((item) => (
           <Link
             key={item.name}
@@ -45,14 +47,14 @@ const MenuDropdown = ({ open, onClose }) => {
           >
             <Icon name={item.icon} size={20} />
             <div>
-              <div className="menu-dropdown__label">{item.name}</div>
+              <div className="menu-dropdown__label">{t(item.name)}</div>
             </div>
           </Link>
         ))}
       </div>
 
       <div className="menu-dropdown__section menu-dropdown__section--create">
-        <div className="menu-dropdown__title">Create</div>
+        <div className="menu-dropdown__title">{t('Create')}</div>
         {createItems.map((item) => (
           <Link
             key={item.name}
@@ -61,7 +63,7 @@ const MenuDropdown = ({ open, onClose }) => {
             onClick={onClose}
           >
             <Icon name={item.icon} size={20} />
-            <div className="menu-dropdown__label">{item.name}</div>
+            <div className="menu-dropdown__label">{t(item.name)}</div>
           </Link>
         ))}
       </div>

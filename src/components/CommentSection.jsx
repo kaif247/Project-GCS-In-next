@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { currentUser } from '../data/facebookData';
+import { LanguageContext } from '../context/LanguageContext';
 
 const CommentSection = () => {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const { t } = useContext(LanguageContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,7 +22,7 @@ const CommentSection = () => {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder={`What's on your mind, ${currentUser.name.split(' ')[0]}?`}
+            placeholder={t('What’s on your mind, {name}?', { name: currentUser.name.split(' ')[0] || currentUser.name })}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />

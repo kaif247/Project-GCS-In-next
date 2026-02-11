@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import CommentSection from './CommentSection';
 import { currentUser } from '../data/facebookData';
 import Icon from './Icon';
+import { LanguageContext } from '../context/LanguageContext';
 
 const Post = ({ post }) => {
   const [liked, setLiked] = useState(false);
@@ -10,6 +11,7 @@ const Post = ({ post }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [imageModal, setImageModal] = useState(null); // { index }
   const [imageComments, setImageComments] = useState({});
+  const { t } = useContext(LanguageContext);
 
   const reactionEmojis = {
     like: '👍',
@@ -22,9 +24,9 @@ const Post = ({ post }) => {
   const totalReactions = baseTotal + (liked ? 1 : 0);
   const likedByText = useMemo(() => {
     if (!liked) return '';
-    if (baseTotal > 0) return `${currentUser.name} and ${baseTotal} others`;
+    if (baseTotal > 0) return `${currentUser.name} ${t('and')} ${baseTotal} ${t('others')}`;
     return `${currentUser.name}`;
-  }, [liked, baseTotal]);
+  }, [liked, baseTotal, t]);
 
   const handleLike = () => {
     setLiked((prev) => !prev);
@@ -50,11 +52,11 @@ const Post = ({ post }) => {
             <div className="post-user-info">
               <h3 className="post-user-name">{post.userName}</h3>
               <p className="post-meta">
-                {post.location} • <time>{post.timestamp}</time>
+                {t(post.location)} • <time>{t(post.timestamp)}</time>
               </p>
             </div>
           </div>
-          <button className="post-menu-btn" aria-label="Post options" title="More options">
+          <button className="post-menu-btn" aria-label={t('Post options')} title={t('More options')}>
             ⋯
           </button>
         </div>
@@ -62,7 +64,7 @@ const Post = ({ post }) => {
         {/* Post Content */}
         <div className="post-content">
           <p className="post-text">
-            {post.content}
+            {t(post.content)}
             {post.hashtags && post.hashtags.length > 0 && (
               <>
                 {' '}
@@ -122,12 +124,12 @@ const Post = ({ post }) => {
           <div className="interaction-counts">
             <span>
               <button className="post-link-btn" type="button" onClick={() => setIsCommentOpen(true)}>
-                {post.comments} comments
+                {post.comments} {t('comments')}
               </button>
             </span>
             <span>
               <button className="post-link-btn" type="button" onClick={() => setIsShareOpen(true)}>
-                {post.shares} shares
+                {post.shares} {t('shares')}
               </button>
             </span>
           </div>
@@ -142,43 +144,43 @@ const Post = ({ post }) => {
             onClick={handleLike}
             onMouseEnter={() => setShowReactions(true)}
             onMouseLeave={() => setShowReactions(false)}
-            aria-label={liked ? 'Unlike' : 'Like'}
+            aria-label={liked ? t('Unlike') : t('Like')}
           >
             {liked ? (
               <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
             ) : (
               <span aria-hidden="true">👍</span>
             )}
-            <span>Like</span>
+            <span>{t('Like')}</span>
           </button>
 
           {/* Reactions Popup */}
           {showReactions && (
             <div className="reactions-popup">
-              <button className="reaction-btn" title="Like">👍</button>
-              <button className="reaction-btn" title="Love">❤️</button>
-              <button className="reaction-btn" title="Haha">😄</button>
-              <button className="reaction-btn" title="Wow">😮</button>
-              <button className="reaction-btn" title="Sad">😢</button>
-              <button className="reaction-btn" title="Angry">😠</button>
+              <button className="reaction-btn" title={t('Like')}>👍</button>
+              <button className="reaction-btn" title={t('Love')}>❤️</button>
+              <button className="reaction-btn" title={t('Haha')}>😄</button>
+              <button className="reaction-btn" title={t('Wow')}>😮</button>
+              <button className="reaction-btn" title={t('Sad')}>😢</button>
+              <button className="reaction-btn" title={t('Angry')}>😠</button>
             </div>
           )}
 
-          <button className="action-btn" aria-label="Comment" onClick={() => setIsCommentOpen(true)}>
+          <button className="action-btn" aria-label={t('Comment')} onClick={() => setIsCommentOpen(true)}>
             <Icon name="comment" size={16} className="icon--no-circle comment-icon" aria-hidden="true" />
-            <span>Comment</span>
+            <span>{t('Comment')}</span>
           </button>
 
-          <button className="action-btn" aria-label="Share" onClick={() => setIsShareOpen(true)}>
+          <button className="action-btn" aria-label={t('Share')} onClick={() => setIsShareOpen(true)}>
             <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-            <span>Share</span>
+            <span>{t('Share')}</span>
           </button>
         </div>
 
         {/* Quick Comment */}
         <div className="post-quick-comment">
           <img src={currentUser.avatar} alt={currentUser.name} />
-          <input type="text" placeholder={`Comment as ${currentUser.name}`} />
+          <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
           <button className="quick-comment-btn" type="button">➤</button>
         </div>
 
@@ -190,7 +192,7 @@ const Post = ({ post }) => {
         <div className="post-modal-backdrop" onClick={() => setIsShareOpen(false)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>Share</h3>
+              <h3>{t('Share')}</h3>
               <button type="button" className="post-modal__close" onClick={() => setIsShareOpen(false)}>×</button>
             </div>
             <div className="post-modal__body">
@@ -198,11 +200,11 @@ const Post = ({ post }) => {
                 <img src={currentUser.avatar} alt={currentUser.name} />
                 <div>
                   <div className="post-modal__name">{currentUser.name}</div>
-                  <button type="button" className="post-modal__audience">Friends</button>
+                  <button type="button" className="post-modal__audience">{t('Friends')}</button>
                 </div>
               </div>
-              <textarea placeholder="Say something about this..." rows={4} />
-              <button type="button" className="post-modal__primary">Share now</button>
+              <textarea placeholder={t('Say something about this...')} rows={4} />
+              <button type="button" className="post-modal__primary">{t('Share now')}</button>
             </div>
           </div>
         </div>
@@ -213,7 +215,7 @@ const Post = ({ post }) => {
         <div className="post-modal-backdrop" onClick={() => setIsCommentOpen(false)}>
           <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>{post.userName}'s post</h3>
+              <h3>{t("{name}'s post", { name: post.userName })}</h3>
               <button type="button" className="post-modal__close" onClick={() => setIsCommentOpen(false)}>×</button>
             </div>
             <div className="post-modal__body">
@@ -224,13 +226,13 @@ const Post = ({ post }) => {
                     <div className="post-user-info">
                       <h3 className="post-user-name">{post.userName}</h3>
                       <p className="post-meta">
-                        {post.location} • <time>{post.timestamp}</time>
+                        {t(post.location)} • <time>{t(post.timestamp)}</time>
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="post-content">
-                  <p className="post-text">{post.content}</p>
+                  <p className="post-text">{t(post.content)}</p>
                 </div>
                 {post.video && (
                   <div className="post-video">
@@ -250,7 +252,7 @@ const Post = ({ post }) => {
               <CommentSection />
               <div className="post-quick-comment">
                 <img src={currentUser.avatar} alt={currentUser.name} />
-                <input type="text" placeholder={`Comment as ${currentUser.name}`} />
+                <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
                 <button className="quick-comment-btn" type="button">➤</button>
               </div>
             </div>
@@ -262,7 +264,7 @@ const Post = ({ post }) => {
         <div className="post-modal-backdrop" onClick={() => setImageModal(null)}>
           <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>{post.userName}'s photo</h3>
+              <h3>{t("{name}'s photo", { name: post.userName })}</h3>
               <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>×</button>
             </div>
             <div className="post-modal__body">
@@ -283,22 +285,22 @@ const Post = ({ post }) => {
                   ) : (
                     <span aria-hidden="true">👍</span>
                   )}
-                  <span>Like</span>
+                  <span>{t('Like')}</span>
                 </button>
                 <button className="action-btn" type="button">
                   <Icon name="comment" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>Comment</span>
+                  <span>{t('Comment')}</span>
                 </button>
                 <button className="action-btn" type="button" onClick={() => setIsShareOpen(true)}>
                   <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>Share</span>
+                  <span>{t('Share')}</span>
                 </button>
               </div>
               <div className="post-quick-comment">
                 <img src={currentUser.avatar} alt={currentUser.name} />
                 <input
                   type="text"
-                  placeholder={`Comment as ${currentUser.name}`}
+                  placeholder={t('Comment as {name}', { name: currentUser.name })}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleImageComment(imageModal.index, e.currentTarget.value);
@@ -334,3 +336,13 @@ const Post = ({ post }) => {
 };
 
 export default Post;
+
+
+
+
+
+
+
+
+
+

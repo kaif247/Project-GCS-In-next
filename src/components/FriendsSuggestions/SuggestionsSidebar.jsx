@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import SuggestionCard from './SuggestionCard';
 import styles from './friendsSuggestions.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const SuggestionsSidebar = ({ suggestions, selectedId, onSelect, onRemove, onToggleRequest }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { t } = useContext(LanguageContext);
 
   return (
     <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ''}`}>
       <div className={styles.sidebarHeader}>
         <div>
-          <div className={styles.heading}>Friends</div>
-          <div className={styles.subheading}>Suggestions</div>
-          <div className={styles.label}>People you may know</div>
+          <div className={styles.heading}>{t('Friends')}</div>
+          <div className={styles.subheading}>{t('Suggestions')}</div>
+          <div className={styles.label}>{t('People you may know')}</div>
         </div>
         <button
           className={styles.collapseBtn}
           type="button"
           onClick={() => setIsCollapsed((prev) => !prev)}
-          aria-label="Toggle sidebar"
+          aria-label={t('Toggle sidebar')}
         >
           {isCollapsed ? '›' : '‹'}
         </button>

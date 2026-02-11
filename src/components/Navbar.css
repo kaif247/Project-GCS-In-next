@@ -230,6 +230,10 @@
   position: relative;
 }
 
+.navbar-language {
+  position: relative;
+}
+
 .dark-mode .navbar-icon-btn {
   background-color: var(--bg-muted);
   color: #E38F12;
@@ -238,6 +242,65 @@
 .navbar-icon-btn:hover {
   background-color: var(--bg-hover);
   color: #E38F12;
+}
+
+.language-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 24px var(--shadow-strong);
+  border-radius: 12px;
+  min-width: 220px;
+  padding: 8px;
+  display: none;
+  z-index: 220;
+  animation: slideDown 0.2s ease;
+}
+
+.language-menu.open {
+  display: block;
+}
+
+.language-menu-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 4px 8px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.language-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.language-option:hover {
+  background-color: var(--bg-hover);
+  color: #E38F12;
+}
+
+.language-option.active {
+  background-color: rgba(227, 143, 18, 0.12);
+  color: #E38F12;
+}
+
+.language-code {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
 .dark-mode .navbar-icon-btn:hover {

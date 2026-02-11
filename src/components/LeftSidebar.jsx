@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { sidebarItems, currentUser } from '../data/facebookData';
 import Icon from './Icon';
+import { LanguageContext } from '../context/LanguageContext';
 
 const LeftSidebar = () => {
   const [showMore, setShowMore] = useState(false);
   const router = useRouter();
+  const { t } = useContext(LanguageContext);
 
   const iconKeyMap = {
     'Meta AI': 'meta',
@@ -53,10 +55,10 @@ const LeftSidebar = () => {
                   key={item.id}
                   href={route}
                   className={`sidebar-item ${isActive ? 'active' : ''}`}
-                  aria-label={item.label}
+                  aria-label={t(item.label)}
                 >
                   <span className="sidebar-icon">{renderIcon(item.label)}</span>
-                  <span className="sidebar-label">{item.label}</span>
+                  <span className="sidebar-label">{t(item.label)}</span>
                 </Link>
               );
             }
@@ -64,10 +66,10 @@ const LeftSidebar = () => {
               <button
                 key={item.id}
                 className="sidebar-item"
-                aria-label={item.label}
+                aria-label={t(item.label)}
               >
                 <span className="sidebar-icon">{renderIcon(item.label)}</span>
-                <span className="sidebar-label">{item.label}</span>
+                <span className="sidebar-label">{t(item.label)}</span>
               </button>
             );
           })}
@@ -81,7 +83,7 @@ const LeftSidebar = () => {
             aria-expanded={showMore}
           >
             <span className="see-more-icon">▼</span>
-            <span>See more</span>
+            <span>{t('See more')}</span>
           </button>
         )}
 
@@ -92,7 +94,7 @@ const LeftSidebar = () => {
             aria-expanded={showMore}
           >
             <span className="see-more-icon">▲</span>
-            <span>See less</span>
+            <span>{t('See less')}</span>
           </button>
         )}
       </div>

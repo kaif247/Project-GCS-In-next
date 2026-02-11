@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { stories } from '../data/facebookData';
 import styles from '../components/Feed/StoriesSection.module.css';
+import { LanguageContext } from '../context/LanguageContext';
 
 const StoriesPage = () => {
   const router = useRouter();
+  const { t } = useContext(LanguageContext);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -27,11 +29,11 @@ const StoriesPage = () => {
   return (
     <div className={styles.storyViewerOverlay}>
       <div className={styles.storyViewerContent}>
-        <img src={story.image || story.userAvatar} alt={story.userName} className={styles.storyViewerImage} />
-        <div className={styles.storyViewerUser}>{story.userName}</div>
-        <button onClick={prevStory} className={styles.storyNavBtn} aria-label="Previous Story">&#8592;</button>
-        <button onClick={nextStory} className={styles.storyNavBtn} aria-label="Next Story">&#8594;</button>
-        <button onClick={() => router.back()} className={styles.storyCloseBtn} aria-label="Close">&times;</button>
+        <img src={story.image || story.userAvatar} alt={t(story.userName)} className={styles.storyViewerImage} />
+        <div className={styles.storyViewerUser}>{t(story.userName)}</div>
+        <button onClick={prevStory} className={styles.storyNavBtn} aria-label={t('Previous Story')}>&#8592;</button>
+        <button onClick={nextStory} className={styles.storyNavBtn} aria-label={t('Next Story')}>&#8594;</button>
+        <button onClick={() => router.back()} className={styles.storyCloseBtn} aria-label={t('Close')}>&times;</button>
       </div>
     </div>
   );

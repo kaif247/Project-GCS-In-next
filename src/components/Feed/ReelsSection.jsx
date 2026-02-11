@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import { MdReels } from 'react-icons/md';
 import styles from './ReelsSection.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const reelsPreview = [
   {
@@ -18,11 +19,12 @@ const reelsPreview = [
 
 const ReelsSection = () => {
   const router = useRouter();
+  const { t } = useContext(LanguageContext);
   return (
     <div className={styles.reelsSection}>
-      <button className={styles.reelsEntry} onClick={() => router.push('/reels')} aria-label="View Reels">
+      <button className={styles.reelsEntry} onClick={() => router.push('/reels')} aria-label={t('View Reels')}>
         <MdReels className={styles.reelsIcon} />
-        <span>Reels</span>
+        <span>{t('Reels')}</span>
       </button>
       <div className={styles.reelsPreviewList}>
         {reelsPreview.map((reel, idx) => (
@@ -32,7 +34,7 @@ const ReelsSection = () => {
             onClick={() => router.push(`/reels?start=${idx}`)}
             tabIndex={0}
             role="button"
-            aria-label={`Watch reel by ${reel.user}`}
+            aria-label={t('Watch reel by {name}', { name: reel.user })}
           >
             <img src={reel.thumbnail} alt={reel.user} className={styles.thumbnail} />
             <span className={styles.user}>{reel.user}</span>

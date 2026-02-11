@@ -1,3 +1,9 @@
 import React from 'react';
-const Profile = () => <div>Profile Page</div>;
+import React, { useContext } from 'react';
+import { LanguageContext } from '../context/LanguageContext';
+
+const Profile = () => {
+  const { t } = useContext(LanguageContext);
+  return <div>{t('Profile Page')}</div>;
+};
 export default Profile;
