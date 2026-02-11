@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MarketplaceCard from './MarketplaceCard';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const MarketplaceGrid = ({ products }) => {
+  const { t } = useContext(LanguageContext);
   return (
     <section className="marketplace-grid">
-      <h2 className="marketplace-grid__title">Today&apos;s picks</h2>
+      <h2 className="marketplace-grid__title">{t('Today's picks')}</h2>
       <div className="marketplace-grid__list">
         {products.map((product) => (
           <MarketplaceCard key={product.id} product={product} />
@@ -15,3 +17,4 @@ const MarketplaceGrid = ({ products }) => {
 };
 
 export default MarketplaceGrid;
+

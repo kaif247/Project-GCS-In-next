@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { currentUser } from '../data/facebookData';
+import { LanguageContext } from '../context/LanguageContext';
 
 const PostUpload = () => {
   const [text, setText] = useState('');
+  const { t } = useContext(LanguageContext);
 
   return (
     <div className="post-upload">
@@ -12,22 +14,22 @@ const PostUpload = () => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={`What's on your mind, ${currentUser.name.split(' ')[0]}?`}
-          aria-label="Create post"
+          placeholder={t('What’s on your mind, {name}?', { name: currentUser.name.split(' ')[0] || currentUser.name })}
+          aria-label={t('Create post')}
         />
       </div>
       <div className="post-upload__actions">
-        <button className="post-upload__action" type="button" aria-label="Live">
+        <button className="post-upload__action" type="button" aria-label={t('Live')}>
           <span className="post-upload__icon post-upload__icon--live" />
-          Live
+          {t('Live')}
         </button>
-        <button className="post-upload__action" type="button" aria-label="Photos">
+        <button className="post-upload__action" type="button" aria-label={t('Photos')}>
           <span className="post-upload__icon post-upload__icon--photo" />
-          Photos
+          {t('Photos')}
         </button>
-        <button className="post-upload__action" type="button" aria-label="Emojis">
+        <button className="post-upload__action" type="button" aria-label={t('Emojis')}>
           <span className="post-upload__icon post-upload__icon--emoji" />
-          Emojis
+          {t('Emojis')}
         </button>
       </div>
     </div>

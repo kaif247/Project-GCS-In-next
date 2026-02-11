@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../context/ThemeContext';
+import { LanguageContext } from '../context/LanguageContext';
 import ProfileMenu from './ProfileMenu';
 import NotificationDropdown from './NotificationDropdown';
 import { notificationsData } from '../data/notificationsData';
@@ -11,6 +12,7 @@ import Icon from './Icon';
 const Navbar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const { t, language, setLanguage, languages } = useContext(LanguageContext);
   const [notificationCount] = useState(3);
   const [messageCount] = useState(1);
   const router = useRouter();
@@ -18,9 +20,10 @@ const Navbar = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMessengerHover, setIsMessengerHover] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
 
   const navItems = [
-    { id: 'home', label: 'home', icon: <Icon name="home" size={28} />, path: '/' },
+    { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
     { id: 'marketplace', label: '', icon: <Icon name="marketplace2" size={28} />, path: '/marketplace' },
     { id: 'friends', label: '', icon: <Icon name="friends" size={28} />, path: '/friends' },
     { id: 'products', label: '', icon: <Icon name="product" size={28} /> },
@@ -46,10 +49,10 @@ const Navbar = () => {
             <Icon name="search (1)" size={14} className="search-icon" aria-hidden="true" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('Search')}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              aria-label="Search"
+              aria-label={t('Search')}
             />
           </div>
         </div>
@@ -64,7 +67,7 @@ const Navbar = () => {
                   key={item.id}
                   href={item.path}
                   className={`nav-item ${isActive ? 'active' : ''}`}
-                  aria-label={item.label}
+                  aria-label={item.label ? t(item.label) : undefined}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   <span className="nav-icon">{item.icon}</span>
@@ -75,7 +78,7 @@ const Navbar = () => {
               <button
                 key={item.id}
                 className="nav-item"
-                aria-label={item.label}
+                aria-label={item.label ? t(item.label) : undefined}
               >
                 <span className="nav-icon">{item.icon}</span>
               </button>
@@ -88,8 +91,8 @@ const Navbar = () => {
           <div className="navbar-menu">
             <button
               className="navbar-icon-btn"
-              aria-label="Menu"
-              title="Menu"
+              aria-label={t('Menu')}
+              title={t('Menu')}
               onClick={() => setIsMenuOpen((prev) => !prev)}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -110,8 +113,8 @@ const Navbar = () => {
           <Link
             href="/chats"
             className="navbar-icon-btn notification-btn"
-            aria-label="Messenger"
-            title="Messenger"
+            aria-label={t('Messenger')}
+            title={t('Messenger')}
             onMouseEnter={() => setIsMessengerHover(true)}
             onMouseLeave={() => setIsMessengerHover(false)}
           >
@@ -127,8 +130,8 @@ const Navbar = () => {
           <div className="navbar-notifications">
             <button
               className="navbar-icon-btn notification-btn"
-              aria-label="Notifications"
-              title="Notifications"
+              aria-label={t('Notifications')}
+              title={t('Notifications')}
               onClick={() => setIsNotifOpen((prev) => !prev)}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -145,11 +148,44 @@ const Navbar = () => {
             />
           </div>
 
+          <div className="navbar-language">
+            <button
+              className="navbar-icon-btn"
+              aria-label={t('Language')}
+              title={t('Language')}
+              onClick={() => setIsLangOpen((prev) => !prev)}
+            >
+              <Icon
+                name="social_13670340"
+                size={18}
+                className="icon--no-circle"
+                aria-hidden="true"
+              />
+            </button>
+            <div className={`language-menu ${isLangOpen ? 'open' : ''}`}>
+              <div className="language-menu-title">{t('Language')}</div>
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  className={`language-option ${language === lang.code ? 'active' : ''}`}
+                  onClick={() => {
+                    setLanguage(lang.code);
+                    setIsLangOpen(false);
+                  }}
+                  type="button"
+                >
+                  <span className="language-label">{lang.label}</span>
+                  <span className="language-code">{lang.code.toUpperCase()}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="navbar-profile">
             <button
               className="navbar-icon-btn profile-btn"
-              aria-label="User profile"
-              title="User profile"
+              aria-label={t('User profile')}
+              title={t('User profile')}
               onClick={() => setIsProfileOpen((prev) => !prev)}
             >
               <img
@@ -168,8 +204,8 @@ const Navbar = () => {
           <button
             className="navbar-icon-btn theme-toggle"
             onClick={toggleTheme}
-            aria-label="Toggle dark mode"
-            title={isDarkMode ? 'Light mode' : 'Dark mode'}
+            aria-label={t('Toggle dark mode')}
+            title={isDarkMode ? t('Light mode') : t('Dark mode')}
           >
             <Icon
               name={isDarkMode ? 'lightmode' : 'night-mode'}

@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import { currentUser } from '../../data/facebookData';
 import Icon from '../Icon';
 import styles from './friendsSuggestions.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const PostsPreview = ({ posts = [], name, avatar }) => {
   const [likedIds, setLikedIds] = useState(new Set());
@@ -9,6 +10,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
   const [activeComment, setActiveComment] = useState(null);
   const [imageModal, setImageModal] = useState(null); // { post, index }
   const [imageComments, setImageComments] = useState({});
+  const { t } = useContext(LanguageContext);
 
   const toggleLike = (id) => {
     setLikedIds((prev) => {
@@ -37,8 +39,8 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
   return (
     <div className={styles.detailCard}>
       <div className={styles.cardHeader}>
-        <h3>Posts</h3>
-        <button type="button" className={styles.filterBtn}>Filters</button>
+        <h3>{t('Posts')}</h3>
+        <button type="button" className={styles.filterBtn}>{t('Filters')}</button>
       </div>
       {posts.map((post) => {
         const liked = likedIds.has(post.id);
@@ -50,16 +52,16 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 <div className="post-user-info">
                   <h3 className="post-user-name">{name}</h3>
                   <p className="post-meta">
-                    {post.time} • {post.location}
+                    {t(post.time)} ? {t(post.location)}
                   </p>
                 </div>
               </div>
-              <button className="post-menu-btn" aria-label="Post options" title="More options">⋯</button>
+              <button className="post-menu-btn" aria-label={t('Post options')} title={t('More options')}>⋯</button>
             </div>
             <div className="post-content">
               <p className="post-text">
-                {post.text.length > 160 ? `${post.text.slice(0, 160)}… ` : post.text}
-                <button type="button" className="post-link-btn">See more</button>
+                {t(post.text).length > 160 ? `${t(post.text).slice(0, 160)}… ` : t(post.text)}
+                <button type="button" className="post-link-btn">{t('See more')}</button>
               </p>
             </div>
             {post.video && (
@@ -93,8 +95,8 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 <span className="reactions-count">{liked ? 1 : 0}</span>
               </div>
               <div className="interaction-counts">
-                <span><button className="post-link-btn" type="button" onClick={() => setActiveComment(post)}>comments</button></span>
-                <span><button className="post-link-btn" type="button" onClick={() => setActiveShare(post)}>shares</button></span>
+                <span><button className="post-link-btn" type="button" onClick={() => setActiveComment(post)}>{t('comments')}</button></span>
+                <span><button className="post-link-btn" type="button" onClick={() => setActiveShare(post)}>{t('shares')}</button></span>
               </div>
             </div>
             {liked && <div className="liked-by">{currentUser.name}</div>}
@@ -105,20 +107,20 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 ) : (
                   <span aria-hidden="true">👍</span>
                 )}
-                <span>Like</span>
+                <span>{t('Like')}</span>
               </button>
               <button className="action-btn" type="button" onClick={() => setActiveComment(post)}>
                 <Icon name="comment" size={16} className="icon--no-circle comment-icon" aria-hidden="true" />
-                <span>Comment</span>
+                <span>{t('Comment')}</span>
               </button>
               <button className="action-btn" type="button" onClick={() => setActiveShare(post)}>
                 <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                <span>Share</span>
+                <span>{t('Share')}</span>
               </button>
             </div>
             <div className="post-quick-comment">
               <img src={currentUser.avatar} alt={currentUser.name} />
-              <input type="text" placeholder={`Comment as ${currentUser.name}`} />
+              <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
               <button className="quick-comment-btn" type="button">➤</button>
             </div>
           </div>
@@ -129,7 +131,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
         <div className="post-modal-backdrop" onClick={() => setActiveShare(null)}>
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>Share</h3>
+              <h3>{t('Share')}</h3>
               <button type="button" className="post-modal__close" onClick={() => setActiveShare(null)}>×</button>
             </div>
             <div className="post-modal__body">
@@ -137,11 +139,11 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 <img src={currentUser.avatar} alt={currentUser.name} />
                 <div>
                   <div className="post-modal__name">{currentUser.name}</div>
-                  <button type="button" className="post-modal__audience">Friends</button>
+                  <button type="button" className="post-modal__audience">{t('Friends')}</button>
                 </div>
               </div>
-              <textarea placeholder="Say something about this..." rows={4} />
-              <button type="button" className="post-modal__primary">Share now</button>
+              <textarea placeholder={t('Say something about this...')} rows={4} />
+              <button type="button" className="post-modal__primary">{t('Share now')}</button>
             </div>
           </div>
         </div>
@@ -151,12 +153,12 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
         <div className="post-modal-backdrop" onClick={() => setActiveComment(null)}>
           <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>{name}'s post</h3>
+              <h3>{t("{name}'s post", { name })}</h3>
               <button type="button" className="post-modal__close" onClick={() => setActiveComment(null)}>×</button>
             </div>
             <div className="post-modal__body">
               <div className="post-content">
-                <p className="post-text">{activeComment.text}</p>
+                <p className="post-text">{t(activeComment.text)}</p>
               </div>
               {activeComment.video && (
                 <div className="post-video">
@@ -175,7 +177,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
               {likedByText && <div className="liked-by">{likedByText}</div>}
               <div className="post-quick-comment">
                 <img src={currentUser.avatar} alt={currentUser.name} />
-                <input type="text" placeholder={`Comment as ${currentUser.name}`} />
+                <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
                 <button className="quick-comment-btn" type="button">➤</button>
               </div>
             </div>
@@ -187,7 +189,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
         <div className="post-modal-backdrop" onClick={() => setImageModal(null)}>
           <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
-              <h3>{name}'s photo</h3>
+              <h3>{t("{name}'s photo", { name })}</h3>
               <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>×</button>
             </div>
             <div className="post-modal__body">
@@ -208,22 +210,22 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                   ) : (
                     <span aria-hidden="true">👍</span>
                   )}
-                  <span>Like</span>
+                  <span>{t('Like')}</span>
                 </button>
                 <button className="action-btn" type="button">
                   <Icon name="comment" size={16} className="icon--no-circle comment-icon" aria-hidden="true" />
-                  <span>Comment</span>
+                  <span>{t('Comment')}</span>
                 </button>
                 <button className="action-btn" type="button" onClick={() => setActiveShare(imageModal.post)}>
                   <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>Share</span>
+                  <span>{t('Share')}</span>
                 </button>
               </div>
               <div className="post-quick-comment">
                 <img src={currentUser.avatar} alt={currentUser.name} />
                 <input
                   type="text"
-                  placeholder={`Comment as ${currentUser.name}`}
+                  placeholder={t('Comment as {name}', { name: currentUser.name })}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleImageComment(imageModal.post.id, imageModal.index, e.currentTarget.value);
@@ -259,3 +261,10 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
 };
 
 export default React.memo(PostsPreview);
+
+
+
+
+
+
+

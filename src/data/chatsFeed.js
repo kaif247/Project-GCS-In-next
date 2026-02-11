@@ -16,7 +16,7 @@ export const chatsFeed = [
       {
         id: 'm2',
         from: 'them',
-        text: 'By following these tips, you will be well‑equipped to find a reliable used car. Happy shopping!',
+        text: 'By following these tips, you will be well-equipped to find a reliable used car. Happy shopping!',
       },
       { id: 'm3', from: 'me', text: 'Hi' },
       { id: 'm4', from: 'me', text: 'how are you' },
@@ -26,7 +26,7 @@ export const chatsFeed = [
     id: 2,
     name: 'The UAJK MUZAFFARABAD',
     avatar: 'https://i.pravatar.cc/100?img=12',
-    meta: 'The University of Azad Jammu… · 2d',
+    meta: 'The University of Azad Jammu... · 2d',
     messages: [
       {
         id: 'u1',
@@ -50,7 +50,7 @@ export const chatsFeed = [
     id: 4,
     name: 'Pakiza Rathore',
     avatar: 'https://i.pravatar.cc/100?img=32',
-    meta: 'Messages and calls are secured… · 1w',
+    meta: 'Messages and calls are secured... · 1w',
     messages: [
       { id: 'p1', from: 'them', text: 'Assalam o alaikum' },
       { id: 'p2', from: 'me', text: 'Walaikum salam' },

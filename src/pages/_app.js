@@ -19,15 +19,18 @@ import '../components/Chats/chats.css';
 import '../components/Marketplace/marketplace.css';
 import '../components/Friends/friends.css';
 import { ThemeProvider } from '../context/ThemeContext';
+import { LanguageProvider } from '../context/LanguageContext';
 import Navbar from '../components/Navbar';
 
 export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider>
-      <div className="app">
-        <Navbar />
-        <Component {...pageProps} />
-      </div>
+      <LanguageProvider>
+        <div className="app">
+          <Navbar />
+          <Component {...pageProps} />
+        </div>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

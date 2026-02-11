@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FaRegThumbsUp, FaThumbsUp, FaRegCommentDots, FaShare, FaEllipsisH, FaBookmark, FaRegBookmark, FaRegSmile, FaHeart, FaLaughSquint, FaSurprise, FaSadTear, FaAngry, FaHandHoldingHeart } from 'react-icons/fa';
 import styles from './Post.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const reactionIcons = [
   { type: 'like', icon: <FaThumbsUp color="#1877F2" />, label: 'Like' },
@@ -14,6 +15,7 @@ const reactionIcons = [
 ];
 
 const Post = ({ post }) => {
+  const { t } = useContext(LanguageContext);
   const [reaction, setReaction] = useState(null); // like, love, care, haha, wow, sad, angry
   const [showReactions, setShowReactions] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -39,16 +41,16 @@ const Post = ({ post }) => {
         <img src={post.userAvatar} alt={post.userName} className={styles.avatar} />
         <div className={styles.userInfo}>
           <span className={styles.userName}>{post.userName}</span>
-          <span className={styles.meta}>{post.location} • {post.timestamp}</span>
+          <span className={styles.meta}>{t(post.location)} • {t(post.timestamp)}</span>
         </div>
-        <button className={styles.menuBtn} aria-label="More options"><FaEllipsisH /></button>
+        <button className={styles.menuBtn} aria-label={t('More options')}><FaEllipsisH /></button>
       </header>
       <div className={styles.content}>
-        <p>{post.content} {post.hashtags && post.hashtags.map(tag => <span key={tag} className={styles.hashtag}>{tag}</span>)}</p>
+        <p>{t(post.content)} {post.hashtags && post.hashtags.map(tag => <span key={tag} className={styles.hashtag}>{tag}</span>)}</p>
         {post.images && post.images.length > 0 && (
           <div className={styles.images}>
             {post.images.map((img, idx) => (
-              <img key={idx} src={img} alt="Post media" className={styles.image} />
+              <img key={idx} src={img} alt={t('Post media')} className={styles.image} />
             ))}
           </div>
         )}
@@ -59,9 +61,9 @@ const Post = ({ post }) => {
           onMouseEnter={() => setShowReactions(true)}
           onMouseLeave={() => setShowReactions(false)}
           onClick={() => handleReaction(reaction === 'like' ? null : 'like')}
-          aria-label="Like"
+          aria-label={t('Like')}
         >
-          {reaction ? reactionIcons.find(r => r.type === reaction)?.icon : <FaRegThumbsUp />} {reaction ? reactionIcons.find(r => r.type === reaction)?.label : 'Like'}
+          {reaction ? reactionIcons.find(r => r.type === reaction)?.icon : <FaRegThumbsUp />} {reaction ? t(reactionIcons.find(r => r.type === reaction)?.label) : t('Like')}
           {showReactions && (
             <div className={styles.reactionsPopup}>
               {reactionIcons.map(r => (
@@ -69,9 +71,9 @@ const Post = ({ post }) => {
                   key={r.type}
                   onClick={e => { e.stopPropagation(); handleReaction(r.type); }}
                   style={{ cursor: 'pointer', fontSize: 22, margin: '0 2px' }}
-                  title={r.label}
+                  title={t(r.label)}
                   role="img"
-                  aria-label={r.label}
+                  aria-label={t(r.label)}
                 >
                   {r.icon}
                 </span>
@@ -79,25 +81,25 @@ const Post = ({ post }) => {
             </div>
           )}
         </div>
-        <div className={styles.actionBtn} aria-label="Comment">
-          <FaRegCommentDots /> Comment
+        <div className={styles.actionBtn} aria-label={t('Comment')}>
+          <FaRegCommentDots /> {t('Comment')}
         </div>
-        <div className={styles.actionBtn} aria-label="Share">
-          <FaShare /> Share
+        <div className={styles.actionBtn} aria-label={t('Share')}>
+          <FaShare /> {t('Share')}
         </div>
         <div
           className={styles.actionBtn}
-          aria-label="Save"
+          aria-label={t('Save')}
           onClick={() => setSaved(s => !s)}
         >
-          {saved ? <FaBookmark color="#1877F2" /> : <FaRegBookmark />} Save
+          {saved ? <FaBookmark color="#1877F2" /> : <FaRegBookmark />} {t('Save')}
         </div>
       </div>
       <form className={styles.commentBox} onSubmit={handleComment}>
         <input
           className={styles.commentInput}
           type="text"
-          placeholder="Write a comment..."
+          placeholder={t('Write a comment...')}
           value={comment}
           onChange={e => setComment(e.target.value)}
         />
@@ -117,3 +119,6 @@ const Post = ({ post }) => {
 };
 
 export default Post;
+
+
+

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MutualFriends from './MutualFriends';
 import styles from './friendsSuggestions.module.css';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const SuggestionCard = ({ suggestion, isSelected, onClick, onRemove, onToggleRequest }) => {
+  const { t } = useContext(LanguageContext);
   return (
     <div
       role="button"
@@ -33,7 +35,7 @@ const SuggestionCard = ({ suggestion, isSelected, onClick, onRemove, onToggleReq
                 onToggleRequest();
               }}
             >
-              Cancel request
+              {t('Cancel request')}
             </button>
           ) : (
             <>
@@ -45,7 +47,7 @@ const SuggestionCard = ({ suggestion, isSelected, onClick, onRemove, onToggleReq
                   onToggleRequest();
                 }}
               >
-                Add friend
+                {t('Add friend')}
               </button>
               <button
                 type="button"
@@ -55,7 +57,7 @@ const SuggestionCard = ({ suggestion, isSelected, onClick, onRemove, onToggleReq
                   onRemove();
                 }}
               >
-                Remove
+                {t('Remove')}
               </button>
             </>
           )}

@@ -1,3 +1,9 @@
 import React from 'react';
-const ForgotPassword = () => <div>Forgot Password Page</div>;
+import React, { useContext } from 'react';
+import { LanguageContext } from '../context/LanguageContext';
+
+const ForgotPassword = () => {
+  const { t } = useContext(LanguageContext);
+  return <div>{t('Forgot Password Page')}</div>;
+};
 export default ForgotPassword;

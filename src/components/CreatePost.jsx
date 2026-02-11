@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { currentUser } from '../data/facebookData';
+import { LanguageContext } from '../context/LanguageContext';
 
 const CreatePost = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [postText, setPostText] = useState('');
+  const { t } = useContext(LanguageContext);
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
@@ -26,12 +28,12 @@ const CreatePost = () => {
         <div className="post-input-section">
           <input
             type="text"
-            placeholder="What's on your mind, Kaif?"
+            placeholder={t("What's on your mind, {name}?", { name: currentUser.name.split(' ')[0] || currentUser.name })}
             className="post-input"
             onFocus={() => setIsExpanded(true)}
             onClick={() => setIsExpanded(true)}
             readOnly
-            aria-label="Create post"
+            aria-label={t('Create post')}
           />
         </div>
 
@@ -41,24 +43,24 @@ const CreatePost = () => {
             <textarea
               value={postText}
               onChange={(e) => setPostText(e.target.value)}
-              placeholder="What's on your mind, Kaif?"
+              placeholder={t("What's on your mind, {name}?", { name: currentUser.name.split(' ')[0] || currentUser.name })}
               className="post-textarea"
-              aria-label="Post content"
+              aria-label={t('Post content')}
             />
 
             {/* Action Icons */}
             <div className="post-actions">
-              <button className="action-btn live-video" title="Live Video">
+              <button className="action-btn live-video" title={t('Live Video')}>
                 <span className="action-icon">📹</span>
-                <span className="action-label">Live Video</span>
+                <span className="action-label">{t('Live Video')}</span>
               </button>
-              <button className="action-btn photo-video" title="Photo/Video">
+              <button className="action-btn photo-video" title={t('Photo/Video')}>
                 <span className="action-icon">🖼️</span>
-                <span className="action-label">Photo/Video</span>
+                <span className="action-label">{t('Photo/Video')}</span>
               </button>
-              <button className="action-btn feeling-activity" title="Feeling/Activity">
+              <button className="action-btn feeling-activity" title={t('Feeling/Activity')}>
                 <span className="action-icon">😊</span>
-                <span className="action-label">Feeling/Activity</span>
+                <span className="action-label">{t('Feeling/Activity')}</span>
               </button>
             </div>
 
@@ -71,14 +73,14 @@ const CreatePost = () => {
                   setPostText('');
                 }}
               >
-                Cancel
+                {t('Cancel')}
               </button>
               <button
                 className="post-submit-btn"
                 onClick={handlePostSubmit}
                 disabled={!postText.trim()}
               >
-                Post
+                {t('Post')}
               </button>
             </div>
           </div>
@@ -87,15 +89,15 @@ const CreatePost = () => {
         {/* Compact Action Icons */}
         {!isExpanded && (
           <div className="post-compact-actions">
-            <button className="compact-action-btn live-video" title="Live Video">
+            <button className="compact-action-btn live-video" title={t('Live Video')}>
               <span>📹</span>
               Live Video
             </button>
-            <button className="compact-action-btn photo-video" title="Photo/Video">
+            <button className="compact-action-btn photo-video" title={t('Photo/Video')}>
               <span>🖼️</span>
               Photo/Video
             </button>
-            <button className="compact-action-btn feeling-activity" title="Feeling/Activity">
+            <button className="compact-action-btn feeling-activity" title={t('Feeling/Activity')}>
               <span>😊</span>
               Feeling/Activity
             </button>
@@ -107,3 +109,10 @@ const CreatePost = () => {
 };
 
 export default CreatePost;
+
+
+
+
+
+
+

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from 'next/link';
 import Icon from '../Icon';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const SettingsIcon = () => (
   <svg viewBox="0 0 24 24" className="friends-icon" aria-hidden="true">
@@ -16,11 +17,12 @@ const ArrowIcon = () => (
 );
 
 const FriendsSidebar = () => {
+  const { t } = useContext(LanguageContext);
   return (
     <aside className="friends-sidebar">
       <div className="friends-sidebar__header">
-        <h1>Friends</h1>
-        <button className="friends-sidebar__icon-btn" aria-label="Settings">
+        <h1>{t('Friends')}</h1>
+        <button className="friends-sidebar__icon-btn" aria-label={t('Settings')}>
           <SettingsIcon />
         </button>
       </div>
@@ -30,40 +32,40 @@ const FriendsSidebar = () => {
           <span className="friends-sidebar__icon">
             <Icon name="home" size={18} />
           </span>
-          <span>Home</span>
+          <span>{t('Home')}</span>
         </Link>
         <button className="friends-sidebar__item">
           <span className="friends-sidebar__icon">
             <Icon name="friends" size={18} />
           </span>
-          <span>Friend requests</span>
+          <span>{t('Friend requests')}</span>
           <ArrowIcon />
         </button>
         <Link href="/friends/suggestions" className="friends-sidebar__item">
           <span className="friends-sidebar__icon">
             <Icon name="friends" size={18} />
           </span>
-          <span>Suggestions</span>
+          <span>{t('Suggestions')}</span>
           <ArrowIcon />
         </Link>
         <button className="friends-sidebar__item">
           <span className="friends-sidebar__icon">
             <Icon name="friends" size={18} />
           </span>
-          <span>All friends</span>
+          <span>{t('All friends')}</span>
           <ArrowIcon />
         </button>
         <button className="friends-sidebar__item">
           <span className="friends-sidebar__icon">
             <Icon name="cake (1)" size={18} />
           </span>
-          <span>Birthdays</span>
+          <span>{t('Birthdays')}</span>
         </button>
         <button className="friends-sidebar__item">
           <span className="friends-sidebar__icon">
             <Icon name="friends" size={18} />
           </span>
-          <span>Custom lists</span>
+          <span>{t('Custom lists')}</span>
           <ArrowIcon />
         </button>
       </div>
@@ -71,16 +73,16 @@ const FriendsSidebar = () => {
       <div className="friends-sidebar__divider" />
 
       <div className="friends-sidebar__section">
-        <h3>New friends</h3>
+        <h3>{t('New friends')}</h3>
         <div className="friends-sidebar__notification">
           <img
             src="https://i.pravatar.cc/100?img=52"
-            alt="New friend"
+            alt={t('New friend')}
             className="friends-sidebar__avatar"
           />
           <div>
-            <div className="friends-sidebar__text">accepted your friend request</div>
-            <div className="friends-sidebar__time">12 hours ago</div>
+            <div className="friends-sidebar__text">{t('accepted your friend request')}</div>
+            <div className="friends-sidebar__time">{t('12 hours ago')}</div>
           </div>
         </div>
       </div>
