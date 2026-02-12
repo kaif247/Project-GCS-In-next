@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { currentUser } from '../data/facebookData';
 import { LanguageContext } from '../context/LanguageContext';
+import Icon from './Icon';
 
 const CreatePost = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -51,19 +52,24 @@ const CreatePost = () => {
             {/* Action Icons */}
             <div className="post-actions">
               <button className="action-btn live-video" title={t('Live Video')}>
-                <span className="action-icon">📹</span>
+                <span className="action-icon">
+                  <Icon name="live2" size={18} className="icon--no-circle" aria-hidden="true" />
+                </span>
                 <span className="action-label">{t('Live Video')}</span>
               </button>
               <button className="action-btn photo-video" title={t('Photo/Video')}>
-                <span className="action-icon">🖼️</span>
+                <span className="action-icon">
+                  <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
+                </span>
                 <span className="action-label">{t('Photo/Video')}</span>
               </button>
               <button className="action-btn feeling-activity" title={t('Feeling/Activity')}>
-                <span className="action-icon">😊</span>
+                <span className="action-icon">
+                  <Icon name="activity-arrows" size={18} className="icon--no-circle" aria-hidden="true" />
+                </span>
                 <span className="action-label">{t('Feeling/Activity')}</span>
               </button>
             </div>
-
             {/* Submit Buttons */}
             <div className="post-buttons">
               <button
@@ -90,16 +96,22 @@ const CreatePost = () => {
         {!isExpanded && (
           <div className="post-compact-actions">
             <button className="compact-action-btn live-video" title={t('Live Video')}>
-              <span>📹</span>
-              Live Video
+              <span className="action-icon">
+                <Icon name="live2" size={16} className="icon--no-circle" aria-hidden="true" />
+              </span>
+              {t('Live Video')}
             </button>
             <button className="compact-action-btn photo-video" title={t('Photo/Video')}>
-              <span>🖼️</span>
-              Photo/Video
+              <span className="action-icon">
+                <Icon name="photo2" size={16} className="icon--no-circle" aria-hidden="true" />
+              </span>
+              {t('Photo/Video')}
             </button>
             <button className="compact-action-btn feeling-activity" title={t('Feeling/Activity')}>
-              <span>😊</span>
-              Feeling/Activity
+              <span className="action-icon">
+                <Icon name="activity-arrows" size={16} className="icon--no-circle" aria-hidden="true" />
+              </span>
+              {t('Feeling/Activity')}
             </button>
           </div>
         )}

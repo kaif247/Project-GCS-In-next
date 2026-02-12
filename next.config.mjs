@@ -11,20 +11,7 @@ const nextConfig = {
           options: {
             exportType: 'named',
             namedExport: 'ReactComponent',
-            svgo: true,
-            svgoConfig: {
-              plugins: [
-                {
-                  name: 'preset-default',
-                  params: {
-                    overrides: {
-                      removeViewBox: false,
-                      removeRasterImages: false,
-                    },
-                  },
-                },
-              ],
-            },
+            svgo: false,
           },
         },
       ],

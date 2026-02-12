@@ -15,7 +15,7 @@
   height: 100%;
   /* allow SVGs to inherit color */
   fill: currentColor;
-  stroke: none;
+  stroke: currentColor;
 }
 
 .app-icon img {

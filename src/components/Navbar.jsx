@@ -21,6 +21,11 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMessengerHover, setIsMessengerHover] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const languageIconMap = {
+    fr: 'lang-fr',
+    es: 'lang-es',
+    ht: 'lang-ht',
+  };
 
   const navItems = [
     { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
@@ -156,8 +161,8 @@ const Navbar = () => {
               onClick={() => setIsLangOpen((prev) => !prev)}
             >
               <Icon
-                name="social_13670340"
-                size={18}
+                name={languageIconMap[language] || 'languages'}
+                size={20}
                 className="icon--no-circle"
                 aria-hidden="true"
               />

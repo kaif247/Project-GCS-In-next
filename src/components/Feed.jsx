@@ -1,10 +1,12 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { posts } from '../data/facebookData';
 import Stories from './Stories';
 import PostInput from './PostInput';
 import Post from './Post';
 
 const Feed = () => {
+  const router = useRouter();
   return (
     <div className="feed-container">
       <div className="feed-content">
@@ -12,7 +14,7 @@ const Feed = () => {
         <PostInput
           username="Kaif"
           avatarUrl="https://i.pravatar.cc/150?img=1"
-          onVideoClick={() => {}}
+          onVideoClick={() => router.push('/live')}
           onPhotoClick={() => {}}
           onEmojiClick={() => {}}
         />
