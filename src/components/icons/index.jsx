@@ -21,6 +21,11 @@ import { ReactComponent as Image14 } from './image.svg';
 import { ReactComponent as Logo15 } from './logo.svg';
 import { ReactComponent as Lightmode16 } from './lightmode.svg';
 import { ReactComponent as MapLocation17 } from './map-location_12519920.svg';
+import LanguagesPng from './languages.png';
+import FranciumPng from './francium_13468930.png';
+import EsFlagPng from './ChatGPT_Image_Feb_12__2026__12_14_22_PM-removebg-preview.png';
+import KreyolPng from './ChatGPT_Image_Feb_12__2026__12_15_44_PM-removebg-preview.png';
+import Live2Png from './live2.png';
 
 import { ReactComponent as Marketplace217 } from './marketplace (2).svg';
 import { ReactComponent as Marketplace2 } from './marketplace2.svg';
@@ -32,6 +37,8 @@ import { ReactComponent as Messenger596877121 } from './messenger_596877.svg';
 import { ReactComponent as Meta21 } from './meta.svg';
 import { ReactComponent as NightMode22 } from './night-mode.svg';
 import { ReactComponent as Notification22 } from './Notification.svg';
+import Photos2Png from './photos2.png';
+import Photo2Png from './photo2.png';
 import { ReactComponent as Product22 } from './product.svg';
 import { ReactComponent as Post25 } from './post.svg';
 import { ReactComponent as Properties27 } from './properties.svg';
@@ -73,6 +80,11 @@ const icons = {
   "logo": Logo15,
   "lightmode": Lightmode16,
   "map-location": MapLocation17,
+  "languages": LanguagesPng,
+  "lang-fr": FranciumPng,
+  "lang-es": EsFlagPng,
+  "lang-ht": KreyolPng,
+  "live2": Live2Png,
 
   "marketplace (2)": Marketplace217,
   "marketplace2": Marketplace2,
@@ -84,6 +96,8 @@ const icons = {
   "meta": Meta21,
   "night-mode": NightMode22,
   "notification": Notification22,
+  "photos2": Photos2Png,
+  "photo2": Photo2Png,
   "product": Product22,
   "post": Post25,
   "properties": Properties27,

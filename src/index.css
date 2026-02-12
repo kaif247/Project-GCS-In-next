@@ -120,6 +120,68 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* Initial Loader */
+.initial-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  padding: 24px 16px env(safe-area-inset-bottom);
+}
+
+.initial-loader__center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.initial-loader__logo {
+  width: clamp(72px, 16vw, 140px);
+  height: clamp(72px, 16vw, 140px);
+  object-fit: contain;
+}
+
+.initial-loader__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: clamp(18px, 6vh, 40px);
+}
+
+.initial-loader__from {
+  font-size: clamp(12px, 2.2vw, 16px);
+  color: #7a7d85;
+  letter-spacing: 0.04em;
+}
+
+.initial-loader__gcs {
+  width: clamp(52px, 9vw, 88px);
+  height: auto;
+  object-fit: contain;
+}
+
+.initial-loader__name {
+  font-size: clamp(12px, 2.4vw, 16px);
+  color: #1f2a44;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  max-width: 90vw;
+}
+
+@media (max-width: 480px) {
+  .initial-loader__footer {
+    gap: 6px;
+  }
+}
+
 /* Input Base Styles */
 input,
 textarea {

@@ -184,7 +184,6 @@ const Post = ({ post }) => {
           <button className="quick-comment-btn" type="button">➤</button>
         </div>
 
-        <CommentSection />
       </article>
 
       {/* Share Modal */}

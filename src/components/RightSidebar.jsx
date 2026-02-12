@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { sponsoredAds, birthdays, onlineContacts } from '../data/facebookData';
 import { LanguageContext } from '../context/LanguageContext';
+import Icon from './Icon';
 
 const SponsoredAd = ({ ad, t }) => (
   <div className="sponsored-ad">
@@ -33,9 +34,7 @@ const RightSidebar = () => {
           <div className="birthdays-content">
             {birthdays.length > 0 ? (
               <div className="birthday-item">
-                <svg className="gift-icon" viewBox="0 0 24 24" fill="#f02849" width="20" height="20">
-                  <path d="M20 8h-3V6c0-2.21-1.79-4-4-4s-4 1.79-4 4v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-8-2c1.1 0 2 .9 2 2v2h-4V6c0-1.1.9-2 2-2zm8 16H4V10h3v2h10v-2h3v12z" />
-                </svg>
+                <Icon name="cake (1)" size={20} className="gift-icon" aria-hidden="true" />
                 <span className="birthday-text">
                   <strong>{birthdays.map(b => b.name).join(` ${t('and')} `)}</strong> {t('have their birthdays today.')}
                 </span>
@@ -51,15 +50,17 @@ const RightSidebar = () => {
           <div className="contacts-header">
             <h3 className="section-title">{t('Contacts')}</h3>
             <div className="contacts-actions">
-              <button className="contacts-action-btn" aria-label={t('Video call')}>
-                📹
-              </button>
+             
               <button className="contacts-action-btn" aria-label={t('Search')}>
-                🔍
+                <Icon name="search (1)" size={16} className="icon--no-circle" aria-hidden="true" />
               </button>
-              <button className="contacts-action-btn" aria-label={t('More options')}>
-                ⋯
-              </button>
+              <button className="chats-icon-btn" aria-label={t('More')}>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="6" cy="12" r="2" fill="currentColor" />
+              <circle cx="12" cy="12" r="2" fill="currentColor" />
+              <circle cx="18" cy="12" r="2" fill="currentColor" />
+            </svg>
+          </button>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
+import Icon from './Icon';
 
 const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiClick }) => {
   const { t } = useContext(LanguageContext);
@@ -17,7 +18,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
           type="button"
           className="post-input-field"
         >
-          {t('What’s on your mind, {name}?', { name: firstName })}
+          {t("What's on your mind, {name}?", { name: firstName })}
         </button>
         <div className="post-input-actions">
           <button
@@ -26,7 +27,9 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
             className="post-input-icon-btn"
             aria-label={t('Video')}
           >
-            <span className="post-input-icon post-input-icon--video">🎥</span>
+            <span className="post-input-icon post-input-icon--video">
+              <Icon name="live2" size={22} className="icon--no-circle" aria-hidden="true" />
+            </span>
           </button>
           <button
             type="button"
@@ -34,7 +37,9 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
             className="post-input-icon-btn"
             aria-label={t('Photo')}
           >
-            <span className="post-input-icon post-input-icon--photo">🖼️</span>
+            <span className="post-input-icon post-input-icon--photo">
+              <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
+            </span>
           </button>
           <button
             type="button"
@@ -42,7 +47,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
             className="post-input-icon-btn"
             aria-label={t('Emoji')}
           >
-            <span className="post-input-icon post-input-icon--emoji">😊</span>
+            <span className="post-input-icon post-input-icon--emoji">{'\u{1F60A}'}</span>
           </button>
         </div>
       </div>
