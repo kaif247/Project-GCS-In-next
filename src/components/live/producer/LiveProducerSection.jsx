@@ -3,6 +3,8 @@ import ToggleButton from '../../ToggleButton';
 import LiveProducerSidebar from './LiveProducerSidebar';
 import LiveProducerSetup from './LiveProducerSetup';
 import LiveProducerDashboard from './LiveProducerDashboard';
+import StreamSettingsPanel from '../StreamSettingsPanel';
+import CameraControlsPanel from '../CameraControlsPanel';
 
 const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
   const videoRef = useRef(null);
@@ -21,6 +23,12 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
     message: '',
     shareToStory: true,
   });
+  const [latencyChoice, setLatencyChoice] = useState('auto');
+  const [audience, setAudience] = useState('friends');
+  const [embedLiveVideo, setEmbedLiveVideo] = useState(false);
+  const [unpublishAfterEnd, setUnpublishAfterEnd] = useState(false);
+  const [selectedCameraSource, setSelectedCameraSource] = useState(null);
+  const [selectedMicrophoneSource, setSelectedMicrophoneSource] = useState(null);
 
   const stopStream = useCallback(() => {
     if (streamRef.current) {
@@ -29,6 +37,16 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
     }
     if (videoRef.current) {
       videoRef.current.srcObject = null;
+    }
+  }, []);
+
+  const attachStreamToVideo = useCallback(() => {
+    if (streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      const playPromise = videoRef.current.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {});
+      }
     }
   }, []);
 
@@ -48,9 +66,7 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
         return;
       }
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
+      attachStreamToVideo();
       setPermissionGranted(true);
     } catch (error) {
       setPermissionDenied(true);
@@ -86,6 +102,10 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
   }, [requestMedia, stopStream]);
 
   useEffect(() => {
+    attachStreamToVideo();
+  }, [activeSection, isLive, attachStreamToVideo]);
+
+  useEffect(() => {
     if (onLiveStateChange) onLiveStateChange(isLive);
   }, [isLive, onLiveStateChange]);
 
@@ -102,9 +122,7 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
       const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
       stopStream();
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
+      attachStreamToVideo();
       setPermissionGranted(true);
       setPermissionDenied(false);
       setSelectedVideoSource('screen');
@@ -185,7 +203,27 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
         </div>
 
         <div className="live-producer-main">
-          {activeSection === 'dashboard' || isLive ? (
+          {activeSection === 'settings' ? (
+            <div className="lp-settings-grid">
+              <StreamSettingsPanel
+                latencyChoice={latencyChoice}
+                onLatencyChange={setLatencyChoice}
+                audience={audience}
+                onAudienceChange={setAudience}
+                embedLiveVideo={embedLiveVideo}
+                onEmbedLiveVideoChange={setEmbedLiveVideo}
+                unpublishAfterEnd={unpublishAfterEnd}
+                onUnpublishAfterEndChange={setUnpublishAfterEnd}
+              />
+              <CameraControlsPanel
+                selectedCameraSource={selectedCameraSource}
+                onCameraSourceChange={setSelectedCameraSource}
+                selectedMicrophoneSource={selectedMicrophoneSource}
+                onMicrophoneSourceChange={setSelectedMicrophoneSource}
+                onScreenShare={handleScreenShare}
+              />
+            </div>
+          ) : activeSection === 'dashboard' || isLive ? (
             <LiveProducerDashboard
               videoRef={videoRef}
               hasActiveStream={hasActiveStream}
