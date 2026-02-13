@@ -9,7 +9,7 @@ import { notificationsData } from '../data/notificationsData';
 import MenuDropdown from './MenuDropdown';
 import Icon from './Icon';
 
-const Navbar = () => {
+const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   const { t, language, setLanguage, languages } = useContext(LanguageContext);
@@ -40,12 +40,23 @@ const Navbar = () => {
     return router.asPath === path || router.asPath.startsWith(`${path}/`);
   };
 
+  const handleNavAttempt = (event, path) => {
+    if (!onNavigateAttempt || !path) return;
+    const shouldNavigate = onNavigateAttempt(path);
+    if (!shouldNavigate) event.preventDefault();
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
         {/* Left Section */}
         <div className="navbar-left">
-          <Link href="/" className="navbar-logo" aria-label="Home">
+          <Link
+            href="/"
+            className="navbar-logo"
+            aria-label="Home"
+            onClick={(event) => handleNavAttempt(event, '/')}
+          >
             {/* full rectangular logo (not circular) from public folder */}
             <img src="/GCS.png" alt="GCS" className="navbar-logo-img" />
           </Link>
@@ -74,6 +85,7 @@ const Navbar = () => {
                   className={`nav-item ${isActive ? 'active' : ''}`}
                   aria-label={item.label ? t(item.label) : undefined}
                   aria-current={isActive ? 'page' : undefined}
+                  onClick={(event) => handleNavAttempt(event, item.path)}
                 >
                   <span className="nav-icon">{item.icon}</span>
                 </Link>
@@ -122,6 +134,7 @@ const Navbar = () => {
             title={t('Messenger')}
             onMouseEnter={() => setIsMessengerHover(true)}
             onMouseLeave={() => setIsMessengerHover(false)}
+            onClick={(event) => handleNavAttempt(event, '/chats')}
           >
             <Icon
               name={isMessengerHover ? 'messenger_5968771' : (isDarkMode ? 'messenger_5968771' : 'messenger_596877')}

@@ -1,7 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import LiveCard from './LiveCard';
-import MobileHeader from './MobileHeader';
+import ToggleButton from '../ToggleButton';
 
 const LiveSetupPage = ({
   username,
@@ -10,44 +10,54 @@ const LiveSetupPage = ({
   destinations,
   defaultDestination,
   onPrimaryAction,
+  hideToggle = false,
 }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 900;
+      setIsMobile(mobile);
+      if (!mobile) setIsSidebarOpen(true);
+      if (mobile) setIsSidebarOpen(false);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className="live-page">
-      <MobileHeader
-        title="Create live video"
-        isOpen={isMobileMenuOpen}
-        onToggle={() => setIsMobileMenuOpen((prev) => !prev)}
-      />
+      {isMobile && !hideToggle && (
+        <ToggleButton
+          isOpen={isSidebarOpen}
+          onToggle={() => setIsSidebarOpen((prev) => !prev)}
+          label="Toggle live sidebar"
+        />
+      )}
 
       <div className="live-layout">
-        <div className="live-sidebar live-sidebar--desktop">
-          <Sidebar
-            username={username}
-            avatarUrl={avatarUrl}
-            roleText={roleText}
-            destinations={destinations}
-            defaultDestination={defaultDestination}
-            variant="desktop"
+        {isMobile && isSidebarOpen && (
+          <button
+            type="button"
+            className="live-sidebar-backdrop"
+            aria-label="Close live sidebar"
+            onClick={() => setIsSidebarOpen(false)}
           />
-        </div>
-
-        {isMobileMenuOpen && (
-          <div className="live-drawer-overlay" onClick={() => setIsMobileMenuOpen(false)}>
-            <div className="live-drawer" onClick={(e) => e.stopPropagation()}>
-              <Sidebar
-                username={username}
-                avatarUrl={avatarUrl}
-                roleText={roleText}
-                destinations={destinations}
-                defaultDestination={defaultDestination}
-                variant="mobile"
-                onClose={() => setIsMobileMenuOpen(false)}
-              />
-            </div>
-          </div>
         )}
+        <div className={`live-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>
+          <div className="live-sidebar">
+            <Sidebar
+              username={username}
+              avatarUrl={avatarUrl}
+              roleText={roleText}
+              destinations={destinations}
+              defaultDestination={defaultDestination}
+              variant="desktop"
+            />
+          </div>
+        </div>
 
         <main className="live-main">
           <div className="live-main-inner">
