@@ -100,6 +100,7 @@ export default function App({ Component, pageProps }) {
     setLeavePrompt({ open: false, target: null, action: null });
   };
 
+
   return (
     <ThemeProvider>
       <LanguageProvider>

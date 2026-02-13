@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   FaRegCommentDots,
   FaUsers,
@@ -7,6 +7,8 @@ import {
   FaRegEye,
   FaThumbsUp,
   FaVideo,
+  FaExpand,
+  FaCompress,
 } from 'react-icons/fa';
 
 const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
@@ -14,7 +16,10 @@ const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
   const [comments, setComments] = useState([]);
   const [pollQuestion, setPollQuestion] = useState('');
   const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollCorrectIndex, setPollCorrectIndex] = useState('');
   const [polls, setPolls] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const fullscreenRef = useRef(null);
 
   const pollOptionsTrimmed = useMemo(
     () => pollOptions.map((option) => option.trim()).filter(Boolean),
@@ -42,23 +47,52 @@ const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
   const handleCreatePoll = () => {
     const question = pollQuestion.trim();
     if (!question || pollOptionsTrimmed.length < 2) return;
+    const correctIndex =
+      pollCorrectIndex === '' ? null : Number.parseInt(pollCorrectIndex, 10);
     setPolls((prev) => [
       {
         id: Date.now(),
         question,
         options: pollOptionsTrimmed,
+        votes: new Array(pollOptionsTrimmed.length).fill(0),
+        correctIndex: Number.isNaN(correctIndex) ? null : correctIndex,
       },
       ...prev,
     ]);
     setPollQuestion('');
     setPollOptions(['', '']);
+    setPollCorrectIndex('');
+  };
+
+  const handleVote = (pollId, optionIndex) => {
+    setPolls((prev) =>
+      prev.map((poll) => {
+        if (poll.id !== pollId) return poll;
+        if (poll.selectedIndex === optionIndex) return poll;
+        const votes = poll.votes.map((count, idx) =>
+          idx === optionIndex ? count + 1 : count
+        );
+        return { ...poll, votes, selectedIndex: optionIndex };
+      })
+    );
+  };
+
+  const handleToggleFullscreen = async () => {
+    if (!fullscreenRef.current) return;
+    if (!document.fullscreenElement) {
+      await fullscreenRef.current.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      await document.exitFullscreen();
+      setIsFullscreen(false);
+    }
   };
 
   return (
     <div className="lp-dashboard">
       <div className="lp-dashboard-top">
         <div className="lp-card lp-preview-card">
-          <div className="lp-preview">
+          <div className="lp-preview lp-preview--live" ref={fullscreenRef}>
             {hasActiveStream ? (
               <video ref={videoRef} autoPlay muted playsInline />
             ) : (
@@ -67,6 +101,50 @@ const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
                 <div className="lp-preview-title">Start your video to see the preview.</div>
                 <div className="lp-preview-sub">Select Webcam to request camera access.</div>
               </div>
+            )}
+            {hasActiveStream && (
+              <>
+                <div className="lp-live-viewers">
+                  <FaUsers />
+                  <span>0</span>
+                </div>
+                <div className="lp-live-comments">
+                  {comments.length === 0 ? (
+                    <div className="lp-live-comments__empty">No comments yet</div>
+                  ) : (
+                    comments.slice(0, 4).map((comment) => (
+                      <div className="lp-live-comment" key={`overlay-${comment.id}`}>
+                        <strong>{comment.author}</strong> {comment.text}
+                      </div>
+                    ))
+                  )}
+                  <div className="lp-live-comment-input">
+                    <input
+                      type="text"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      placeholder="Write a comment"
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                          event.preventDefault();
+                          handleAddComment();
+                        }
+                      }}
+                    />
+                    <button type="button" onClick={handleAddComment}>
+                      Post
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="lp-live-fullscreen-btn"
+                  onClick={handleToggleFullscreen}
+                  aria-label={isFullscreen ? 'Exit full screen' : 'Enter full screen'}
+                >
+                  {isFullscreen ? <FaCompress /> : <FaExpand />}
+                </button>
+              </>
             )}
           </div>
           <div className="lp-event-logs">
@@ -193,11 +271,33 @@ const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
                     <span>{poll.question}</span>
                   </div>
                   <div className="lp-poll-options">
-                    {poll.options.map((option, index) => (
-                      <div key={`${poll.id}-${index}`} className="lp-poll-option">
-                        {option}
-                      </div>
-                    ))}
+                    {poll.options.map((option, index) => {
+                      const totalVotes = poll.votes.reduce((sum, v) => sum + v, 0) || 1;
+                      const percent = Math.round((poll.votes[index] / totalVotes) * 100);
+                      const isSelected = poll.selectedIndex === index;
+                      const isCorrect = poll.correctIndex === index;
+                      const showResult = poll.selectedIndex !== undefined;
+                      return (
+                        <button
+                          type="button"
+                          key={`${poll.id}-${index}`}
+                          className={`lp-poll-option-btn ${isSelected ? 'is-selected' : ''}`}
+                          onClick={() => handleVote(poll.id, index)}
+                        >
+                          <span className="lp-poll-option__label">{option}</span>
+                          {showResult && (
+                            <span className="lp-poll-option__meta">
+                              {percent}% • {poll.votes[index]}
+                            </span>
+                          )}
+                          {showResult && poll.correctIndex !== null && isSelected && (
+                            <span className={`lp-poll-option__result ${isCorrect ? 'ok' : 'bad'}`}>
+                              {isCorrect ? 'Correct' : 'Incorrect'}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -221,6 +321,18 @@ const LiveProducerDashboard = ({ videoRef, hasActiveStream, onEndLive }) => {
                 placeholder={`Add option ${index + 1}`}
               />
             ))}
+            <label>Correct option (optional)</label>
+            <select
+              value={pollCorrectIndex}
+              onChange={(e) => setPollCorrectIndex(e.target.value)}
+            >
+              <option value="">No correct option</option>
+              {pollOptionsTrimmed.map((option, index) => (
+                <option key={`correct-${index}`} value={index}>
+                  {option}
+                </option>
+              ))}
+            </select>
             <button type="button" className="lp-btn-secondary" onClick={handleAddPollOption}>
               Add another option
             </button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import { FaVideo, FaRegCommentDots, FaCog, FaMagic, FaCheckCircle } from 'react-icons/fa';
 
 const LiveProducerSidebar = ({
@@ -96,10 +95,14 @@ const LiveProducerSidebar = ({
           <span className="live-producer-nav__icon"><FaCheckCircle /></span>
           Dashboard
         </button>
-        <Link href="/settings" className="live-producer-nav__item">
+        <button
+          type="button"
+          className={`live-producer-nav__item ${activeSection === 'settings' ? 'active' : ''}`}
+          onClick={() => onSectionChange('settings')}
+        >
           <span className="live-producer-nav__icon"><FaCog /></span>
           Settings
-        </Link>
+        </button>
         <button type="button" className="live-producer-nav__item">
           <span className="live-producer-nav__icon"><FaMagic /></span>
           Interactivity
