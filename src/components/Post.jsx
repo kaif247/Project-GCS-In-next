@@ -280,19 +280,19 @@ const Post = ({ post }) => {
               <div className="post-actions-bar">
                 <button className={`action-btn ${liked ? 'liked' : ''}`} type="button" onClick={handleLike}>
                   {liked ? (
-                    <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
+                      <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
                   ) : (
                     <span aria-hidden="true">👍</span>
                   )}
                   <span>{t('Like')}</span>
                 </button>
                 <button className="action-btn" type="button">
-                  <Icon name="comment" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>{t('Comment')}</span>
+                    <Icon name="comment" size={16} className="icon--no-circle" aria-hidden="true" />
+                    <span>{t('Comment')}</span>
                 </button>
                 <button className="action-btn" type="button" onClick={() => setIsShareOpen(true)}>
-                  <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>{t('Share')}</span>
+                    <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
+                    <span>{t('Share')}</span>
                 </button>
               </div>
               <div className="post-quick-comment">

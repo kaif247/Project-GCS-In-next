@@ -19,6 +19,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  width: 100%;
   max-width: 1920px;
   margin: 0 auto;
   padding: 12px 16px;
@@ -199,6 +200,7 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .navbar-icon-btn {
@@ -360,7 +362,7 @@
   }
 
   .navbar-container {
-    padding: 8px 12px;
+    padding: 8px 5px;
     gap: 12px;
   }
 
@@ -379,25 +381,16 @@
   }
 
   .nav-icon {
-    font-size: 16px;
+    font-size: 29px;
   }
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding-top: 23px;
+  .navbar-logo-img {
+    
   }
 
-  .navbar-logo {
-    width: 36px;
-    height: 36px;
-    padding-left: 23px;
-  }
 
-  .navbar-logo svg {
-    width: 32px;
-    height: 32px;
-  }
 
   .navbar-search {
     width: 120px;
@@ -441,7 +434,7 @@
 
   .navbar-container {
     height: 64px;
-    padding-bottom: 60px;
+    padding-right: 8px;
   }
 
   .navbar-right {
@@ -457,4 +450,18 @@
     width: 28px;
     height: 28px;
   }
+
+@media (max-width: 420px) {
+  .navbar-right {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 6px;
+  }
+
+  .navbar-left {
+    margin-left: 4px;
+  }
+}
 }

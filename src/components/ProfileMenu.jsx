@@ -2,15 +2,29 @@ import React, { useEffect, useRef, useContext } from 'react';
 import Link from 'next/link';
 import { LanguageContext } from '../context/LanguageContext';
 
-const MenuRow = ({ icon, label, meta, onClick }) => (
-  <button className="profile-menu__item" onClick={onClick} type="button">
-    <span className="profile-menu__icon">{icon}</span>
-    <span className="profile-menu__label">
-      {label}
-      {meta && <span className="profile-menu__meta">{meta}</span>}
-    </span>
-  </button>
-);
+const MenuRow = ({ icon, label, meta, onClick, href }) => {
+  if (href) {
+    return (
+      <Link className="profile-menu__item" href={href} onClick={onClick}>
+        <span className="profile-menu__icon">{icon}</span>
+        <span className="profile-menu__label">
+          {label}
+          {meta && <span className="profile-menu__meta">{meta}</span>}
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <button className="profile-menu__item" onClick={onClick} type="button">
+      <span className="profile-menu__icon">{icon}</span>
+      <span className="profile-menu__label">
+        {label}
+        {meta && <span className="profile-menu__meta">{meta}</span>}
+      </span>
+    </button>
+  );
+};
 
 const ChevronIcon = () => (
   <svg viewBox="0 0 20 20" aria-hidden="true">

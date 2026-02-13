@@ -1,7 +1,7 @@
 import React from 'react';
 import LiveSetupPage from '../components/live/LiveSetupPage';
 
-const LivePage = () => {
+const LivePage = ({ onOpenLiveProducer, isLiveProducerOpen }) => {
   const dummyUser = {
     username: 'Kaif',
     avatarUrl: 'https://i.pravatar.cc/150?img=1',
@@ -16,7 +16,8 @@ const LivePage = () => {
       roleText="Host · Your profile"
       destinations={destinations}
       defaultDestination="Post on profile"
-      onPrimaryAction={() => console.log('Set up live video')}
+      onPrimaryAction={onOpenLiveProducer}
+      hideToggle={isLiveProducerOpen}
     />
   );
 };

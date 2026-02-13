@@ -1,7 +1,7 @@
 .sidebar-toggle {
   position: fixed;
-  top: 72px;
-  left: 12px;
+  top: 53px;
+  left: 16px;
   z-index: 300;
   width: 36px;
   height: 36px;
@@ -13,7 +13,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px var(--shadow);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(227, 143, 18, 0.35);
 }
 
 @media (max-width: 900px) {
