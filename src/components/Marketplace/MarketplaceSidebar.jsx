@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Link from 'next/link';
 import Icon from '../Icon';
 import { LanguageContext } from '../../context/LanguageContext';
 
@@ -64,18 +65,18 @@ const MarketplaceSidebar = ({
           </span>
           <span>{t('Browse all')}</span>
         </button>
-        <button className="marketplace-sidebar__item">
+        <Link href="/marketplace/inbox?tab=notifications" className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="notification" size={18} />
           </span>
           <span>{t('Notifications')}</span>
-        </button>
-        <button className="marketplace-sidebar__item">
+        </Link>
+        <Link href="/marketplace/inbox" className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="inbox" size={18} />
           </span>
           <span>{t('Inbox')}</span>
-        </button>
+        </Link>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="marketplace-access" size={18} />

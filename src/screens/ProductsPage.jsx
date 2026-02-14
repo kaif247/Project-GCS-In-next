@@ -53,10 +53,12 @@ const ProductsPage = () => {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState({ type: 'idle', message: '' });
 
-  const primaryImage = useMemo(
-    () => form.images.find((url) => url.trim() !== '') || '',
+  const uploadedImages = useMemo(
+    () => form.images.filter((url) => url.trim() !== ''),
     [form.images]
   );
+
+  const primaryImage = uploadedImages[0] || '';
 
   const preview = useMemo(() => {
     const priceValue = form.price === '' ? '' : Number(form.price);
@@ -80,9 +82,14 @@ const ProductsPage = () => {
       contactName: form.contactName.trim() || t('Your name'),
       contactEmail: form.contactEmail.trim() || t('Email'),
       contactPhone: form.contactPhone.trim() || t('Phone'),
-      image: primaryImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900&h=900&fit=crop',
+      image: primaryImage,
     };
   }, [form, primaryImage, t]);
+
+  const previewImages = useMemo(() => {
+    if (uploadedImages.length > 0) return uploadedImages.slice(0, 4);
+    return [];
+  }, [uploadedImages, preview.image]);
 
   const handleChange = (field) => (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -95,6 +102,36 @@ const ProductsPage = () => {
       const images = [...prev.images];
       images[index] = value;
       return { ...prev, images };
+    });
+  };
+
+  const handleImageUpload = (event) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    const readers = files.map(
+      (file) =>
+        new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        })
+    );
+
+    Promise.all(readers).then((results) => {
+      setForm((prev) => {
+        const images = [...prev.images];
+        results.forEach((result) => {
+          const dataUrl = typeof result === 'string' ? result : '';
+          const emptyIndex = images.findIndex((url) => url.trim() === '');
+          if (emptyIndex >= 0) {
+            images[emptyIndex] = dataUrl;
+          } else {
+            images.push(dataUrl);
+          }
+        });
+        return { ...prev, images };
+      });
     });
   };
 
@@ -388,6 +425,15 @@ const ProductsPage = () => {
                 />
               ))}
             </div>
+            <label className="products-form__upload">
+              <span>{t('Upload your photos')}</span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageUpload}
+              />
+            </label>
           </div>
 
           <div className="products-form__divider" />
@@ -429,8 +475,20 @@ const ProductsPage = () => {
         <section className="products-preview">
           <h2>{t('Preview')}</h2>
           <div className="products-preview__card">
-            <div className="products-preview__image">
-              <img src={preview.image} alt={preview.title} />
+            <div
+              className={`products-preview__image-grid ${
+                previewImages.length > 1 ? 'is-split' : ''
+              }`}
+            >
+              {previewImages.length === 0 ? (
+                <div className="products-preview__placeholder">
+                  {t('Add product image')}
+                </div>
+              ) : (
+                previewImages.map((src, index) => (
+                  <img key={`${src}-${index}`} src={src} alt={preview.title} />
+                ))
+              )}
             </div>
             <div className="products-preview__body">
               <div className="products-preview__price">{formatPrice(preview.price, t)}</div>
