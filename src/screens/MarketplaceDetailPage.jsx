@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { LanguageContext } from '../context/LanguageContext';
 import { MarketplaceContext } from '../context/MarketplaceContext';
 import { CartContext } from '../context/CartContext';
+import MarketplaceChatWidget from '../components/Marketplace/MarketplaceChatWidget';
 
 const formatPrice = (value, t) => {
   if (value === 0) return t('Free');
@@ -20,6 +21,9 @@ const MarketplaceDetailPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [status, setStatus] = useState('');
+  const [activeImage, setActiveImage] = useState('');
+  const [zoom, setZoom] = useState({ visible: false, x: 50, y: 50 });
+  const [chatOpen, setChatOpen] = useState(false);
 
   const product = useMemo(() => {
     if (!id) return null;
@@ -44,10 +48,31 @@ const MarketplaceDetailPage = () => {
 
   const details = product.details || {};
 
+  const galleryImages = useMemo(() => {
+    const list = details.images && details.images.length ? details.images : [product.image];
+    return list.filter(Boolean);
+  }, [details.images, product.image]);
+
+  const mainIndex = Math.max(0, galleryImages.findIndex((img) => img === activeImage));
+  const mainImage = activeImage || galleryImages[0] || product.image;
+
   const handleAddToCart = () => {
     addToCart(product);
     setStatus(t('Added to cart'));
     setTimeout(() => setStatus(''), 2000);
+  };
+
+  const handleZoomMove = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    const safeX = Math.max(0, Math.min(100, x));
+    const safeY = Math.max(0, Math.min(100, y));
+    setZoom({ visible: true, x: safeX, y: safeY });
+  };
+
+  const handleZoomLeave = () => {
+    setZoom((prev) => ({ ...prev, visible: false }));
   };
 
   return (
@@ -63,10 +88,58 @@ const MarketplaceDetailPage = () => {
 
       <div className="marketplace-detail__content">
         <div className="marketplace-detail__media">
-          <img src={product.image} alt={product.title} />
+          <div
+            className="marketplace-detail__main-image"
+            onMouseMove={handleZoomMove}
+            onMouseLeave={handleZoomLeave}
+          >
+            <img src={mainImage} alt={product.title} />
+            <div
+              className={`marketplace-detail__zoom-lens ${zoom.visible ? 'is-visible' : ''}`}
+              style={{
+                backgroundImage: `url(${mainImage})`,
+                backgroundPosition: `${zoom.x}% ${zoom.y}%`,
+              }}
+            />
+            {galleryImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="marketplace-detail__nav marketplace-detail__nav--prev"
+                  onClick={() => {
+                    const nextIndex = (mainIndex - 1 + galleryImages.length) % galleryImages.length;
+                    setActiveImage(galleryImages[nextIndex]);
+                  }}
+                  aria-label={t('Previous image')}
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="marketplace-detail__nav marketplace-detail__nav--next"
+                  onClick={() => {
+                    const nextIndex = (mainIndex + 1) % galleryImages.length;
+                    setActiveImage(galleryImages[nextIndex]);
+                  }}
+                  aria-label={t('Next image')}
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
           <div className="marketplace-detail__thumbs">
-            {(details.images || [product.image]).slice(0, 4).map((src, index) => (
-              <img key={`${src}-${index}`} src={src} alt={product.title} />
+            {galleryImages.map((src, index) => (
+              <button
+                type="button"
+                key={`${src}-${index}`}
+                className={`marketplace-detail__thumb ${
+                  mainImage === src ? 'is-active' : ''
+                }`}
+                onClick={() => setActiveImage(src)}
+              >
+                <img src={src} alt={product.title} />
+              </button>
             ))}
           </div>
         </div>
@@ -87,7 +160,11 @@ const MarketplaceDetailPage = () => {
             <button type="button" className="marketplace-detail__cta" onClick={handleAddToCart}>
               {t('Add to cart')}
             </button>
-            <button type="button" className="marketplace-detail__cta-outline">
+            <button
+              type="button"
+              className="marketplace-detail__cta-outline"
+              onClick={() => setChatOpen(true)}
+            >
               {t('Message seller')}
             </button>
           </div>
@@ -158,6 +235,26 @@ const MarketplaceDetailPage = () => {
           </div>
         </div>
       </div>
+
+      <button
+        type="button"
+        className="marketplace-chat-fab"
+        onClick={() => setChatOpen(true)}
+        aria-label={t('Contact seller')}
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path
+            d="M6 18l-2.5 2.5V6a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H9l-3 2z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+
+      <MarketplaceChatWidget
+        product={product}
+        isOpen={chatOpen}
+        onClose={() => setChatOpen(false)}
+      />
     </div>
   );
 };
