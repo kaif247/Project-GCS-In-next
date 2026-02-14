@@ -240,6 +240,9 @@ const LiveProducerSection = ({ onRequestClose, onLiveStateChange }) => {
               onScreenShare={handleScreenShare}
               postDetails={postDetails}
               onPostDetailsChange={setPostDetails}
+              onGoLive={handleGoLive}
+              onBack={handleBack}
+              isGoLiveDisabled={isGoLiveDisabled}
             />
           )}
         </div>

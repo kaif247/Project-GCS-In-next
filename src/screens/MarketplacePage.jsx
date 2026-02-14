@@ -1,9 +1,9 @@
 import React, { useMemo, useState, useEffect, useContext } from 'react';
 import MarketplaceSidebar from '../components/Marketplace/MarketplaceSidebar';
 import MarketplaceGrid from '../components/Marketplace/MarketplaceGrid';
-import { marketplaceProducts } from '../data/marketplaceProducts';
 import ToggleButton from '../components/ToggleButton';
 import { LanguageContext } from '../context/LanguageContext';
+import { MarketplaceContext } from '../context/MarketplaceContext';
 
 const categories = [
   'Vehicles',
@@ -18,6 +18,7 @@ const categories = [
 
 const MarketplacePage = () => {
   const { t } = useContext(LanguageContext);
+  const { products } = useContext(MarketplaceContext);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('Browse all');
   const [isMobile, setIsMobile] = useState(false);
@@ -37,13 +38,13 @@ const MarketplacePage = () => {
 
   const filteredProducts = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    return marketplaceProducts.filter((product) => {
+    return products.filter((product) => {
       const matchesSearch = term === '' || product.title.toLowerCase().includes(term);
       const matchesCategory =
         activeCategory === 'Browse all' || product.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, activeCategory]);
+  }, [searchTerm, activeCategory, products]);
 
   return (
     <div className="marketplace-page">
