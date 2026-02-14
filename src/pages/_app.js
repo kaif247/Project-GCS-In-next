@@ -17,12 +17,15 @@ import '../components/Icon.css';
 import '../components/ToggleButton.css';
 import '../components/Chats/chats.css';
 import '../components/Marketplace/marketplace.css';
+import '../components/Products/products.css';
 import '../components/Friends/friends.css';
 import '../components/live/live.css';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ThemeProvider } from '../context/ThemeContext';
 import { LanguageProvider } from '../context/LanguageContext';
+import { MarketplaceProvider } from '../context/MarketplaceContext';
+import { CartProvider } from '../context/CartContext';
 import Navbar from '../components/Navbar';
 import InitialLoader from '../components/InitialLoader';
 import LiveProducerSection from '../components/live/producer/LiveProducerSection';
@@ -104,44 +107,48 @@ export default function App({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <div className="app">
-          {showLoader && <InitialLoader />}
-          <Navbar
-            isLiveOpen={isLiveOpen}
-            onToggleLive={handleToggleLive}
-            onNavigateAttempt={handleNavigateAttempt}
-          />
-          <Component
-            {...pageProps}
-            onOpenLiveProducer={() => setIsLiveOpen(true)}
-            isLiveProducerOpen={isLiveOpen}
-          />
-          {isLiveOpen && (
-            <LiveProducerSection
-              onRequestClose={handleLiveCloseRequest}
-              onLiveStateChange={setIsLiveSession}
-            />
-          )}
-          {leavePrompt.open && (
-            <div className="live-leave-overlay" role="dialog" aria-modal="true">
-              <div className="live-leave-card">
-                <h3 className="live-leave-title">End live session?</h3>
-                <p className="live-leave-text">
-                  You are currently live. Leaving this page will end your live session and turn off
-                  your camera and microphone.
-                </p>
-                <div className="live-leave-actions">
-                  <button type="button" className="lp-btn-secondary" onClick={handleCancelLeave}>
-                    Stay live
-                  </button>
-                  <button type="button" className="lp-btn-primary" onClick={handleConfirmLeave}>
-                    End live
-                  </button>
+        <MarketplaceProvider>
+          <CartProvider>
+            <div className="app">
+              {showLoader && <InitialLoader />}
+              <Navbar
+                isLiveOpen={isLiveOpen}
+                onToggleLive={handleToggleLive}
+                onNavigateAttempt={handleNavigateAttempt}
+              />
+              <Component
+                {...pageProps}
+                onOpenLiveProducer={() => setIsLiveOpen(true)}
+                isLiveProducerOpen={isLiveOpen}
+              />
+              {isLiveOpen && (
+                <LiveProducerSection
+                  onRequestClose={handleLiveCloseRequest}
+                  onLiveStateChange={setIsLiveSession}
+                />
+              )}
+              {leavePrompt.open && (
+                <div className="live-leave-overlay" role="dialog" aria-modal="true">
+                  <div className="live-leave-card">
+                    <h3 className="live-leave-title">End live session?</h3>
+                    <p className="live-leave-text">
+                      You are currently live. Leaving this page will end your live session and turn off
+                      your camera and microphone.
+                    </p>
+                    <div className="live-leave-actions">
+                      <button type="button" className="lp-btn-secondary" onClick={handleCancelLeave}>
+                        Stay live
+                      </button>
+                      <button type="button" className="lp-btn-primary" onClick={handleConfirmLeave}>
+                        End live
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
-          )}
-        </div>
+          </CartProvider>
+        </MarketplaceProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

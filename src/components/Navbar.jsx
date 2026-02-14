@@ -31,7 +31,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
     { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
     { id: 'marketplace', label: '', icon: <Icon name="marketplace2" size={28} />, path: '/marketplace' },
     { id: 'friends', label: '', icon: <Icon name="friends" size={28} />, path: '/friends' },
-    { id: 'products', label: '', icon: <Icon name="product" size={28} /> },
+    { id: 'products', label: '', icon: <Icon name="product" size={28} />, path: '/products' },
   ];
 
   const isActiveRoute = (path) => {

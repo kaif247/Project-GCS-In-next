@@ -11,17 +11,20 @@ import {
   FaSmile,
 } from 'react-icons/fa';
 
-const LiveProducerSetup = ({
-  videoRef,
-  isRequesting,
-  permissionGranted,
-  permissionDenied,
-  selectedVideoSource,
-  onVideoSourceChange,
-  onScreenShare,
-  postDetails,
-  onPostDetailsChange,
-}) => {
+const LiveProducerSetup = ({
+  videoRef,
+  isRequesting,
+  permissionGranted,
+  permissionDenied,
+  selectedVideoSource,
+  onVideoSourceChange,
+  onScreenShare,
+  postDetails,
+  onPostDetailsChange,
+  onGoLive,
+  onBack,
+  isGoLiveDisabled,
+}) => {
   const showStream = permissionGranted && selectedVideoSource !== 'software' && !permissionDenied;
 
   return (
@@ -98,8 +101,8 @@ const LiveProducerSetup = ({
         </div>
       </div>
 
-      <div className="lp-column">
-        <div className="lp-card lp-post-details">
+      <div className="lp-column">
+        <div className="lp-card lp-post-details">
           <div className="lp-card__header">
             <h3>Add post details</h3>
           </div>
@@ -135,15 +138,29 @@ const LiveProducerSetup = ({
               placeholder="Say something about your live video"
             />
           </label>
-          <div className="lp-post-actions">
-            <FaUserFriends />
-            <FaMapMarkerAlt />
-            <FaSmile />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+          <div className="lp-post-actions">
+            <FaUserFriends />
+            <FaMapMarkerAlt />
+            <FaSmile />
+          </div>
+        </div>
+
+        <div className="lp-setup-actions">
+          <button type="button" className="lp-btn-secondary" onClick={onBack}>
+            Back
+          </button>
+          <button
+            type="button"
+            className="lp-btn-primary"
+            onClick={onGoLive}
+            disabled={isGoLiveDisabled}
+          >
+            Go Live
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default LiveProducerSetup;
