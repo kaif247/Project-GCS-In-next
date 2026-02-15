@@ -15,7 +15,6 @@ const sidebarItems = [
   { to: '/marketplace', icon: <FaStore />, label: 'Marketplace' },
   { to: '/watch', icon: <FaTv />, label: 'Watch' },
   { to: '/saved', icon: <FaBookmark />, label: 'Saved' },
-  { to: '/memories', icon: <FaClock />, label: 'Memories' },
   { to: '/events', icon: <MdEvent />, label: 'Events' },
   { to: '/feeds', icon: <CgFeed />, label: 'Feeds' },
 ];

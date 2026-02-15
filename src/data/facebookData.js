@@ -9,9 +9,8 @@ export const sidebarItems = [
   { id: 1, icon: 'Meta AI', label: 'Meta AI', color: '#E7F3FF' },
   { id: 2, icon: 'Friends', label: 'Friends', color: '#EBF5FF' },
   { id: 3, icon: 'Suggestions', label: 'Suggestions', color: '#E7F3FF' },
-  { id: 4, icon: 'Memories', label: 'Memories', color: '#FEF3C7' },
-  { id: 5, icon: 'Saved', label: 'Saved', color: '#DDD6FE' },
-  { id: 6, icon: 'Marketplace', label: 'Marketplace', color: '#DBEAFE' },
+  { id: 4, icon: 'Saved', label: 'Saved', color: '#DDD6FE' },
+  { id: 5, icon: 'Marketplace', label: 'Marketplace', color: '#DBEAFE' },
 ];
 
 export const stories = [

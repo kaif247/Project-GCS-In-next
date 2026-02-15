@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import Link from 'next/link';
 import { LanguageContext } from '../context/LanguageContext';
 
@@ -35,6 +35,18 @@ const ChevronIcon = () => (
 const ProfileMenu = ({ open, onClose, user }) => {
   const menuRef = useRef(null);
   const { t } = useContext(LanguageContext);
+  const [hasProfile, setHasProfile] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = window.localStorage.getItem('gcs-profile');
+      setHasProfile(!!stored);
+    } catch (error) {
+      setHasProfile(false);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -55,13 +67,25 @@ const ProfileMenu = ({ open, onClose, user }) => {
         <img src={user.avatar} alt={user.name} />
         <div>
           <div className="profile-menu__name">{user.name}</div>
-          <Link href="/profiles" className="profile-menu__profiles" onClick={onClose}>
+          <Link
+            href={hasProfile ? '/profile' : '/profile/create'}
+            className="profile-menu__profiles"
+            onClick={onClose}
+          >
             {t('See all profiles')}
           </Link>
         </div>
       </div>
 
       <div className="profile-menu__section">
+        {!hasProfile && (
+          <MenuRow
+            icon={<ChevronIcon />}
+            label={t('Create profile')}
+            href="/profile/create"
+            onClick={onClose}
+          />
+        )}
         <MenuRow
           icon={<ChevronIcon />}
           label={t('Settings & privacy')}
