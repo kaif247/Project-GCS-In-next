@@ -10,6 +10,7 @@ export const buildThreadId = (productId, sellerEmail, sellerPhone) => {
 export const MarketplaceMessagingContext = createContext({
   threads: [],
   sendBuyerMessage: () => {},
+  sendSellerMessage: () => {},
   deleteThread: () => {},
   deleteMessage: () => {},
 });
@@ -96,6 +97,29 @@ export const MarketplaceMessagingProvider = ({ children }) => {
     });
   }, []);
 
+  const sendSellerMessage = useCallback((payload) => {
+    const { threadId, text } = payload;
+    const message = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      sender: 'seller',
+      text,
+      createdAt: Date.now(),
+    };
+
+    setThreads((prev) =>
+      prev.map((thread) =>
+        thread.id === threadId
+          ? {
+              ...thread,
+              messages: [...thread.messages, message],
+              lastMessageAt: message.createdAt,
+              lastMessage: message.text,
+            }
+          : thread
+      )
+    );
+  }, []);
+
   const deleteThread = useCallback((threadId) => {
     setThreads((prev) => prev.filter((thread) => thread.id !== threadId));
   }, []);
@@ -122,10 +146,11 @@ export const MarketplaceMessagingProvider = ({ children }) => {
     () => ({
       threads,
       sendBuyerMessage,
+      sendSellerMessage,
       deleteThread,
       deleteMessage,
     }),
-    [threads, sendBuyerMessage, deleteThread, deleteMessage]
+    [threads, sendBuyerMessage, sendSellerMessage, deleteThread, deleteMessage]
   );
 
   return (

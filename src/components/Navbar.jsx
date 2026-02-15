@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ThemeContext } from '../context/ThemeContext';
@@ -21,11 +21,24 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMessengerHover, setIsMessengerHover] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
+  const [profileData, setProfileData] = useState(null);
   const languageIconMap = {
     fr: 'lang-fr',
     es: 'lang-es',
     ht: 'lang-ht',
   };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = window.localStorage.getItem('gcs-profile');
+      if (stored) {
+        setProfileData(JSON.parse(stored));
+      }
+    } catch (error) {
+      setProfileData(null);
+    }
+  }, []);
 
   const navItems = [
     { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
@@ -207,7 +220,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
               onClick={() => setIsProfileOpen((prev) => !prev)}
             >
               <img
-                src="https://i.pravatar.cc/150?img=1"
+                src={profileData?.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
                 alt="Profile"
                 className="profile-avatar"
               />
@@ -215,7 +228,10 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
             <ProfileMenu
               open={isProfileOpen}
               onClose={() => setIsProfileOpen(false)}
-              user={{ name: 'Kaif Islam', avatar: 'https://i.pravatar.cc/150?img=1' }}
+              user={{
+                name: profileData?.name || 'Kaif Islam',
+                avatar: profileData?.avatarUrl || 'https://i.pravatar.cc/150?img=1',
+              }}
             />
           </div>
 

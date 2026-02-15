@@ -6,7 +6,6 @@ import { LanguageContext } from '../context/LanguageContext';
 const socialItems = [
   { name: 'Meta AI', icon: 'meta', link: '/meta' },
   { name: 'Friends', icon: 'friends', link: '/friends' },
-  { name: 'Memories', icon: 'memories', link: '/memories' },
   { name: 'Saved', icon: 'saved', link: '/saved' },
   { name: 'Marketplace', icon: 'marketplace (2)', link: '/marketplace' },
 ];

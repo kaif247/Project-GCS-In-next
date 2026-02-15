@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { sidebarItems, currentUser } from '../data/facebookData';
@@ -9,13 +9,14 @@ const LeftSidebar = () => {
   const [showMore, setShowMore] = useState(false);
   const router = useRouter();
   const { t } = useContext(LanguageContext);
+  const [profileData, setProfileData] = useState(null);
+  const [profileRoute, setProfileRoute] = useState('/profile/create');
 
   const iconKeyMap = {
     'Meta AI': 'meta',
     'Friends': 'friends',
     'Suggestions': 'friends',
     'Feeds': 'feeds', // match exact filename key
-    'Memories': 'memories',
     'Saved': 'saved',
     'Events': 'event',
     'Marketplace': 'marketplace (2)',
@@ -33,15 +34,35 @@ const LeftSidebar = () => {
     Suggestions: '/friends/suggestions',
   };
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const stored = window.localStorage.getItem('gcs-profile');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setProfileData(parsed);
+        setProfileRoute('/profile');
+      } else {
+        setProfileRoute('/profile/create');
+      }
+    } catch (error) {
+      setProfileRoute('/profile/create');
+    }
+  }, []);
+
   return (
     <aside className="left-sidebar">
       <div className="sidebar-scroll">
         {/* User Profile Section */}
-        <div className="user-profile">
-          <img src={currentUser.avatar} alt={currentUser.name} className="user-avatar" />
-          <span className="user-name">{currentUser.name}</span>
+        <Link className="user-profile" href={profileRoute} aria-label={t('Profile')}>
+          <img
+            src={profileData?.avatarUrl || currentUser.avatar}
+            alt={profileData?.name || currentUser.name}
+            className="user-avatar"
+          />
+          <span className="user-name">{profileData?.name || currentUser.name}</span>
           {currentUser.online && <span className="online-indicator" />}
-        </div>
+        </Link>
 
         {/* Sidebar Items */}
         <nav className="sidebar-nav">

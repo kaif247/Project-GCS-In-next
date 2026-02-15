@@ -18,6 +18,9 @@ import '../components/ToggleButton.css';
 import '../components/Chats/chats.css';
 import '../components/Marketplace/marketplace.css';
 import '../components/Products/products.css';
+import '../components/ChatBot.css';
+import '../components/ProfileCreate.css';
+import '../components/ProfileView.css';
 import '../components/Friends/friends.css';
 import '../components/live/live.css';
 import { useEffect, useState } from 'react';
@@ -30,6 +33,7 @@ import { MarketplaceMessagingProvider } from '../context/MarketplaceMessagingCon
 import Navbar from '../components/Navbar';
 import InitialLoader from '../components/InitialLoader';
 import LiveProducerSection from '../components/live/producer/LiveProducerSection';
+import ChatBot from '../components/ChatBot';
 
 export default function App({ Component, pageProps }) {
   const [showLoader, setShowLoader] = useState(true);
@@ -123,6 +127,7 @@ export default function App({ Component, pageProps }) {
                   onOpenLiveProducer={() => setIsLiveOpen(true)}
                   isLiveProducerOpen={isLiveOpen}
                 />
+                <ChatBot />
                 {isLiveOpen && (
                   <LiveProducerSection
                     onRequestClose={handleLiveCloseRequest}

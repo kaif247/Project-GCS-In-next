@@ -33,6 +33,8 @@ const MarketplaceSidebar = ({
   categories,
   activeCategory,
   onCategoryChange,
+  activeSection = 'browse',
+  onSectionChange,
 }) => {
   const { t } = useContext(LanguageContext);
   return (
@@ -58,25 +60,38 @@ const MarketplaceSidebar = ({
       <nav className="marketplace-sidebar__menu">
         <button
           className={`marketplace-sidebar__item ${activeCategory === 'Browse all' ? 'active' : ''}`}
-          onClick={() => onCategoryChange('Browse all')}
+          onClick={() => {
+            onCategoryChange('Browse all');
+            onSectionChange?.('browse');
+          }}
         >
           <span className="marketplace-sidebar__icon">
             <Icon name="browse-all" size={18} />
           </span>
           <span>{t('Browse all')}</span>
         </button>
-        <Link href="/marketplace/inbox?tab=notifications" className="marketplace-sidebar__item">
+        <button
+          type="button"
+          className={`marketplace-sidebar__item ${
+            activeSection === 'notifications' ? 'active' : ''
+          }`}
+          onClick={() => onSectionChange?.('notifications')}
+        >
           <span className="marketplace-sidebar__icon">
             <Icon name="notification" size={18} />
           </span>
           <span>{t('Notifications')}</span>
-        </Link>
-        <Link href="/marketplace/inbox" className="marketplace-sidebar__item">
+        </button>
+        <button
+          type="button"
+          className={`marketplace-sidebar__item ${activeSection === 'inbox' ? 'active' : ''}`}
+          onClick={() => onSectionChange?.('inbox')}
+        >
           <span className="marketplace-sidebar__icon">
             <Icon name="inbox" size={18} />
           </span>
           <span>{t('Inbox')}</span>
-        </Link>
+        </button>
         <button className="marketplace-sidebar__item">
           <span className="marketplace-sidebar__icon">
             <Icon name="marketplace-access" size={18} />
@@ -93,7 +108,12 @@ const MarketplaceSidebar = ({
           <span>{t('Buying')}</span>
           <ChevronIcon />
         </button>
-        <button className="marketplace-sidebar__item">
+        <button
+          className={`marketplace-sidebar__item ${
+            activeSection === 'selling' ? 'active' : ''
+          }`}
+          onClick={() => onSectionChange?.('selling')}
+        >
           <span className="marketplace-sidebar__icon">
             <Icon name="selling" size={18} />
           </span>
