@@ -1,12 +1,14 @@
 import React, { useState, useContext } from 'react';
-import { currentUser } from '../data/facebookData';
+import Link from 'next/link';
 import { LanguageContext } from '../context/LanguageContext';
 import Icon from './Icon';
+import useProfileData from '../hooks/useProfileData';
 
 const CreatePost = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [postText, setPostText] = useState('');
   const { t } = useContext(LanguageContext);
+  const profile = useProfileData();
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
@@ -22,14 +24,14 @@ const CreatePost = () => {
       <div className="create-post-card">
         {/* User Avatar */}
         <div className="post-avatar-section">
-          <img src={currentUser.avatar} alt={currentUser.name} className="post-avatar" />
+          <img src={profile.avatar} alt={profile.name} className="post-avatar" />
         </div>
 
         {/* Input Section */}
         <div className="post-input-section">
           <input
             type="text"
-            placeholder={t("What's on your mind, {name}?", { name: currentUser.name.split(' ')[0] || currentUser.name })}
+            placeholder={t("What's on your mind, {name}?", { name: profile.name.split(' ')[0] || profile.name })}
             className="post-input"
             onFocus={() => setIsExpanded(true)}
             onClick={() => setIsExpanded(true)}
@@ -44,19 +46,19 @@ const CreatePost = () => {
             <textarea
               value={postText}
               onChange={(e) => setPostText(e.target.value)}
-              placeholder={t("What's on your mind, {name}?", { name: currentUser.name.split(' ')[0] || currentUser.name })}
+              placeholder={t("What's on your mind, {name}?", { name: profile.name.split(' ')[0] || profile.name })}
               className="post-textarea"
               aria-label={t('Post content')}
             />
 
             {/* Action Icons */}
             <div className="post-actions">
-              <button className="action-btn live-video" title={t('Live Video')}>
+              <Link href="/live" className="action-btn live-video" title={t('Live Video')}>
                 <span className="action-icon">
                   <Icon name="live2" size={18} className="icon--no-circle" aria-hidden="true" />
                 </span>
                 <span className="action-label">{t('Live Video')}</span>
-              </button>
+              </Link>
               <button className="action-btn photo-video" title={t('Photo/Video')}>
                 <span className="action-icon">
                   <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
@@ -95,12 +97,12 @@ const CreatePost = () => {
         {/* Compact Action Icons */}
         {!isExpanded && (
           <div className="post-compact-actions">
-            <button className="compact-action-btn live-video" title={t('Live Video')}>
+            <Link href="/live" className="compact-action-btn live-video" title={t('Live Video')}>
               <span className="action-icon">
                 <Icon name="live2" size={16} className="icon--no-circle" aria-hidden="true" />
               </span>
               {t('Live Video')}
-            </button>
+            </Link>
             <button className="compact-action-btn photo-video" title={t('Photo/Video')}>
               <span className="action-icon">
                 <Icon name="photo2" size={16} className="icon--no-circle" aria-hidden="true" />

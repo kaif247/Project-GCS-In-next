@@ -1,0 +1,80 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  padding: 120px 24px 80px;
+}
+
+.header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-blue);
+  margin-bottom: 12px;
+}
+
+.subhead {
+  color: #d7d7d7;
+  margin-top: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card h2 {
+  font-size: 22px;
+  color: var(--primary);
+}
+
+.card button {
+  margin-top: auto;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #0a0a0a;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card button:hover,
+.card button:focus-visible {
+  background: var(--accent-blue);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 96px 16px 64px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

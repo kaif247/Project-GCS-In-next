@@ -19,6 +19,7 @@ const ProfileCreatePage = () => {
   const [form, setForm] = useState(initialForm);
   const [status, setStatus] = useState('');
   const [modalImage, setModalImage] = useState('');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -31,7 +32,14 @@ const ProfileCreatePage = () => {
         // ignore malformed data
       }
     }
+    setIsHydrated(true);
   }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !isHydrated) return;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+    window.dispatchEvent(new Event('gcs-profile-updated'));
+  }, [form, isHydrated]);
 
   const preview = useMemo(
     () => ({
@@ -71,6 +79,7 @@ const ProfileCreatePage = () => {
     }
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
+      window.dispatchEvent(new Event('gcs-profile-updated'));
     }
     setStatus('Profile saved successfully.');
   };

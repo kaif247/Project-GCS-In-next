@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import CreatePost from '../components/CreatePost';
+import PostInput from '../components/PostInput';
+import Post from '../components/Post';
 import PostsPreview from '../components/FriendsSuggestions/PostsPreview';
 import PhotosPreview from '../components/FriendsSuggestions/PhotosPreview';
 import styles from '../components/FriendsSuggestions/friendsSuggestions.module.css';
+import { currentUser, posts as feedPosts } from '../data/facebookData';
+import useProfileData from '../hooks/useProfileData';
+import useLocalPosts from '../hooks/useLocalPosts';
+import useStories from '../hooks/useStories';
 
 const STORAGE_KEY = 'gcs-profile';
 
@@ -18,6 +23,44 @@ const Profile = () => {
   const [modalImage, setModalImage] = useState('');
   const coverInputRef = useRef(null);
   const avatarInputRef = useRef(null);
+  const profileRuntime = useProfileData();
+  const { posts: localPosts, addPost, removePost } = useLocalPosts();
+  const { addStory } = useStories();
+  const [isStoryComposerOpen, setIsStoryComposerOpen] = useState(false);
+  const [storyText, setStoryText] = useState('');
+  const [storyImage, setStoryImage] = useState(null);
+  const [storyVideo, setStoryVideo] = useState(null);
+  const [storyBg, setStoryBg] = useState('dark');
+  const storyFileRef = useRef(null);
+  const storyVideoRef = useRef(null);
+
+  const storyBgOptions = [
+    { key: 'dark', color: '#1f1f1f' },
+    { key: 'accent', color: '#E38F12' },
+    { key: 'cyan', color: '#22c1c3' },
+    { key: 'violet', color: '#4a00e0' },
+    { key: 'rose', color: '#ff758c' },
+    { key: 'mint', color: '#56ab2f' },
+  ];
+  const storyMode = storyVideo ? 'Video' : storyImage ? 'Photo' : 'Text';
+
+  const handleStoryCreate = () => {
+    if (!storyText.trim() && !storyImage && !storyVideo) return;
+    addStory({
+      userId: currentUser.id,
+      userName: profileRuntime.name,
+      userAvatar: profileRuntime.avatar,
+      text: storyText.trim(),
+      image: storyImage?.url || null,
+      video: storyVideo?.url || null,
+      backgroundKey: storyBg,
+      hasViewed: false,
+    });
+    setStoryText('');
+    setStoryImage(null);
+    setStoryVideo(null);
+    setIsStoryComposerOpen(false);
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -35,6 +78,7 @@ const Profile = () => {
     setProfile(next);
     if (typeof window !== 'undefined') {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      window.dispatchEvent(new Event('gcs-profile-updated'));
     }
   };
 
@@ -83,6 +127,15 @@ const Profile = () => {
       ],
     };
   }, [profile]);
+
+  const myPosts = useMemo(() => {
+    const combined = [...localPosts, ...feedPosts].filter((post) => post.userId === currentUser.id);
+    return combined.map((post) => ({
+      ...post,
+      userName: profileRuntime.name,
+      userAvatar: profileRuntime.avatar,
+    }));
+  }, [localPosts, profileRuntime]);
 
   if (!profileData) {
     return (
@@ -159,7 +212,11 @@ const Profile = () => {
             <div className={styles.profileSubtitle}>Digital creator</div>
           </div>
           <div className="profile-actions">
-            <button type="button" className="profile-action profile-action--primary">
+            <button
+              type="button"
+              className="profile-action profile-action--primary"
+              onClick={() => setIsStoryComposerOpen(true)}
+            >
               + Add to story
             </button>
             <Link href="/profile/create" className="profile-action">
@@ -170,6 +227,7 @@ const Profile = () => {
 
         <div className={styles.profileTabs}>
           <button className={`${styles.tabBtn} ${styles.tabActive}`} type="button">All</button>
+          <Link className={styles.tabBtn} href="/profile/posts">Posts</Link>
           <button className={styles.tabBtn} type="button">About</button>
           <button className={styles.tabBtn} type="button">Friends</button>
           <button className={styles.tabBtn} type="button">Photos</button>
@@ -200,8 +258,48 @@ const Profile = () => {
         </div>
 
         <div className={styles.profilePosts}>
-          <CreatePost />
-          <PostsPreview posts={profileData.posts} name={profileData.name} avatar={profileData.avatar} />
+          <PostInput
+            username={profileRuntime.name}
+            avatarUrl={profileRuntime.avatar}
+            onVideoClick={() => {}}
+            onPhotoClick={() => {}}
+            onEmojiClick={() => {}}
+            onCreatePost={(payload) => {
+              const newPost = {
+                id: `local-${Date.now()}`,
+                isLocal: true,
+                userId: currentUser.id,
+                userName: profileRuntime.name,
+                userAvatar: profileRuntime.avatar,
+                content: payload.content || '',
+                hashtags: payload.tags || [],
+                images: payload.images || [],
+                video: payload.video || null,
+                textBackground: payload.textBackground || null,
+                textColor: payload.textColor || null,
+                reactions: {},
+                comments: 0,
+                shares: 0,
+                location: 'Profile',
+                timestamp: 'Just now',
+              };
+              addPost(newPost);
+            }}
+          />
+          <div className="posts-list">
+            {myPosts.length > 0 ? (
+              myPosts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  canDelete={String(post.id).startsWith('local-')}
+                  onDelete={removePost}
+                />
+              ))
+            ) : (
+              <PostsPreview posts={profileData.posts} name={profileData.name} avatar={profileData.avatar} />
+            )}
+          </div>
         </div>
       </div>
       {modalImage && (
@@ -210,6 +308,91 @@ const Profile = () => {
             <img src={modalImage} alt="Profile" />
             <button type="button" onClick={() => setModalImage('')}>
               ×
+            </button>
+          </div>
+        </div>
+      )}
+      {isStoryComposerOpen && (
+        <div className="story-modal-backdrop" onClick={() => setIsStoryComposerOpen(false)}>
+          <div className="story-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="story-modal__header">
+              <div className="story-modal__title">
+                <span className="story-modal__badge">Story Lab</span>
+                <h3>Create story</h3>
+                <p>Share a new moment with your friends.</p>
+              </div>
+              <button type="button" onClick={() => setIsStoryComposerOpen(false)} className="story-modal__close">
+                x
+              </button>
+            </div>
+            <div className="story-modal__modes">
+              {['Text', 'Photo', 'Video'].map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  className={`story-mode-btn ${storyMode === mode ? 'active' : ''}`}
+                >
+                  {mode}
+                </button>
+              ))}
+              <span className="story-modal__hint">24h visibility</span>
+            </div>
+            <div className="story-modal__preview story-modal__preview--story" data-bg={storyBg}>
+              {storyImage && <img src={storyImage.url} alt="Story" />}
+              {storyVideo && <video src={storyVideo.url} controls />}
+              {!storyImage && !storyVideo && storyText && (
+                <div className="story-modal__text">{storyText}</div>
+              )}
+            </div>
+            <textarea
+              value={storyText}
+              onChange={(e) => setStoryText(e.target.value)}
+              placeholder="Write something..."
+            />
+            <div className="story-modal__actions">
+              <label className="story-modal__file">
+                Add photo
+                <input
+                  ref={storyFileRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = () => setStoryImage({ name: file.name, url: reader.result });
+                    reader.readAsDataURL(file);
+                  }}
+                />
+              </label>
+              <label className="story-modal__file">
+                Add video
+                <input
+                  ref={storyVideoRef}
+                  type="file"
+                  accept="video/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const url = URL.createObjectURL(file);
+                    setStoryVideo({ name: file.name, url });
+                  }}
+                />
+              </label>
+            </div>
+            <div className="story-modal__colors">
+              {storyBgOptions.map((color) => (
+                <button
+                  key={color.key}
+                  type="button"
+                  className={`story-color-btn ${storyBg === color.key ? 'active' : ''}`}
+                  data-bg={color.key}
+                  onClick={() => setStoryBg(color.key)}
+                />
+              ))}
+            </div>
+            <button type="button" className="story-modal__submit" onClick={handleStoryCreate}>
+              Share to story
             </button>
           </div>
         </div>

@@ -1,18 +1,39 @@
-.menu-dropdown {
+.menu-dropdown-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  z-index: 200;
+}
+
+.menu-dropdown-backdrop {
   position: absolute;
-  top: 48px;
-  right: 0;
+  inset: 0;
+  background: rgba(10, 12, 18, 0.35);
+  backdrop-filter: blur(6px);
+  border: 0;
+  padding: 0;
+}
+
+.menu-dropdown {
+  position: relative;
   width: 360px;
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 24px);
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 8px 24px var(--shadow-strong);
   padding: 12px;
-  z-index: 200;
+  z-index: 201;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   animation: menuFade 0.18s ease-out;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 @keyframes menuFade {
@@ -61,8 +82,7 @@
 
 @media (max-width: 600px) {
   .menu-dropdown {
-    width: 320px;
-    right: -8px;
+    width: calc(100vw - 24px);
     grid-template-columns: 1fr;
   }
 }

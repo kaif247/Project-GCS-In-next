@@ -24,6 +24,7 @@ import '../components/ProfileView.css';
 import '../components/Friends/friends.css';
 import '../components/live/live.css';
 import { useEffect, useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ThemeProvider } from '../context/ThemeContext';
 import { LanguageProvider } from '../context/LanguageContext';
@@ -109,6 +110,8 @@ export default function App({ Component, pageProps }) {
   };
 
 
+  const isLanding = router.pathname === '/landing';
+
   return (
     <ThemeProvider>
       <LanguageProvider>
@@ -116,11 +119,24 @@ export default function App({ Component, pageProps }) {
           <CartProvider>
             <MarketplaceMessagingProvider>
               <div className="app">
+                <Head>
+                  <title>House of Dorvilus — Imperial Haiti Restoration</title>
+                  <meta
+                    name="description"
+                    content="Join the Sovereign Intelligence movement. Ground your frequency in the Digital Lakou."
+                  />
+                  <meta
+                    name="keywords"
+                    content="House of Dorvilus, Imperial Haiti Restoration, Sovereign Intelligence, Digital Lakou, Sovereign Authority"
+                  />
+                  <link rel="icon" href="/imperial-seal.svg" />
+                </Head>
                 {showLoader && <InitialLoader />}
                 <Navbar
                   isLiveOpen={isLiveOpen}
                   onToggleLive={handleToggleLive}
                   onNavigateAttempt={handleNavigateAttempt}
+                  hideThemeToggle={isLanding}
                 />
                 <Component
                   {...pageProps}

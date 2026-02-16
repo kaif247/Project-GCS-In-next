@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import './styles/styles/theme.css';
 
 /* Global Styles */
@@ -133,7 +129,7 @@ button:focus-visible {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f0f2f5;
+  background: var(--bg-dark);
   padding: 24px 16px env(safe-area-inset-bottom);
 }
 

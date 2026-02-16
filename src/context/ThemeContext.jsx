@@ -4,13 +4,11 @@ export const ThemeContext = createContext();
 
 const getInitialTheme = () => {
   if (typeof window === 'undefined') return false;
-  const stored = window.localStorage.getItem('facebook-dark-mode');
-  if (stored) return stored === 'true';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return true;
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     setIsDarkMode(getInitialTheme());

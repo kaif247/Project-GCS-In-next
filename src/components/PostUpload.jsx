@@ -1,20 +1,21 @@
 import React, { useState, useContext } from 'react';
-import { currentUser } from '../data/facebookData';
 import { LanguageContext } from '../context/LanguageContext';
+import useProfileData from '../hooks/useProfileData';
 
 const PostUpload = () => {
   const [text, setText] = useState('');
   const { t } = useContext(LanguageContext);
+  const profile = useProfileData();
 
   return (
     <div className="post-upload">
       <div className="post-upload__top">
-        <img src={currentUser.avatar} alt={currentUser.name} className="post-upload__avatar" />
+        <img src={profile.avatar} alt={profile.name} className="post-upload__avatar" />
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder={t('What’s on your mind, {name}?', { name: currentUser.name.split(' ')[0] || currentUser.name })}
+          placeholder={t("What's on your mind, {name}?", { name: profile.name.split(' ')[0] || profile.name })}
           aria-label={t('Create post')}
         />
       </div>

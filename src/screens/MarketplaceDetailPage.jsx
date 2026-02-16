@@ -32,6 +32,17 @@ const MarketplaceDetailPage = () => {
     return products.find((item) => Number(item.id) === numericId) || null;
   }, [id, products]);
 
+  const productSafe = product || { image: '', details: {} };
+  const details = productSafe.details || {};
+
+  const galleryImages = useMemo(() => {
+    const list = details.images && details.images.length ? details.images : [productSafe.image];
+    return list.filter(Boolean);
+  }, [details.images, productSafe.image]);
+
+  const mainIndex = Math.max(0, galleryImages.findIndex((img) => img === activeImage));
+  const mainImage = activeImage || galleryImages[0] || productSafe.image;
+
   if (!product) {
     return (
       <div className="marketplace-detail">
@@ -45,16 +56,6 @@ const MarketplaceDetailPage = () => {
       </div>
     );
   }
-
-  const details = product.details || {};
-
-  const galleryImages = useMemo(() => {
-    const list = details.images && details.images.length ? details.images : [product.image];
-    return list.filter(Boolean);
-  }, [details.images, product.image]);
-
-  const mainIndex = Math.max(0, galleryImages.findIndex((img) => img === activeImage));
-  const mainImage = activeImage || galleryImages[0] || product.image;
 
   const handleAddToCart = () => {
     addToCart(product);
