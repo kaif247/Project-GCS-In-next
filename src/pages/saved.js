@@ -1,6 +1,6 @@
 import React from 'react';
-import PlaceholderPage from '../screens/PlaceholderPage';
+import Saved from '../screens/Saved';
 
-const SavedRoute = () => <PlaceholderPage title="Saved" />;
+const SavedRoute = () => <Saved />;
 
 export default SavedRoute;

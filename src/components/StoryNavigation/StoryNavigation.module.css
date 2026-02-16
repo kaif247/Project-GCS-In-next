@@ -1,0 +1,42 @@
+.nav {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: auto;
+}
+
+.btn:first-of-type {
+  left: 16px;
+}
+
+.btn:last-of-type {
+  right: 16px;
+}
+
+.nav:hover .btn,
+.btn:focus-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .btn {
+    opacity: 1;
+  }
+}

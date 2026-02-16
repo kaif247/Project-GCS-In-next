@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useContext } from 'react';
-import { currentUser } from '../../data/facebookData';
 import Icon from '../Icon';
 import styles from './friendsSuggestions.module.css';
 import { LanguageContext } from '../../context/LanguageContext';
+import useProfileData from '../../hooks/useProfileData';
 
 const PostsPreview = ({ posts = [], name, avatar }) => {
   const [likedIds, setLikedIds] = useState(new Set());
@@ -11,6 +11,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
   const [imageModal, setImageModal] = useState(null); // { post, index }
   const [imageComments, setImageComments] = useState({});
   const { t } = useContext(LanguageContext);
+  const profile = useProfileData();
 
   const toggleLike = (id) => {
     setLikedIds((prev) => {
@@ -23,8 +24,8 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
 
   const likedByText = useMemo(() => {
     if (!activeComment) return '';
-    return currentUser.name;
-  }, [activeComment]);
+    return profile.name;
+  }, [activeComment, profile.name]);
 
   const handleImageComment = (postId, index, text) => {
     if (!text.trim()) return;
@@ -99,7 +100,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 <span><button className="post-link-btn" type="button" onClick={() => setActiveShare(post)}>{t('shares')}</button></span>
               </div>
             </div>
-            {liked && <div className="liked-by">{currentUser.name}</div>}
+            {liked && <div className="liked-by">{profile.name}</div>}
             <div className="post-actions-bar">
               <button className={`action-btn ${liked ? 'liked' : ''}`} type="button" onClick={() => toggleLike(post.id)}>
                 {liked ? (
@@ -119,8 +120,8 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
               </button>
             </div>
             <div className="post-quick-comment">
-              <img src={currentUser.avatar} alt={currentUser.name} />
-              <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
+              <img src={profile.avatar} alt={profile.name} />
+              <input type="text" placeholder={t('Comment as {name}', { name: profile.name })} />
               <button className="quick-comment-btn" type="button">➤</button>
             </div>
           </div>
@@ -136,9 +137,9 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
             </div>
             <div className="post-modal__body">
               <div className="post-modal__user">
-                <img src={currentUser.avatar} alt={currentUser.name} />
+                <img src={profile.avatar} alt={profile.name} />
                 <div>
-                  <div className="post-modal__name">{currentUser.name}</div>
+                  <div className="post-modal__name">{profile.name}</div>
                   <button type="button" className="post-modal__audience">{t('Friends')}</button>
                 </div>
               </div>
@@ -176,8 +177,8 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
               )}
               {likedByText && <div className="liked-by">{likedByText}</div>}
               <div className="post-quick-comment">
-                <img src={currentUser.avatar} alt={currentUser.name} />
-                <input type="text" placeholder={t('Comment as {name}', { name: currentUser.name })} />
+                <img src={profile.avatar} alt={profile.name} />
+                <input type="text" placeholder={t('Comment as {name}', { name: profile.name })} />
                 <button className="quick-comment-btn" type="button">➤</button>
               </div>
             </div>
@@ -222,10 +223,10 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 </button>
               </div>
               <div className="post-quick-comment">
-                <img src={currentUser.avatar} alt={currentUser.name} />
+                <img src={profile.avatar} alt={profile.name} />
                 <input
                   type="text"
-                  placeholder={t('Comment as {name}', { name: currentUser.name })}
+                  placeholder={t('Comment as {name}', { name: profile.name })}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       handleImageComment(imageModal.post.id, imageModal.index, e.currentTarget.value);
@@ -249,7 +250,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
               </div>
               {(imageComments[`${imageModal.post.id}-${imageModal.index}`] || []).map((text, idx) => (
                 <div key={`${imageModal.post.id}-${idx}`} className="image-comment">
-                  <strong>{currentUser.name}</strong> {text}
+                  <strong>{profile.name}</strong> {text}
                 </div>
               ))}
             </div>

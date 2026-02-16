@@ -1,0 +1,59 @@
+.reactions {
+  position: absolute;
+  bottom: 24px;
+  right: 50%;
+  transform: translateX(220px);
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+
+.emojiBtn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.emojiBtn:hover {
+  transform: scale(1.3);
+}
+
+.bursts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floatEmoji {
+  position: absolute;
+  bottom: 40px;
+  font-size: 24px;
+  animation: floatUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.offsetLeft { left: -20px; }
+.offsetCenterLeft { left: 10px; }
+.offsetCenter { left: 40px; }
+.offsetCenterRight { left: 70px; }
+.offsetRight { left: 100px; }
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  40% { transform: translateY(-30px) scale(1.4); }
+  100% { opacity: 0; transform: translateY(-80px) scale(1); }
+}
+
+@media (max-width: 768px) {
+  .reactions {
+    right: 10px;
+    transform: none;
+  }
+  .emojiBtn { font-size: 18px; }
+}

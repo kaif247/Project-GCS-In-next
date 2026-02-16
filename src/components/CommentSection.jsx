@@ -1,28 +1,28 @@
 import React, { useState, useContext } from 'react';
-import { currentUser } from '../data/facebookData';
 import { LanguageContext } from '../context/LanguageContext';
+import useProfileData from '../hooks/useProfileData';
 
-const CommentSection = () => {
+const CommentSection = ({ comments = [], onAddComment, showAll = false, onToggleView, showAllLabel }) => {
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
   const { t } = useContext(LanguageContext);
+  const profile = useProfileData();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const trimmed = comment.trim();
     if (!trimmed) return;
-    setComments((prev) => [...prev, trimmed]);
+    onAddComment?.(trimmed);
     setComment('');
   };
 
   return (
     <div className="comment-section">
       <div className="comment-input">
-        <img src={currentUser.avatar} alt={currentUser.name} />
+        <img src={profile.avatar} alt={profile.name} />
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder={t('What’s on your mind, {name}?', { name: currentUser.name.split(' ')[0] || currentUser.name })}
+            placeholder={t('Write a comment, {name}...', { name: profile.name.split(' ')[0] || profile.name })}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
@@ -30,15 +30,24 @@ const CommentSection = () => {
       </div>
 
       <div className="comment-list">
-        {comments.map((text, idx) => (
-          <div key={idx} className="comment-item">
-            <img src={currentUser.avatar} alt={currentUser.name} />
-            <div className="comment-bubble">{text}</div>
+        {(showAll ? comments : comments.slice(0, 1)).map((item) => (
+          <div key={item.id} className="comment-item">
+            <img src={item.avatar} alt={item.name} />
+            <div className="comment-bubble">
+              <strong>{item.name}</strong>
+              <span>{item.text}</span>
+            </div>
           </div>
         ))}
+        {comments.length > 1 && (
+          <button type="button" className="post-comment-toggle" onClick={onToggleView}>
+            {showAllLabel || 'See more comments'}
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
 export default CommentSection;
+

@@ -17,21 +17,30 @@
   z-index: 420;
 }
 
+.marketplace-chat-fab {
+  bottom: 88px;
+}
+
 @media (max-width: 900px) {
   .site-chatbot-fab {
     right: 16px;
-    bottom: 96px;
+    bottom: 72px;
   }
 
   .site-chatbot {
     right: 16px;
     bottom: 160px;
   }
+
+  .marketplace-chat-fab {
+    right: 16px;
+    bottom: 126px;
+  }
 }
 
 .site-chatbot {
   position: fixed;
-  left: 24px;
+  right: 24px;
   bottom: 90px;
   width: 320px;
   background: var(--bg-surface);
@@ -42,6 +51,28 @@
   flex-direction: column;
   overflow: hidden;
   z-index: 420;
+}
+
+.cart-page .site-chatbot-fab {
+  right: auto;
+  left: 24px;
+}
+
+.cart-page .site-chatbot {
+  right: auto;
+  left: 24px;
+}
+
+@media (max-width: 900px) {
+  .cart-page .site-chatbot-fab {
+    left: 16px;
+    right: auto;
+  }
+
+  .cart-page .site-chatbot {
+    left: 16px;
+    right: auto;
+  }
 }
 
 .site-chatbot__header {

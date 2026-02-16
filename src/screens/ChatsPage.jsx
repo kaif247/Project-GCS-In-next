@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import ChatsSidebar from '../components/Chats/ChatsSidebar';
 import ChatsMain from '../components/Chats/ChatsMain';
@@ -13,6 +13,7 @@ const ChatsPage = () => {
   const [activeChatId, setActiveChatId] = useState(chatsFeed[0]?.id);
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sentMessageKeys = useRef(new Set());
   const activeChat = useMemo(
     () => chats.find((chat) => chat.id === activeChatId),
     [activeChatId, chats]
@@ -36,13 +37,31 @@ const ChatsPage = () => {
     const name = Array.isArray(rawName) ? rawName[0] : rawName;
     const rawAvatar = router.query.avatar;
     const avatar = Array.isArray(rawAvatar) ? rawAvatar[0] : rawAvatar;
+    const rawMessage = router.query.message;
+    const message = rawMessage ? (Array.isArray(rawMessage) ? rawMessage[0] : rawMessage) : '';
     const safeName = decodeURIComponent(name);
     const safeAvatar = avatar ? decodeURIComponent(avatar) : undefined;
+    const safeMessage = message ? decodeURIComponent(message) : '';
+    const messageKey = safeMessage ? `${safeName}::${safeMessage}` : '';
 
     setChats((prev) => {
       const existing = prev.find((chat) => chat.name === safeName);
       if (existing) {
         setActiveChatId(existing.id);
+        if (safeMessage && !sentMessageKeys.current.has(messageKey)) {
+          sentMessageKeys.current.add(messageKey);
+          return prev.map((chat) =>
+            chat.id === existing.id
+              ? {
+                  ...chat,
+                  messages: [
+                    ...chat.messages,
+                    { id: `${existing.id}-${Date.now()}`, from: 'me', text: safeMessage },
+                  ],
+                }
+              : chat
+          );
+        }
         return prev;
       }
       const nextId = prev.length ? Math.max(...prev.map((chat) => chat.id)) + 1 : 1;
@@ -52,14 +71,17 @@ const ChatsPage = () => {
         avatar: safeAvatar || 'https://i.pravatar.cc/100?img=1',
         meta: 'Active now',
         online: true,
-        messages: [],
+        messages: safeMessage
+          ? [{ id: `${nextId}-${Date.now()}`, from: 'me', text: safeMessage }]
+          : [],
       };
       setActiveChatId(nextId);
       return [newChat, ...prev];
     });
-  }, [router.query.name, router.query.avatar]);
+  }, [router.query.name, router.query.avatar, router.query.message]);
 
-  const handleSend = (chatId, text) => {
+  const handleSend = (chatId, payload) => {
+    const data = typeof payload === 'string' ? { text: payload } : payload || {};
     setChats((prev) =>
       prev.map((chat) =>
         chat.id === chatId
@@ -67,7 +89,7 @@ const ChatsPage = () => {
               ...chat,
               messages: [
                 ...chat.messages,
-                { id: `${chatId}-${Date.now()}`, from: 'me', text },
+                { id: `${chatId}-${Date.now()}`, from: 'me', ...data },
               ],
             }
           : chat

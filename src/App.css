@@ -17,6 +17,41 @@
   margin: 0;
 }
 
+.saved-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--text-primary);
+}
+
+.profile-posts-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--text-primary);
+}
+
+.profile-posts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.profile-posts-back {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.profile-posts-empty {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+}
+
 
 /* Responsive Design */
 @media (max-width: 1440px) {

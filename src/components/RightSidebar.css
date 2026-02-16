@@ -165,6 +165,14 @@
   border-radius: 8px;
 }
 
+.birthdays-content--clickable {
+  cursor: pointer;
+}
+
+.birthdays-content--clickable:hover {
+  background-color: var(--bg-hover);
+}
+
 .dark-mode .birthdays-content {
   background-color: var(--bg-muted);
 }
@@ -211,6 +219,10 @@
 }
 
 /* Contacts Section */
+.contacts-header-wrap {
+  position: relative;
+}
+
 .contacts-header {
   display: flex;
   justify-content: space-between;
@@ -221,6 +233,104 @@
 .contacts-actions {
   display: flex;
   gap: 4px;
+}
+
+.contacts-settings {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 16px var(--shadow-strong);
+}
+
+.contacts-settings--popover {
+  position: absolute;
+  right: 0;
+  top: 36px;
+  width: 260px;
+  z-index: 60;
+}
+
+.contacts-settings__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.contacts-settings__subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.contacts-settings__divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 10px 0;
+}
+
+.contacts-settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 6px 0;
+}
+
+.toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  border: none;
+  background: #4b4f56;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle span {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+.toggle.on {
+  background: #E38F12;
+}
+
+.toggle.on span {
+  transform: translateX(18px);
+}
+
+.contacts-search {
+  position: relative;
+  margin: 10px 0 8px;
+}
+
+.contacts-search .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.contacts-search input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--bg-muted);
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
 }
 
 .contacts-action-btn {
@@ -322,6 +432,137 @@ color:  white;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
+}
+
+.birthday-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 600;
+}
+
+.birthday-modal__card {
+  width: 540px;
+  max-width: 92vw;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+  padding: 16px;
+}
+
+.birthday-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.birthday-modal__header h3 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.birthday-modal__header button {
+  border: none;
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.birthday-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.birthday-modal__row {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.birthday-modal__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.birthday-modal__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.birthday-modal__name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.birthday-modal__input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-muted);
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+
+.birthday-modal__input input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+}
+
+.birthday-send-btn {
+  border: none;
+  background: #E38F12;
+  color: #121212;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.birthday-modal__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.birthday-modal__presets button {
+  border: 1px solid var(--border-color);
+  background: var(--bg-muted);
+  color: var(--text-primary);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.birthday-modal__footer {
+  margin-top: 12px;
+  width: 100%;
+  border: none;
+  background: #E38F12;
+  color: #121212;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 /* Responsive Design */

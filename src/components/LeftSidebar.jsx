@@ -32,6 +32,7 @@ const LeftSidebar = () => {
     Marketplace: '/marketplace',
     Friends: '/friends',
     Suggestions: '/friends/suggestions',
+    Saved: '/saved',
   };
 
   useEffect(() => {

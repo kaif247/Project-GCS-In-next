@@ -9,7 +9,7 @@ import { notificationsData } from '../data/notificationsData';
 import MenuDropdown from './MenuDropdown';
 import Icon from './Icon';
 
-const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt }) => {
+const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt, hideThemeToggle = false }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   const { t, language, setLanguage, languages } = useContext(LanguageContext);
@@ -44,7 +44,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
     { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
     { id: 'marketplace', label: '', icon: <Icon name="marketplace2" size={28} />, path: '/marketplace' },
     { id: 'friends', label: '', icon: <Icon name="friends" size={28} />, path: '/friends' },
-    { id: 'products', label: '', icon: <Icon name="product" size={28} />, path: '/products' },
+    { id: 'treasury', label: '', icon: <Icon name="product" size={28} />, path: '/treasury' },
   ];
 
   const isActiveRoute = (path) => {
@@ -137,7 +137,6 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
                 <rect x="16" y="16" width="5" height="5" />
               </svg>
             </button>
-            <MenuDropdown open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
           </div>
 
           <Link
@@ -235,21 +234,24 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
             />
           </div>
 
-          <button
-            className="navbar-icon-btn theme-toggle"
-            onClick={toggleTheme}
-            aria-label={t('Toggle dark mode')}
-            title={isDarkMode ? t('Light mode') : t('Dark mode')}
-          >
-            <Icon
-              name={isDarkMode ? 'lightmode' : 'night-mode'}
-              size={18}
-              className="icon--no-circle"
-              aria-hidden="true"
-            />
-          </button>
+          {!hideThemeToggle && (
+            <button
+              className="navbar-icon-btn theme-toggle"
+              onClick={toggleTheme}
+              aria-label={t('Toggle dark mode')}
+              title={isDarkMode ? t('Light mode') : t('Dark mode')}
+            >
+              <Icon
+                name={isDarkMode ? 'lightmode' : 'night-mode'}
+                size={18}
+                className="icon--no-circle"
+                aria-hidden="true"
+              />
+            </button>
+          )}
         </div>
       </div>
+      <MenuDropdown open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </nav>
   );
 };
