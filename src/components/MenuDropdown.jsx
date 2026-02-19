@@ -9,6 +9,7 @@ const socialItems = [
   { name: 'Friends', icon: 'friends', link: '/friends' },
   { name: 'Saved', icon: 'saved', link: '/saved' },
   { name: 'Marketplace', icon: 'marketplace (2)', link: '/marketplace' },
+  { name: 'Catagory', icon: 'marketplace (2)', link: '/treasury' },
 ];
 
 const createItems = [

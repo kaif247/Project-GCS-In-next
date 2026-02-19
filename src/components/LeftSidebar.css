@@ -3,15 +3,15 @@
   position: sticky;
   top: 60px;
   height: calc(100vh - 60px);
-  border-right: 1px solid var(--border-color);
-  background-color: var(--bg-surface);
+  border-right: none;
+  background-color: var(--bg-page);
   z-index: 50;
   transition: background-color 0.3s, border-color 0.3s;
 }
 
 .dark-mode .left-sidebar {
-  background-color: var(--bg-surface);
-  border-right-color: var(--border-color);
+  background-color: var(--bg-page);
+  border-right-color: transparent;
 }
 
 .sidebar-scroll {
@@ -67,12 +67,12 @@
 
 .user-profile:hover {
   background-color: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .dark-mode .user-profile:hover {
   background-color: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .user-avatar {
@@ -81,6 +81,13 @@
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+}
+
+.user-avatar-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .user-name {
@@ -97,7 +104,7 @@
   color: var(--text-primary);
 }
 .dark-mode .user-name:hover {
-  color: #E38F12;
+  color: #FFD700;
 }
 
 
@@ -108,8 +115,8 @@
   background-color: #31a24c;
   border-radius: 50%;
   border: 2px solid var(--bg-surface);
-  bottom: 0;
-  right: 42px;
+  bottom: -1px;
+  right: -1px;
 }
 
 .dark-mode .online-indicator {
@@ -152,7 +159,7 @@
 
 .dark-mode .sidebar-item:hover {
   background-color: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .sidebar-item:active {

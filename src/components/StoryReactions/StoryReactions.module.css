@@ -52,7 +52,8 @@
 
 @media (max-width: 768px) {
   .reactions {
-    right: 10px;
+    right: 12px;
+    bottom: 64px;
     transform: none;
   }
   .emojiBtn { font-size: 18px; }

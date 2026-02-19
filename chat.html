@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WhatsApp-Style Chat UI</title>
+    <style>
+      :root {
+        --bg: #0b141a;
+        --bubble-in: #1f2a33;
+        --bubble-out: #0b4f3f;
+        --text: #e4e6eb;
+        --muted: #b0b3b8;
+        --label-in: #64c5ff;
+        --label-out: #8ff0c4;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: "Segoe UI", "Inter", system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      .chat {
+        width: min(980px, 100%);
+        padding: 24px;
+        position: relative;
+      }
+      .thread {
+        background-color: var(--bg);
+        background-image:
+          radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          radial-gradient(circle at 60px 60px, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          radial-gradient(circle at 100px 30px, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          radial-gradient(circle at 140px 80px, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 160px 120px;
+        background-repeat: repeat;
+        border-radius: 16px;
+        padding: 24px 18px 64px;
+        min-height: 80vh;
+      }
+      .row {
+        display: flex;
+        margin: 10px 0;
+      }
+      .row.in { justify-content: flex-start; }
+      .row.out { justify-content: flex-end; }
+      .bubble {
+        position: relative;
+        max-width: 70%;
+        padding: 8px 10px 18px;
+        border-radius: 6px 14px 14px 14px;
+        background: var(--bubble-in);
+        color: var(--text);
+        line-height: 1.35;
+      }
+      .row.out .bubble {
+        background: var(--bubble-out);
+        border-radius: 14px 6px 14px 14px;
+      }
+      .label {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--label-in);
+        margin-bottom: 4px;
+      }
+      .row.out .label { color: var(--label-out); }
+      .reply {
+        border-left: 3px solid rgba(255, 255, 255, 0.2);
+        padding-left: 8px;
+        margin-bottom: 6px;
+      }
+      .row.out .reply { border-left-color: rgba(255, 255, 255, 0.35); }
+      .reply .name {
+        font-size: 11px;
+        font-weight: 700;
+        color: #9fd2ff;
+        margin-bottom: 2px;
+      }
+      .reply .text {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .audio {
+        display: grid;
+        grid-template-columns: auto 1fr auto auto;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .audio .play {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        font-size: 12px;
+      }
+      .audio .bar {
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        position: relative;
+        overflow: hidden;
+      }
+      .audio .bar span {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 35%;
+        background: rgba(255, 255, 255, 0.6);
+      }
+      .audio .time {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .audio .avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+      }
+      .timestamp {
+        position: absolute;
+        right: 10px;
+        bottom: 4px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      @media (max-width: 768px) {
+        .chat { padding: 12px; }
+        .thread { padding: 16px 12px 56px; border-radius: 12px; }
+        .bubble { max-width: 82%; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="chat">
+      <section class="thread">
+        <div class="row in">
+          <div class="bubble">
+            <div class="label">You</div>
+            <div class="reply">
+              <div class="name">o abnda asa page chara hy</div>
+              <div class="text">Wait kro</div>
+            </div>
+            <div class="audio">
+              <button class="play">▶</button>
+              <div class="bar"><span></span></div>
+              <div class="time">0:07</div>
+              <img class="avatar" src="https://i.pravatar.cc/40?img=12" alt="avatar" />
+            </div>
+            Internet ka kya bna
+            <span class="timestamp">6:29 pm</span>
+          </div>
+        </div>
+
+        <div class="row out">
+          <div class="bubble">
+            <div class="label">You</div>
+            bhi settings wagra same rakhni ha
+            <span class="timestamp">5:46 pm ✓✓</span>
+          </div>
+        </div>
+
+        <div class="row out">
+          <div class="bubble">
+            jasy policies wagra
+            <span class="timestamp">5:46 pm ✓✓</span>
+          </div>
+        </div>
+
+        <div class="row out">
+          <div class="bubble">
+            <div class="label">Brother No 1 💖🥰😘</div>
+            <div class="reply">
+              <div class="name">Internet ka kya bna</div>
+              <div class="text">10 din bad survay ka lia ae gy to phir lagy ga</div>
+            </div>
+            10 din bad survay ka lia ae gy to phir lagy ga
+            <span class="timestamp">7:25 pm ✓✓</span>
+          </div>
+        </div>
+
+        <div class="row in">
+          <div class="bubble">
+            <div class="label">You</div>
+            10 din bad q
+            <span class="timestamp">7:26 pm</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

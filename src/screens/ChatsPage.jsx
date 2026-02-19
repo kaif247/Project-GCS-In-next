@@ -99,13 +99,6 @@ const ChatsPage = () => {
 
   return (
     <div className="chats-page">
-      {isMobile && (
-        <ToggleButton
-          isOpen={isSidebarOpen}
-          onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label={t('Toggle chats list')}
-        />
-      )}
       <div className={`chats-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>
         <ChatsSidebar
           chats={chats}
@@ -122,6 +115,34 @@ const ChatsPage = () => {
         onBack={() => setIsSidebarOpen(true)}
         showBack={isMobile}
       />
+      <aside className="chats-info">
+        <div className="chats-info__card">
+          <img src={activeChat?.avatar} alt={activeChat?.name} />
+          <div className="chats-info__name">{activeChat?.name}</div>
+          <div className="chats-info__status">{activeChat?.online ? 'Online' : 'Offline'}</div>
+          <div className="chats-info__actions">
+            <button type="button" aria-label="Call">Call</button>
+            <button type="button" aria-label="Video call">Video</button>
+          </div>
+        </div>
+        <div className="chats-info__controls">
+          <button type="button" aria-label="Mute notifications">Mute notifications</button>
+          <button type="button" aria-label="Pin chat">Pin chat</button>
+          <button type="button" aria-label="Star messages">Starred messages</button>
+          <button type="button" aria-label="Disappearing messages">Disappearing messages</button>
+          <button type="button" aria-label="View once media">View once media</button>
+          <button type="button" aria-label="Block or report">Block / Report</button>
+        </div>
+        <div className="chats-info__section">
+          <h4>Shared Media</h4>
+          <div className="chats-info__media">
+            <div />
+            <div />
+            <div />
+            <div />
+          </div>
+        </div>
+      </aside>
     </div>
   );
 };

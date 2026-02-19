@@ -16,7 +16,7 @@ const ArrowIcon = () => (
   </svg>
 );
 
-const FriendsSidebar = () => {
+const FriendsSidebar = ({ activeSection = 'home', onSelectSection = () => {} }) => {
   const { t } = useContext(LanguageContext);
   return (
     <aside className="friends-sidebar">
@@ -28,7 +28,7 @@ const FriendsSidebar = () => {
       </div>
 
       <div className="friends-sidebar__menu">
-        <Link href="/" className="friends-sidebar__item active">
+        <Link href="/" className={`friends-sidebar__item ${activeSection === 'home' ? 'active' : ''}`}>
           <span className="friends-sidebar__icon">
             <Icon name="home" size={18} />
           </span>
@@ -55,17 +55,15 @@ const FriendsSidebar = () => {
           <span>{t('All friends')}</span>
           <ArrowIcon />
         </button>
-        <button className="friends-sidebar__item">
+        <button
+          type="button"
+          className={`friends-sidebar__item ${activeSection === 'birthdays' ? 'active' : ''}`}
+          onClick={() => onSelectSection('birthdays')}
+        >
           <span className="friends-sidebar__icon">
             <Icon name="cake (1)" size={18} />
           </span>
           <span>{t('Birthdays')}</span>
-        </button>
-        <button className="friends-sidebar__item">
-          <span className="friends-sidebar__icon">
-            <Icon name="friends" size={18} />
-          </span>
-          <span>{t('Custom lists')}</span>
           <ArrowIcon />
         </button>
       </div>

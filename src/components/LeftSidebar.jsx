@@ -56,13 +56,15 @@ const LeftSidebar = () => {
       <div className="sidebar-scroll">
         {/* User Profile Section */}
         <Link className="user-profile" href={profileRoute} aria-label={t('Profile')}>
-          <img
-            src={profileData?.avatarUrl || currentUser.avatar}
-            alt={profileData?.name || currentUser.name}
-            className="user-avatar"
-          />
+          <span className="user-avatar-wrap">
+            <img
+              src={profileData?.avatarUrl || currentUser.avatar}
+              alt={profileData?.name || currentUser.name}
+              className="user-avatar"
+            />
+            {currentUser.online && <span className="online-indicator" />}
+          </span>
           <span className="user-name">{profileData?.name || currentUser.name}</span>
-          {currentUser.online && <span className="online-indicator" />}
         </Link>
 
         {/* Sidebar Items */}

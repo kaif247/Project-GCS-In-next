@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { LanguageContext } from '../../context/LanguageContext';
 
-const FriendCard = ({ friend }) => {
+const FriendCard = ({ friend, onRemove }) => {
   const { t } = useContext(LanguageContext);
+  const [isRequestSent, setIsRequestSent] = useState(false);
   return (
     <article className="friends-card">
       <div className="friends-card__image-wrap">
@@ -21,8 +22,32 @@ const FriendCard = ({ friend }) => {
           </span>
           {friend.mutualFriends} {t('mutual friends')}
         </div>
-        <button className=" friends-card__btn--primary">{t('Add friend')}</button>
-        <button className="friends-card__btn">{t('Remove')}</button>
+        {isRequestSent ? (
+          <button
+            type="button"
+            className="friends-card__btn"
+            onClick={() => setIsRequestSent(false)}
+          >
+            {t('Cancel request')}
+          </button>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="friends-card__btn--primary"
+              onClick={() => setIsRequestSent(true)}
+            >
+              {t('Add friend')}
+            </button>
+            <button
+              type="button"
+              className="friends-card__btn"
+              onClick={() => onRemove?.(friend.id)}
+            >
+              {t('Remove')}
+            </button>
+          </>
+        )}
       </div>
     </article>
   );

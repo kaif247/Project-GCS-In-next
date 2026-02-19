@@ -79,19 +79,27 @@
 .live-nav-item:hover {
   background: var(--bg-hover);
   transition-duration: o.5s;
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .live-nav-icon {
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
+}
+
+.live-nav-icon svg {
+  color: #fff;
+}
+
+.live-nav-item:hover .live-nav-icon svg {
+  color: #fff;
 }
 
 .live-profile {
@@ -228,12 +236,16 @@
   width: 64px;
   height: 64px;
   border-radius: 999px;
-  background: #E38F12;
+  background: #FFD700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-size: 26px;
+}
+
+.live-card-icon svg {
+  color: #fff;
 }
 
 .live-card h3 {
@@ -270,7 +282,7 @@
   width: 100%;
   padding: 12px 16px;
   border-radius: 10px;
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   font-weight: 600;
   font-size: 14px;
@@ -462,7 +474,7 @@
 .live-producer-progress span {
   display: block;
   height: 100%;
-  background: #E38F12;
+  background: #FFD700;
 }
 
 .live-producer-step {
@@ -567,16 +579,16 @@
 
 .live-producer-nav__item:hover {
   background: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .live-producer-nav__item.active {
   background: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .live-producer-nav__item.active .live-producer-nav__icon {
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .live-producer-nav__icon {
@@ -598,7 +610,7 @@
 }
 
 .lp-btn-primary {
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -643,7 +655,7 @@
 
 .live-producer-warning {
   font-size: 12px;
-  color: #f87171;
+  color: var(--accent-crimson);
   margin-top: 6px;
 }
 
@@ -771,7 +783,7 @@
   border: none;
   border-radius: 999px;
   padding: 8px 14px;
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   font-weight: 600;
 }
@@ -842,15 +854,15 @@
 }
 
 .lp-source-card.active {
-  border-color: #E38F12;
-  box-shadow: 0 0 0 1px #E38F12 inset;
+  border-color: #FFD700;
+  box-shadow: 0 0 0 1px #FFD700 inset;
 }
 
 .lp-source-icon {
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   display: inline-flex;
   align-items: center;
@@ -1095,8 +1107,8 @@
 }
 
 .lp-poll-option-btn.is-selected {
-  border: 1px solid #E38F12;
-  box-shadow: 0 0 0 1px #E38F12 inset;
+  border: 1px solid #FFD700;
+  box-shadow: 0 0 0 1px #FFD700 inset;
 }
 
 .lp-poll-option__label {

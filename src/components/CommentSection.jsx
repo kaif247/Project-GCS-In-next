@@ -1,9 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext';
 import useProfileData from '../hooks/useProfileData';
+import CommentProfileModal from './CommentProfileModal';
 
 const CommentSection = ({ comments = [], onAddComment, showAll = false, onToggleView, showAllLabel }) => {
   const [comment, setComment] = useState('');
+  const [activeProfile, setActiveProfile] = useState(null);
   const { t } = useContext(LanguageContext);
   const profile = useProfileData();
 
@@ -32,9 +34,22 @@ const CommentSection = ({ comments = [], onAddComment, showAll = false, onToggle
       <div className="comment-list">
         {(showAll ? comments : comments.slice(0, 1)).map((item) => (
           <div key={item.id} className="comment-item">
-            <img src={item.avatar} alt={item.name} />
+            <button
+              type="button"
+              className="comment-profile-btn"
+              onClick={() => setActiveProfile(item)}
+              aria-label={t('User profile')}
+            >
+              <img src={item.avatar} alt={item.name} />
+            </button>
             <div className="comment-bubble">
-              <strong>{item.name}</strong>
+              <button
+                type="button"
+                className="comment-name-btn"
+                onClick={() => setActiveProfile(item)}
+              >
+                {item.name}
+              </button>
               <span>{item.text}</span>
             </div>
           </div>
@@ -45,6 +60,7 @@ const CommentSection = ({ comments = [], onAddComment, showAll = false, onToggle
           </button>
         )}
       </div>
+      <CommentProfileModal user={activeProfile} onClose={() => setActiveProfile(null)} />
     </div>
   );
 };

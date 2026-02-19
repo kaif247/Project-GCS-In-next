@@ -1,12 +1,14 @@
 
 import React, { useState, useContext } from 'react';
-import { FaRegThumbsUp, FaThumbsUp, FaRegCommentDots, FaShare, FaEllipsisH, FaBookmark, FaRegBookmark, FaRegSmile, FaHeart, FaLaughSquint, FaSurprise, FaSadTear, FaAngry, FaHandHoldingHeart } from 'react-icons/fa';
+import { FaRegCommentDots, FaShare, FaEllipsisH, FaBookmark, FaRegBookmark, FaRegSmile, FaLaughSquint, FaSurprise, FaSadTear, FaAngry, FaHandHoldingHeart } from 'react-icons/fa';
+import Icon from '../Icon';
 import styles from './Post.module.css';
 import { LanguageContext } from '../../context/LanguageContext';
+import useProfileData from '../../hooks/useProfileData';
+import CommentProfileModal from '../CommentProfileModal';
 
 const reactionIcons = [
-  { type: 'like', icon: <FaThumbsUp color="#1877F2" />, label: 'Like' },
-  { type: 'love', icon: <FaHeart color="#F33E58" />, label: 'Love' },
+  { type: 'like', icon: <Icon name="like" size={18} className="icon--no-circle" aria-hidden="true" />, label: 'Like' },
   { type: 'care', icon: <FaHandHoldingHeart color="#F7B928" />, label: 'Care' },
   { type: 'haha', icon: <FaLaughSquint color="#F7B928" />, label: 'Haha' },
   { type: 'wow', icon: <FaSurprise color="#F7B928" />, label: 'Wow' },
@@ -21,6 +23,8 @@ const Post = ({ post }) => {
   const [saved, setSaved] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [activeProfile, setActiveProfile] = useState(null);
+  const profile = useProfileData();
 
   const handleReaction = (type) => {
     setReaction(type);
@@ -30,7 +34,15 @@ const Post = ({ post }) => {
   const handleComment = (e) => {
     e.preventDefault();
     if (comment.trim()) {
-      setComments([...comments, comment]);
+      setComments([
+        ...comments,
+        {
+          id: `${post.id}-${Date.now()}`,
+          text: comment.trim(),
+          name: profile.name,
+          avatar: profile.avatar,
+        },
+      ]);
       setComment('');
     }
   };
@@ -63,7 +75,7 @@ const Post = ({ post }) => {
           onClick={() => handleReaction(reaction === 'like' ? null : 'like')}
           aria-label={t('Like')}
         >
-          {reaction ? reactionIcons.find(r => r.type === reaction)?.icon : <FaRegThumbsUp />} {reaction ? t(reactionIcons.find(r => r.type === reaction)?.label) : t('Like')}
+          {reaction ? reactionIcons.find(r => r.type === reaction)?.icon : <Icon name="like" size={18} className="icon--no-circle" aria-hidden="true" />} {reaction ? t(reactionIcons.find(r => r.type === reaction)?.label) : t('Like')}
           {showReactions && (
             <div className={styles.reactionsPopup}>
               {reactionIcons.map(r => (
@@ -106,14 +118,32 @@ const Post = ({ post }) => {
         <button type="button" className={styles.emojiBtn}><FaRegSmile /></button>
       </form>
       {comments.length > 0 && (
-        <div style={{ marginTop: 8 }}>
-          {comments.map((c, i) => (
-            <div key={i} style={{ fontSize: 14, color: '#050505', background: '#f0f2f5', borderRadius: 12, padding: '6px 12px', marginBottom: 4 }}>
-              {c}
+        <div className={styles.commentList}>
+          {comments.map((c) => (
+            <div key={c.id} className={styles.commentItem}>
+              <button
+                type="button"
+                className={styles.commentAvatarBtn}
+                onClick={() => setActiveProfile(c)}
+                aria-label={t('User profile')}
+              >
+                <img src={c.avatar} alt={c.name} className={styles.commentAvatar} />
+              </button>
+              <div className={styles.commentBubble}>
+                <button
+                  type="button"
+                  className={styles.commentNameBtn}
+                  onClick={() => setActiveProfile(c)}
+                >
+                  {c.name}
+                </button>
+                <span>{c.text}</span>
+              </div>
             </div>
           ))}
         </div>
       )}
+      <CommentProfileModal user={activeProfile} onClose={() => setActiveProfile(null)} />
     </article>
   );
 };

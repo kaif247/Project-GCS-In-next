@@ -1,0 +1,24 @@
+<svg width="520" height="640" viewBox="0 0 520 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(260 320) rotate(90) scale(260)">
+      <stop stop-color="#FFD700" stop-opacity="0.35" />
+      <stop offset="1" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="circuit" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#00FFFF" stop-opacity="0.5" />
+      <stop offset="1" stop-color="#FFD700" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="520" height="640" rx="28" fill="#0B0B0B" />
+  <circle cx="260" cy="320" r="210" fill="url(#glow)" />
+  <circle cx="260" cy="200" r="70" stroke="#FFD700" stroke-width="3" />
+  <path d="M160 200 L220 140 L260 160 L300 140 L360 200" stroke="#00FFFF" stroke-width="4" fill="none" />
+  <path d="M260 240 C200 240 170 300 170 360 C170 420 210 470 260 470 C310 470 350 420 350 360 C350 300 320 240 260 240Z" fill="#111111" stroke="#FFD700" stroke-width="2" />
+  <path d="M130 360 H390" stroke="url(#circuit)" stroke-width="2" />
+  <path d="M130 400 H390" stroke="url(#circuit)" stroke-width="2" />
+  <path d="M180 480 H340" stroke="#FFD700" stroke-width="2" />
+  <circle cx="180" cy="360" r="4" fill="#00FFFF" />
+  <circle cx="340" cy="400" r="4" fill="#00FFFF" />
+  <circle cx="260" cy="160" r="6" fill="#FFD700" />
+  <circle cx="260" cy="520" r="8" fill="#FFD700" />
+</svg>

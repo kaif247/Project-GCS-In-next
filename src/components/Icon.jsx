@@ -17,16 +17,10 @@ export default function Icon({ name, size, className = '', circle = false, activ
   const px = typeof size === 'number' ? `${size}px` : size || undefined;
   const classes = ['app-icon', className, circle ? 'app-icon--circle' : '', active ? 'app-icon--active' : ''].filter(Boolean).join(' ');
   const svgStyle = { width: px, height: px, ...style };
-  const isUrl = typeof Comp === 'string' || (Comp && typeof Comp === 'object' && typeof Comp.src === 'string');
-  const src = isUrl ? (typeof Comp === 'string' ? Comp : Comp.src) : null;
 
   return (
     <span className={classes} onClick={onClick} {...props}>
-      {isUrl ? (
-        <img src={src} alt="" aria-hidden="true" style={svgStyle} />
-      ) : (
-        <Comp style={svgStyle} />
-      )}
+      <Comp className={className} style={svgStyle} />
     </span>
   );
 }

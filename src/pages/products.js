@@ -1,14 +1,7 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import ProductsPage from '../screens/ProductsPage';
 
 const ProductsRoute = () => {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/treasury');
-  }, [router]);
-
-  return null;
+  return <ProductsPage />;
 };
 
 export default ProductsRoute;

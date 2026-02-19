@@ -47,7 +47,7 @@ const MarketplaceSidebar = ({
       </div>
 
       <div className="marketplace-sidebar__search">
-        <Icon name="search (1)" size={14} className="search-icon" aria-hidden="true" />
+        <Icon name="search (1)" size={18} className="search-icon" aria-hidden="true" />
         <input
           type="text"
           placeholder={t('Search Marketplace')}

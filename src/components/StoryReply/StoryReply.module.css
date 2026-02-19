@@ -24,6 +24,9 @@
 
 @media (max-width: 768px) {
   .reply {
-    width: 90vw;
+    width: calc(100% - 24px);
+    left: 12px;
+    transform: none;
+    bottom: 12px;
   }
 }

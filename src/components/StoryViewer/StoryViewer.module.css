@@ -169,6 +169,15 @@
   object-fit: cover;
 }
 
+.storyMediaLandscape video {
+  object-fit: contain;
+}
+
+.storyMediaPortrait img,
+.storyMediaPortrait video {
+  object-fit: contain;
+}
+
 .storyText {
   width: 100%;
   height: 100%;
@@ -186,7 +195,7 @@
 }
 
 .bgAccent {
-  background: #E38F12;
+  background: #FFD700;
   color: #1b1b1b;
 }
 
@@ -287,7 +296,7 @@
 }
 
 .deleteActions button:last-child {
-  background: #e35d5d;
+  background: var(--accent-crimson);
   color: #fff;
 }
 
@@ -298,11 +307,73 @@
 }
 
 @media (max-width: 768px) {
+  .overlay {
+    top: 64px;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+  }
+
+  .backdrop {
+    display: none;
+  }
+
+  .shell {
+    height: 100%;
+    align-items: stretch;
+  }
+
   .stage {
-    padding: 12px;
+    padding: 0;
+    height: 100%;
+  }
+
+  .storyCard {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    padding: 12px 12px 76px;
+    box-shadow: none;
+  }
+
+  .storyMedia {
+    height: auto;
+    flex: 1;
+    border-radius: 12px;
+  }
+  .storyMediaLandscape {
+    height: auto;
+  }
+  .storyMediaPortrait {
+    height: auto;
+  }
+
+  .storyControls {
+    opacity: 1;
+  }
+
+  .closeButton {
+    left: auto;
+    right: 12px;
+    top: 10px;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1024px) {
+  .stage {
+    padding: 8px;
+  }
+  .storyCard {
+    width: min(720px, 92vw);
   }
   .storyMedia {
-    height: 70vh;
+    height: 75vh;
+  }
+  .storyMediaLandscape {
+    height: 72vh;
+  }
+  .storyMediaPortrait {
+    height: 80vh;
   }
 }
 

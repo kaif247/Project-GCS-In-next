@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import FriendsSidebar from '../components/Friends/FriendsSidebar';
 import FriendsGrid from '../components/Friends/FriendsGrid';
+import BirthdaysPage from './BirthdaysPage';
 import { friendsData } from '../data/friendsData';
 import ToggleButton from '../components/ToggleButton';
 import { LanguageContext } from '../context/LanguageContext';
@@ -9,6 +10,7 @@ const FriendsPage = () => {
   const { t } = useContext(LanguageContext);
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,9 +35,19 @@ const FriendsPage = () => {
         />
       )}
       <div className={`friends-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>
-        <FriendsSidebar />
+        <FriendsSidebar
+          activeSection={activeSection}
+          onSelectSection={(section) => {
+            setActiveSection(section);
+            if (isMobile) setIsSidebarOpen(false);
+          }}
+        />
       </div>
-      <FriendsGrid friends={friendsData} />
+      {activeSection === 'birthdays' ? (
+        <BirthdaysPage />
+      ) : (
+        <FriendsGrid friends={friendsData} />
+      )}
     </div>
   );
 };

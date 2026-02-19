@@ -3,6 +3,7 @@ import Icon from '../Icon';
 import styles from './friendsSuggestions.module.css';
 import { LanguageContext } from '../../context/LanguageContext';
 import useProfileData from '../../hooks/useProfileData';
+import CommentProfileModal from '../CommentProfileModal';
 
 const PostsPreview = ({ posts = [], name, avatar }) => {
   const [likedIds, setLikedIds] = useState(new Set());
@@ -10,6 +11,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
   const [activeComment, setActiveComment] = useState(null);
   const [imageModal, setImageModal] = useState(null); // { post, index }
   const [imageComments, setImageComments] = useState({});
+  const [activeProfile, setActiveProfile] = useState(null);
   const { t } = useContext(LanguageContext);
   const profile = useProfileData();
 
@@ -32,7 +34,15 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
     const key = `${postId}-${index}`;
     setImageComments((prev) => {
       const next = { ...prev };
-      next[key] = [...(next[key] || []), text.trim()];
+      next[key] = [
+        ...(next[key] || []),
+        {
+          id: `${postId}-${Date.now()}`,
+          text: text.trim(),
+          name: profile.name,
+          avatar: profile.avatar,
+        },
+      ];
       return next;
     });
   };
@@ -53,15 +63,15 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
                 <div className="post-user-info">
                   <h3 className="post-user-name">{name}</h3>
                   <p className="post-meta">
-                    {t(post.time)} ? {t(post.location)}
+                    {t(post.time)} - {t(post.location)}
                   </p>
                 </div>
               </div>
-              <button className="post-menu-btn" aria-label={t('Post options')} title={t('More options')}>⋯</button>
+              <button className="post-menu-btn" aria-label={t('Post options')} title={t('More options')}>...</button>
             </div>
             <div className="post-content">
               <p className="post-text">
-                {t(post.text).length > 160 ? `${t(post.text).slice(0, 160)}… ` : t(post.text)}
+                {t(post.text).length > 160 ? `${t(post.text).slice(0, 160)}... ` : t(post.text)}
                 <button type="button" className="post-link-btn">{t('See more')}</button>
               </p>
             </div>
@@ -91,7 +101,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
             <div className="post-stats">
               <div className="reactions-summary">
                 <div className="reaction-icons">
-                  {liked && <Icon name="family" size={16} className="reaction-icon" aria-hidden="true" />}
+                  {liked && <Icon name="like" size={16} className="reaction-icon" aria-hidden="true" />}
                 </div>
                 <span className="reactions-count">{liked ? 1 : 0}</span>
               </div>
@@ -103,11 +113,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
             {liked && <div className="liked-by">{profile.name}</div>}
             <div className="post-actions-bar">
               <button className={`action-btn ${liked ? 'liked' : ''}`} type="button" onClick={() => toggleLike(post.id)}>
-                {liked ? (
-                  <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
-                ) : (
-                  <span aria-hidden="true">👍</span>
-                )}
+                <Icon name="like" size={16} className="icon--no-circle" aria-hidden="true" />
                 <span>{t('Like')}</span>
               </button>
               <button className="action-btn" type="button" onClick={() => setActiveComment(post)}>
@@ -122,7 +128,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
             <div className="post-quick-comment">
               <img src={profile.avatar} alt={profile.name} />
               <input type="text" placeholder={t('Comment as {name}', { name: profile.name })} />
-              <button className="quick-comment-btn" type="button">➤</button>
+              <button className="quick-comment-btn" type="button">{'\u2192'}</button>
             </div>
           </div>
         );
@@ -133,7 +139,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
           <div className="post-modal" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
               <h3>{t('Share')}</h3>
-              <button type="button" className="post-modal__close" onClick={() => setActiveShare(null)}>×</button>
+              <button type="button" className="post-modal__close" onClick={() => setActiveShare(null)}>x</button>
             </div>
             <div className="post-modal__body">
               <div className="post-modal__user">
@@ -155,7 +161,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
           <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
             <div className="post-modal__header">
               <h3>{t("{name}'s post", { name })}</h3>
-              <button type="button" className="post-modal__close" onClick={() => setActiveComment(null)}>×</button>
+              <button type="button" className="post-modal__close" onClick={() => setActiveComment(null)}>x</button>
             </div>
             <div className="post-modal__body">
               <div className="post-content">
@@ -179,7 +185,7 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
               <div className="post-quick-comment">
                 <img src={profile.avatar} alt={profile.name} />
                 <input type="text" placeholder={t('Comment as {name}', { name: profile.name })} />
-                <button className="quick-comment-btn" type="button">➤</button>
+                <button className="quick-comment-btn" type="button">{'\u2192'}</button>
               </div>
             </div>
           </div>
@@ -187,85 +193,51 @@ const PostsPreview = ({ posts = [], name, avatar }) => {
       )}
 
       {imageModal && imageModal.post?.images && (
-        <div className="post-modal-backdrop" onClick={() => setImageModal(null)}>
-          <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
-            <div className="post-modal__header">
-              <h3>{t("{name}'s photo", { name })}</h3>
-              <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>×</button>
-            </div>
-            <div className="post-modal__body">
-              <div className="post-media-scroll">
-                {imageModal.post.images.map((src, idx) => (
-                  <img
-                    key={src + idx}
-                    src={src}
-                    alt={`Post content ${idx + 1}`}
-                    className="post-media-image"
-                  />
-                ))}
-              </div>
-              <div className="post-actions-bar">
-                <button className="action-btn" type="button" onClick={() => toggleLike(imageModal.post.id)}>
-                  {likedIds.has(imageModal.post.id) ? (
-                    <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
-                  ) : (
-                    <span aria-hidden="true">👍</span>
-                  )}
-                  <span>{t('Like')}</span>
-                </button>
-                <button className="action-btn" type="button">
-                  <Icon name="comment" size={16} className="icon--no-circle comment-icon" aria-hidden="true" />
-                  <span>{t('Comment')}</span>
-                </button>
-                <button className="action-btn" type="button" onClick={() => setActiveShare(imageModal.post)}>
-                  <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                  <span>{t('Share')}</span>
-                </button>
-              </div>
-              <div className="post-quick-comment">
-                <img src={profile.avatar} alt={profile.name} />
-                <input
-                  type="text"
-                  placeholder={t('Comment as {name}', { name: profile.name })}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleImageComment(imageModal.post.id, imageModal.index, e.currentTarget.value);
-                      e.currentTarget.value = '';
-                    }
-                  }}
-                />
-                <button
-                  className="quick-comment-btn"
-                  type="button"
-                  onClick={(e) => {
-                    const input = e.currentTarget.previousElementSibling;
-                    if (input) {
-                      handleImageComment(imageModal.post.id, imageModal.index, input.value);
-                      input.value = '';
-                    }
-                  }}
-                >
-                  ➤
-                </button>
-              </div>
-              {(imageComments[`${imageModal.post.id}-${imageModal.index}`] || []).map((text, idx) => (
-                <div key={`${imageModal.post.id}-${idx}`} className="image-comment">
-                  <strong>{profile.name}</strong> {text}
-                </div>
-              ))}
+        <div className="post-modal-backdrop post-modal-backdrop--photo" onClick={() => setImageModal(null)}>
+          <div className="post-photo-modal" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>
+              x
+            </button>
+            <button
+              type="button"
+              className="post-photo-nav"
+              aria-label={t('Previous photo')}
+              onClick={() =>
+                setImageModal((prev) => ({
+                  ...prev,
+                  index: (prev.index - 1 + imageModal.post.images.length) % imageModal.post.images.length,
+                }))
+              }
+            >
+              {'\u2039'}
+            </button>
+            <img
+              src={imageModal.post.images[imageModal.index]}
+              alt={t("{name}'s photo", { name })}
+              className="post-photo-image"
+            />
+            <button
+              type="button"
+              className="post-photo-nav"
+              aria-label={t('Next photo')}
+              onClick={() =>
+                setImageModal((prev) => ({
+                  ...prev,
+                  index: (prev.index + 1) % imageModal.post.images.length,
+                }))
+              }
+            >
+              {'\u203A'}
+            </button>
+            <div className="post-photo-count">
+              {imageModal.index + 1} / {imageModal.post.images.length}
             </div>
           </div>
         </div>
       )}
+      <CommentProfileModal user={activeProfile} onClose={() => setActiveProfile(null)} />
     </div>
   );
 };
 
 export default React.memo(PostsPreview);
-
-
-
-
-
-
-

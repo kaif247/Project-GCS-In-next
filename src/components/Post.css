@@ -140,7 +140,7 @@
   border-radius: 50%;
   border: none;
   background: var(--bg-muted);
-  color: #e35d5d;
+  color: var(--accent-crimson);
   font-size: 16px;
   cursor: pointer;
   display: flex;
@@ -221,7 +221,7 @@
 
 .post-hidden-banner button {
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   padding: 6px 12px;
   border-radius: 10px;
@@ -615,7 +615,7 @@
 }
 
 .comment-icon {
-  color: #E38F12;
+  color: #FFD700;
 }
 
 /* Reactions Popup */
@@ -677,12 +677,12 @@
   width: 100%;
   height: auto;
   display: block;
-  accent-color: #E38F12;
+  accent-color: #FFD700;
 }
 
 .post-video video::-webkit-media-controls-play-button,
 .post-video video::-webkit-media-controls-start-playback-button {
-  background-color: #E38F12;
+  background-color: #FFD700;
   border-radius: 50%;
 }
 
@@ -753,6 +753,11 @@
   justify-content: center;
   z-index: 500;
   padding: 16px;
+}
+
+.post-modal-backdrop--photo {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: none;
 }
 
 .post-modal {
@@ -866,11 +871,91 @@
   scroll-snap-align: center;
 }
 
+.post-photo-modal {
+  position: relative;
+  width: min(720px, 90vw);
+  height: min(60vh, 520px);
+  background: rgba(10, 10, 10, 0.92);
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  place-items: center;
+  gap: 12px;
+}
+
+.post-photo-image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #111;
+}
+
+.post-photo-nav {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 26px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.post-photo-nav:first-of-type {
+  left: 0;
+}
+
+.post-photo-nav:last-of-type {
+  right: 12px;
+}
+
+.post-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.post-photo-count {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+
 .image-comment {
   background: var(--bg-muted);
   border-radius: 10px;
   padding: 6px 10px;
   font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.image-comment__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.image-comment__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .post-report-option {
@@ -886,7 +971,7 @@
 }
 
 .post-report-option input {
-  accent-color: #E38F12;
+  accent-color: var(--accent-crimson);
 }
 
 /* Responsive Design */

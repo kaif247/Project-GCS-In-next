@@ -32,7 +32,7 @@ const Navbar = () => {
           </svg>
         </Link>
         <div className={styles.searchWrap}>
-          <Icon name="search (1)" size={14} className={styles.searchIcon} aria-hidden="true" />
+          <Icon name="search (1)" size={18} className={styles.searchIcon} aria-hidden="true" />
           <input className={styles.search} type="text" placeholder="Search Facebook" aria-label="Search Facebook" />
         </div>
       </div>

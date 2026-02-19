@@ -21,7 +21,7 @@ const buildEmojiList = () => {
 
 const colorOptions = [
   { id: 'default', label: 'Default', bg: 'var(--bg-muted)', text: 'var(--text-primary)' },
-  { id: 'sunset', label: 'Sunset', bg: 'linear-gradient(135deg, #f6b73c 0%, #e38f12 100%)', text: '#1b1b1b' },
+  { id: 'sunset', label: 'Sunset', bg: 'linear-gradient(135deg, #f6b73c 0%, #FFD700 100%)', text: '#1b1b1b' },
   { id: 'ocean', label: 'Ocean', bg: 'linear-gradient(135deg, #22c1c3 0%, #5b86e5 100%)', text: '#0b1b2b' },
   { id: 'violet', label: 'Violet', bg: 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)', text: '#ffffff' },
   { id: 'mint', label: 'Mint', bg: 'linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)', text: '#0e2411' },
@@ -37,6 +37,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
   const [media, setMedia] = useState([]);
   const [video, setVideo] = useState(null);
+  const [mediaLoading, setMediaLoading] = useState(false);
   const [tags, setTags] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showTagPicker, setShowTagPicker] = useState(false);
@@ -46,7 +47,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
   const videoInputRef = useRef(null);
   const emojiList = useMemo(() => buildEmojiList(), []);
 
-  const canPost = postText.trim().length > 0 || media.length > 0;
+  const canPost = (postText.trim().length > 0 || media.length > 0) && !mediaLoading;
   const previewStyle = useMemo(
     () => ({
       background: selectedColor.bg,
@@ -80,6 +81,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
       setVideo({ name: videoFile.name, url: objectUrl, objectUrl: true });
     }
     if (imageFiles.length) {
+      setMediaLoading(true);
       const readers = imageFiles.map(
         (file) =>
           new Promise((resolve) => {
@@ -90,6 +92,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
       );
       Promise.all(readers).then((images) => {
         setMedia((prev) => [...prev, ...images]);
+        setMediaLoading(false);
       });
     }
   };
@@ -97,8 +100,10 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
   const handleVideoChange = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    setMediaLoading(true);
     const objectUrl = URL.createObjectURL(file);
     setVideo({ name: file.name, url: objectUrl, objectUrl: true });
+    setMediaLoading(false);
   };
 
   const handleRemoveMedia = (index) => {
@@ -162,7 +167,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
               aria-label={t('Video')}
             >
               <span className="post-input-icon post-input-icon--video">
-                <Icon name="live2" size={22} className="icon--no-circle" aria-hidden="true" />
+                <Icon name="live" size={22} className="icon--no-circle" aria-hidden="true" />
               </span>
             </button>
             <button
@@ -175,7 +180,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
               aria-label={t('Photo')}
             >
               <span className="post-input-icon post-input-icon--photo">
-                <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
+                <Icon name="photo-png" size={18} className="icon--no-circle" aria-hidden="true" />
               </span>
             </button>
             <button
@@ -273,6 +278,11 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
                 ))}
               </div>
             )}
+            {mediaLoading && (
+              <div className="post-composer__media-status">
+                {t('Loading media...')}
+              </div>
+            )}
             {video && (
               <div className="post-composer__media">
                 <div className="post-media-thumb post-media-thumb--video">
@@ -288,10 +298,10 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
               <span>{t('Add to your post')}</span>
               <div className="post-composer__add-actions">
                 <button type="button" onClick={() => fileInputRef.current?.click()}>
-                  <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
+                  <Icon name="photo-png" size={18} className="icon--no-circle" aria-hidden="true" />
                 </button>
                 <button type="button" onClick={() => videoInputRef.current?.click()}>
-                  <Icon name="live2" size={18} className="icon--no-circle" aria-hidden="true" />
+                  <Icon name="live" size={18} className="icon--no-circle" aria-hidden="true" />
                 </button>
                 <button type="button" onClick={() => setShowTagPicker((prev) => !prev)}>
                   <Icon name="friends" size={18} className="icon--no-circle" aria-hidden="true" />
@@ -356,7 +366,7 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
               onClick={handlePost}
               disabled={!canPost}
             >
-              {t('Post')}
+              {mediaLoading ? t('Please wait...') : t('Post')}
             </button>
             <input
               ref={fileInputRef}
