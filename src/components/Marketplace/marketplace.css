@@ -55,7 +55,7 @@
 
 .marketplace-sidebar__search .search-icon {
   position: absolute;
-  left: 12px;
+  left: 8px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
@@ -64,7 +64,7 @@
 
 .marketplace-sidebar__search input {
   width: 100%;
-  padding: 10px 12px 10px 36px;
+  padding: 10px 12px 10px 46px;
   border-radius: 18px;
   border: 1px solid var(--border-color);
   background: var(--bg-muted);
@@ -104,12 +104,12 @@
 
 .marketplace-sidebar__item:hover {
   background: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .marketplace-sidebar__item.active {
   background: var(--bg-hover);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .marketplace-sidebar__icon {
@@ -138,7 +138,7 @@
   border: none;
   border-radius: 8px;
   padding: 10px 12px;
-  background: #E38F12;
+  background: #FFD700;
   color: var(--text-primary);
   font-weight: 700;
 }
@@ -167,7 +167,7 @@
   font-size: 18px;
   font-weight: 700;
   margin: 4px 0 12px;
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .marketplace-grid__list {
@@ -181,7 +181,7 @@
   border: 1px solid var(--border-color);
   border-radius: 10px;
   overflow: hidden;
-  transition: transform 0.5s ease, box-shadow 2s ease;
+  transition: transform 0.5s ease, box-shadow 0.6s ease, border-color 0.6s ease;
 }
 
 .marketplace-card-link {
@@ -192,7 +192,8 @@
 
 .marketplace-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px var(--shadow);
+  border-color: rgba(0, 255, 255, 0.5);
+  box-shadow: 0 6px 16px var(--shadow), 0 0 18px rgba(0, 255, 255, 0.35);
 }
 
 .marketplace-card__image-wrap {
@@ -249,7 +250,7 @@
 .marketplace-card__price {
   font-size: 15px;
   font-weight: 700;
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .marketplace-card__title {
@@ -349,8 +350,8 @@
 }
 
 .marketplace-btn--primary {
-  background: #E38F12;
-  border-color: #E38F12;
+  background: #FFD700;
+  border-color: #FFD700;
   color: #121212;
 }
 
@@ -436,7 +437,7 @@
 }
 
 .marketplace-detail__thumb.is-active {
-  border-color: #E38F12;
+  border-color: #FFD700;
 }
 
 .marketplace-detail__thumb img {
@@ -453,7 +454,7 @@
   width: 160px;
   height: 160px;
   border-radius: 16px;
-  border: 2px solid #E38F12;
+  border: 2px solid #FFD700;
   background-repeat: no-repeat;
   background-size: 220%;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
@@ -505,7 +506,7 @@
   height: 52px;
   border-radius: 50%;
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   display: flex;
   align-items: center;
@@ -577,7 +578,7 @@
 
 .marketplace-chat__seller-actions a {
   text-decoration: none;
-  color: #E38F12;
+  color: #FFD700;
   font-weight: 600;
   font-size: 12px;
 }
@@ -631,7 +632,7 @@
 
 .marketplace-chat__composer button {
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   border-radius: 10px;
   padding: 8px 10px;
@@ -694,8 +695,8 @@
 }
 
 .marketplace-inbox__tabs button.active {
-  border-color: #E38F12;
-  color: #E38F12;
+  border-color: #FFD700;
+  color: #FFD700;
 }
 
 .marketplace-inbox__layout {
@@ -728,7 +729,7 @@
 }
 
 .marketplace-inbox__thread.active {
-  border-color: #E38F12;
+  border-color: #FFD700;
 }
 
 .marketplace-inbox__thread img {
@@ -846,7 +847,7 @@
 
 .marketplace-inbox__composer button {
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   border-radius: 10px;
   padding: 8px 12px;
@@ -916,7 +917,7 @@
 .marketplace-detail__price {
   font-size: 22px;
   font-weight: 800;
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .marketplace-detail__info h1 {
@@ -954,7 +955,7 @@
 }
 
 .marketplace-detail__cta {
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
 }
 
@@ -1165,7 +1166,7 @@
 .cart-summary__cta {
   width: 100%;
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   padding: 10px 12px;
   border-radius: 10px;
@@ -1182,7 +1183,7 @@
 }
 
 .dark-mode .cart-summary__back {
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .cart-page__empty {
@@ -1209,8 +1210,8 @@
 .dark-mode .marketplace-detail__cart-link,
 .dark-mode .cart-summary__back,
 .dark-mode .cart-page__back {
-  color: #E38F12;
-  border-color: #E38F12;
+  color: #FFD700;
+  border-color: #FFD700;
 }
 
 @media (max-width: 1200px) {
@@ -1263,7 +1264,7 @@
   }
 
   .marketplace-grid__list {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .marketplace-panel__grid,

@@ -142,6 +142,56 @@
 .emojiBtn:hover {
   background: #f0f2f5;
 }
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.commentItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.commentAvatarBtn {
+  border: none;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.commentAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1877f2;
+}
+
+.commentBubble {
+  background: #f0f2f5;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.commentNameBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #050505;
+  cursor: pointer;
+}
 @media (max-width: 768px) {
   .post {
     padding: 8px;

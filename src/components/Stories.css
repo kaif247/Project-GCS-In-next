@@ -48,7 +48,7 @@
 }
 
 .story-card[data-bg='accent'] {
-  background: #E38F12;
+  background: #FFD700;
 }
 
 .story-card[data-bg='cyan'] {
@@ -110,7 +110,10 @@
 
 .story-card:hover {
   transform: scale(1.02);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.25),
+    0 0 18px rgba(0, 255, 255, 0.38),
+    0 0 26px rgba(153, 0, 0, 0.32);
 }
 
 .story-overlay {
@@ -152,7 +155,7 @@
 /* Create Story Card */
 .create-story {
   background: radial-gradient(circle at top, rgba(255, 255, 255, 0.25), transparent 60%),
-    linear-gradient(135deg, #1b1b1b 0%, #3a2a0b 50%, #e38f12 100%);
+    linear-gradient(135deg, #1b1b1b 0%, #3a2a0b 50%, #FFD700 100%);
   justify-content: center;
   gap: 8px;
 }
@@ -178,7 +181,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #E38F12;
+  background: #FFD700;
   color: white;
   border: 3px solid white;
   font-size: 18px;
@@ -192,7 +195,7 @@
 }
 
 .create-story-btn:hover {
-  background-color:#E38F12;;
+  background-color:#FFD700;;
   transform: scale(1.1);
 }
 
@@ -331,7 +334,7 @@
   font-size: 11px;
   font-weight: 700;
   color: #1a1a1a;
-  background: #E38F12;
+  background: #FFD700;
   width: fit-content;
 }
 
@@ -362,9 +365,9 @@
 }
 
 .story-mode-btn.active {
-  border-color: #E38F12;
+  border-color: #FFD700;
   box-shadow: 0 0 0 1px rgba(227, 143, 18, 0.4);
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .story-modal__hint {
@@ -389,7 +392,7 @@
 }
 
 .story-modal__preview--story[data-bg='accent'] {
-  background: #E38F12;
+  background: #FFD700;
 }
 
 .story-modal__preview--story[data-bg='cyan'] {
@@ -409,7 +412,7 @@
 }
 
 .story-color-btn[data-bg='dark'] { background: #1f1f1f; }
-.story-color-btn[data-bg='accent'] { background: #E38F12; }
+.story-color-btn[data-bg='accent'] { background: #FFD700; }
 .story-color-btn[data-bg='cyan'] { background: #22c1c3; }
 .story-color-btn[data-bg='violet'] { background: #4a00e0; }
 .story-color-btn[data-bg='rose'] { background: #ff758c; }
@@ -472,13 +475,13 @@
 }
 
 .story-color-btn.active {
-  border-color: #E38F12;
+  border-color: #FFD700;
 }
 
 .story-modal__submit {
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #f6b73c, #E38F12);
+  background: linear-gradient(135deg, #f6b73c, #FFD700);
   color: #1b1b1b;
   font-weight: 700;
   padding: 10px;

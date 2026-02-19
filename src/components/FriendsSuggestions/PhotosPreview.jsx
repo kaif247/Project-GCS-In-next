@@ -24,6 +24,8 @@ const PhotosPreview = ({ photos = [] }) => {
 
   useEffect(() => {
     if (!isOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const onKey = (event) => {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -39,7 +41,10 @@ const PhotosPreview = ({ photos = [] }) => {
       }
     };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKey);
+    };
   }, [isOpen, photos.length]);
 
   return (

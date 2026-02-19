@@ -148,7 +148,7 @@
 }
 
 .primaryBtn {
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -265,7 +265,7 @@
 }
 
 .tabActive {
-  color: #E38F12;
+  color: #FFD700;
   background: rgba(227, 143, 18, 0.12);
 }
 
@@ -327,14 +327,14 @@
 .linkBtn {
   border: none;
   background: none;
-  color: #E38F12;
+  color: #FFD700;
   font-weight: 600;
   font-size: 13px;
 }
 
 .filterBtn {
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #fff;
   padding: 6px 10px;
   border-radius: 8px;
@@ -342,7 +342,7 @@
 }
 
 :global(.dark-mode) .profileMeta h2 {
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .photosGrid {
@@ -374,12 +374,15 @@
 .photoModalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1200;
+  z-index: 3000;
+  pointer-events: auto;
+  isolation: isolate;
 }
 
 .photoModal {

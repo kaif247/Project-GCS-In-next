@@ -5,6 +5,7 @@ import { LanguageContext } from '../context/LanguageContext';
 import useProfileData from '../hooks/useProfileData';
 import useSavedPosts from '../hooks/useSavedPosts';
 import useFeedPreferences from '../hooks/useFeedPreferences';
+import CommentProfileModal from './CommentProfileModal';
 
 const Post = ({ post, canDelete = false, onDelete }) => {
   const [liked, setLiked] = useState(false);
@@ -24,10 +25,11 @@ const Post = ({ post, canDelete = false, onDelete }) => {
   const [showAllComments, setShowAllComments] = useState(false);
   const [showAllCommentsPopup, setShowAllCommentsPopup] = useState(false);
   const [commentDraft, setCommentDraft] = useState('');
-    const [commentDraftPopup, setCommentDraftPopup] = useState('');
-    const { t } = useContext(LanguageContext);
-    const profile = useProfileData();
-    const canDeletePost = canDelete || post?.isLocal || String(post?.id || '').startsWith('local-');
+  const [commentDraftPopup, setCommentDraftPopup] = useState('');
+  const [activeProfile, setActiveProfile] = useState(null);
+  const { t } = useContext(LanguageContext);
+  const profile = useProfileData();
+  const canDeletePost = canDelete || post?.isLocal || String(post?.id || '').startsWith('local-');
   const { isSaved, toggleSave } = useSavedPosts();
   const {
     prefs,
@@ -42,10 +44,11 @@ const Post = ({ post, canDelete = false, onDelete }) => {
   const notificationsOn = Boolean(prefs.notifications?.[post.id]);
 
   const reactionEmojis = {
-    like: '👍',
-    love: '❤️',
+    like: null,
     haha: '😄',
     wow: '😮',
+    sad: '😢',
+    angry: '😠',
   };
 
   const baseTotal = Object.values(post.reactions || {}).reduce((a, b) => a + b, 0);
@@ -68,7 +71,15 @@ const Post = ({ post, canDelete = false, onDelete }) => {
     setImageComments((prev) => {
       const key = String(index);
       const next = { ...prev };
-      next[key] = [...(next[key] || []), text.trim()];
+      next[key] = [
+        ...(next[key] || []),
+        {
+          id: `${post.id}-${Date.now()}`,
+          text: text.trim(),
+          name: profile.name,
+          avatar: profile.avatar,
+        },
+      ];
       return next;
     });
   };
@@ -368,12 +379,16 @@ const Post = ({ post, canDelete = false, onDelete }) => {
         <div className="post-stats">
           <div className="reactions-summary">
             <div className="reaction-icons">
-              {liked && <Icon name="family" size={16} className="reaction-icon" aria-hidden="true" />}
+              {liked && <Icon name="like" size={16} className="reaction-icon" aria-hidden="true" />}
               {Object.entries(post.reactions || {}).map(
                 ([type, count]) =>
-                  count > 0 && (
+                  count > 0 && type !== 'love' && (
                     <span key={type} className="reaction-icon" title={type}>
-                      {reactionEmojis[type]}
+                      {type === 'like' ? (
+                        <Icon name="like" size={14} className="icon--no-circle" aria-hidden="true" />
+                      ) : (
+                        reactionEmojis[type]
+                      )}
                     </span>
                   )
               )}
@@ -406,19 +421,16 @@ const Post = ({ post, canDelete = false, onDelete }) => {
             onMouseLeave={() => setShowReactions(false)}
             aria-label={liked ? t('Unlike') : t('Like')}
           >
-            {liked ? (
-              <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
-            ) : (
-              <span aria-hidden="true">👍</span>
-            )}
+            <Icon name="like" size={16} className="icon--no-circle" aria-hidden="true" />
             <span>{t('Like')}</span>
           </button>
 
           {/* Reactions Popup */}
           {showReactions && (
             <div className="reactions-popup">
-              <button className="reaction-btn" title={t('Like')}>👍</button>
-              <button className="reaction-btn" title={t('Love')}>❤️</button>
+              <button className="reaction-btn" title={t('Like')}>
+                <Icon name="like" size={18} className="icon--no-circle" aria-hidden="true" />
+              </button>
               <button className="reaction-btn" title={t('Haha')}>😄</button>
               <button className="reaction-btn" title={t('Wow')}>😮</button>
               <button className="reaction-btn" title={t('Sad')}>😢</button>
@@ -459,9 +471,22 @@ const Post = ({ post, canDelete = false, onDelete }) => {
           <div className="post-comment-list">
             {visibleComments.map((item) => (
               <div key={item.id} className="comment-item">
-                <img src={item.avatar} alt={item.name} />
+                <button
+                  type="button"
+                  className="comment-profile-btn"
+                  onClick={() => setActiveProfile(item)}
+                  aria-label={t('User profile')}
+                >
+                  <img src={item.avatar} alt={item.name} />
+                </button>
                 <div className="comment-bubble">
-                  <strong>{item.name}</strong>
+                  <button
+                    type="button"
+                    className="comment-name-btn"
+                    onClick={() => setActiveProfile(item)}
+                  >
+                    {item.name}
+                  </button>
                   <span>{item.text}</span>
                 </div>
               </div>
@@ -547,11 +572,7 @@ const Post = ({ post, canDelete = false, onDelete }) => {
               </div>
               <div className="post-actions-bar">
                 <button className={`action-btn ${liked ? 'liked' : ''}`} type="button" onClick={handleLike}>
-                  {liked ? (
-                    <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
-                  ) : (
-                    <span aria-hidden="true">👍</span>
-                  )}
+                  <Icon name="like" size={16} className="icon--no-circle" aria-hidden="true" />
                   <span>{t('Like')}</span>
                 </button>
                 <button className="action-btn" type="button">
@@ -593,72 +614,41 @@ const Post = ({ post, canDelete = false, onDelete }) => {
       )}
 
       {imageModal && post.images && (
-        <div className="post-modal-backdrop" onClick={() => setImageModal(null)}>
-          <div className="post-modal post-modal--wide" onClick={(e) => e.stopPropagation()}>
-            <div className="post-modal__header">
-              <h3>{t("{name}'s photo", { name: post.userName })}</h3>
-              <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>x</button>
-            </div>
-            <div className="post-modal__body">
-              <div className="post-media-scroll">
-                {post.images.map((img, idx) => (
-                  <img
-                    key={img + idx}
-                    src={img}
-                    alt={`Post content ${idx + 1}`}
-                    className={`post-media-image ${idx === imageModal.index ? 'active' : ''}`}
-                  />
-                ))}
-              </div>
-              <div className="post-actions-bar">
-                <button className={`action-btn ${liked ? 'liked' : ''}`} type="button" onClick={handleLike}>
-                  {liked ? (
-                      <Icon name="family" size={16} className="icon--no-circle" aria-hidden="true" />
-                  ) : (
-                    <span aria-hidden="true">👍</span>
-                  )}
-                  <span>{t('Like')}</span>
-                </button>
-                <button className="action-btn" type="button">
-                    <Icon name="comment" size={16} className="icon--no-circle" aria-hidden="true" />
-                    <span>{t('Comment')}</span>
-                </button>
-                <button className="action-btn" type="button" onClick={() => setIsShareOpen(true)}>
-                    <Icon name="share" size={16} className="icon--no-circle" aria-hidden="true" />
-                    <span>{t('Share')}</span>
-                </button>
-              </div>
-              <div className="post-quick-comment">
-                <img src={profile.avatar} alt={profile.name} />
-                <input
-                  type="text"
-                  placeholder={t('Comment as {name}', { name: profile.name })}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleImageComment(imageModal.index, e.currentTarget.value);
-                      e.currentTarget.value = '';
-                    }
-                  }}
-                />
-                <button
-                  className="quick-comment-btn"
-                  type="button"
-                  onClick={(e) => {
-                    const input = e.currentTarget.previousElementSibling;
-                    if (input) {
-                      handleImageComment(imageModal.index, input.value);
-                      input.value = '';
-                    }
-                  }}
-                >
-                  &rarr;
-                </button>
-              </div>
-              {(imageComments[String(imageModal.index)] || []).map((text, idx) => (
-                <div key={`${imageModal.index}-${idx}`} className="image-comment">
-                  <strong>{profile.name}</strong> {text}
-                </div>
-              ))}
+        <div className="post-modal-backdrop post-modal-backdrop--photo" onClick={() => setImageModal(null)}>
+          <div className="post-photo-modal" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="post-modal__close" onClick={() => setImageModal(null)}>
+              x
+            </button>
+            <button
+              type="button"
+              className="post-photo-nav"
+              aria-label={t('Previous photo')}
+              onClick={() =>setImageModal((prev) => ({
+                  index: (prev.index - 1 + post.images.length) % post.images.length,
+                }))
+              }
+            >
+              ‹
+            </button>
+            <img
+              src={post.images[imageModal.index]}
+              alt={t("{name}'s photo", { name: post.userName })}
+              className="post-photo-image"
+            />
+            <button
+              type="button"
+              className="post-photo-nav"
+              aria-label={t('Next photo')}
+              onClick={() =>
+                setImageModal((prev) => ({
+                  index: (prev.index + 1) % post.images.length,
+                }))
+              }
+            >
+              ›
+            </button>
+            <div className="post-photo-count">
+              {imageModal.index + 1} / {post.images.length}
             </div>
           </div>
         </div>
@@ -744,6 +734,8 @@ const Post = ({ post, canDelete = false, onDelete }) => {
           </div>
         </div>
       )}
+
+      <CommentProfileModal user={activeProfile} onClose={() => setActiveProfile(null)} />
     </>
   );
 };

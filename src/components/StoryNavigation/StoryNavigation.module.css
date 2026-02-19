@@ -1,7 +1,8 @@
 .nav {
   position: absolute;
   inset: 0;
-  pointer-events: auto;
+  pointer-events: none;
+  z-index: 5;
 }
 
 .btn {
@@ -19,6 +20,7 @@
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: auto;
+  z-index: 6;
 }
 
 .btn:first-of-type {

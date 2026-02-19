@@ -40,13 +40,13 @@
 }
 
 .dark-mode .products-page__marketplace-link {
-  color: #E38F12;
-  border-color: #E38F12;
+  color: #FFD700;
+  border-color: #FFD700;
 }
 
 .products-page__publish {
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   padding: 10px 16px;
   border-radius: 10px;
@@ -161,7 +161,7 @@
 .products-form__upload input[type='file']::file-selector-button {
   margin-right: 10px;
   border: none;
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
   padding: 6px 10px;
   border-radius: 8px;
@@ -236,7 +236,7 @@
 .products-preview__price {
   font-size: 20px;
   font-weight: 800;
-  color: #E38F12;
+  color: #FFD700;
 }
 
 .products-preview__title {
@@ -318,7 +318,7 @@
 }
 
 .products-preview__cta {
-  background: #E38F12;
+  background: #FFD700;
   color: #121212;
 }
 

@@ -10,22 +10,24 @@ import { ReactComponent as Clothings7 } from './clothings.svg';
 import { ReactComponent as Comment12 } from './comment.svg';
 import { ReactComponent as Communication5 } from './communication.svg';
 import { ReactComponent as DetailedProblem6 } from './detailed-problem.svg';
+import { ReactComponent as EnglishIcon } from './english.svg';
 import { ReactComponent as Entertainment8 } from './entertainment.svg';
+import { ReactComponent as EspanolIcon } from './espanol.svg';
 import { ReactComponent as Event7 } from './event.svg';
 import { ReactComponent as FacebookPage8 } from './facebook-page.svg';
+import { ReactComponent as FrancaisIcon } from './Français.svg';
 import { ReactComponent as Family11 } from './family.svg';
 import { ReactComponent as Feeds9 } from './feeds.svg';
 import { ReactComponent as Friends10 } from './friends.svg';
 import { ReactComponent as Home13 } from './home.svg';
 import { ReactComponent as Image14 } from './image.svg';
+import { ReactComponent as KreyolIcon } from './kreyol.svg';
+import { ReactComponent as LiveIcon } from './live.svg';
+import { ReactComponent as LikeIcon } from './like.svg';
 import { ReactComponent as Logo15 } from './logo.svg';
 import { ReactComponent as Lightmode16 } from './lightmode.svg';
 import { ReactComponent as MapLocation17 } from './map-location_12519920.svg';
-import LanguagesPng from './languages.png';
-import FranciumPng from './francium_13468930.png';
-import EsFlagPng from './ChatGPT_Image_Feb_12__2026__12_14_22_PM-removebg-preview.png';
-import KreyolPng from './ChatGPT_Image_Feb_12__2026__12_15_44_PM-removebg-preview.png';
-import Live2Png from './live2.png';
+import { ReactComponent as LanguagesIcon } from './image.svg';
 
 import { ReactComponent as Marketplace217 } from './marketplace (2).svg';
 import { ReactComponent as Marketplace2 } from './marketplace2.svg';
@@ -37,8 +39,6 @@ import { ReactComponent as Messenger596877121 } from './messenger_596877.svg';
 import { ReactComponent as Meta21 } from './meta.svg';
 import { ReactComponent as NightMode22 } from './night-mode.svg';
 import { ReactComponent as Notification22 } from './Notification.svg';
-import Photos2Png from './photos2.png';
-import Photo2Png from './photo2.png';
 import { ReactComponent as Product22 } from './product.svg';
 import { ReactComponent as Post25 } from './post.svg';
 import { ReactComponent as Properties27 } from './properties.svg';
@@ -47,6 +47,7 @@ import { ReactComponent as Saved23 } from './saved.svg';
 import { ReactComponent as Search24 } from './search (1).svg';
 import { ReactComponent as Selling28 } from './selling.svg';
 import { ReactComponent as Share27 } from './share.svg';
+import { ReactComponent as PhotoPngIcon } from './photo.png.svg';
 import { ReactComponent as Story26 } from './story.svg';
 import { ReactComponent as Social1367034024 } from './social_13670340.svg';
 import { ReactComponent as Social136g7034025 } from './social_136g70340.svg';
@@ -68,23 +69,30 @@ const icons = {
   "comment": Comment12,
   "communication": Communication5,
   "detailed-problem": DetailedProblem6,
+  "english": EnglishIcon,
   "entertainment": Entertainment8,
+  "espanol": EspanolIcon,
   "event": Event7,
   "facebook-page": FacebookPage8,
+  "francais": FrancaisIcon,
+  "français": FrancaisIcon,
   "family": Family11,
   "feeds": Feeds9,
   "friends": Friends10,
 
   "home": Home13,
   "image": Image14,
+  "kreyol": KreyolIcon,
+  "live": LiveIcon,
+  "like": LikeIcon,
   "logo": Logo15,
   "lightmode": Lightmode16,
   "map-location": MapLocation17,
-  "languages": LanguagesPng,
-  "lang-fr": FranciumPng,
-  "lang-es": EsFlagPng,
-  "lang-ht": KreyolPng,
-  "live2": Live2Png,
+  "languages": LanguagesIcon,
+  "lang-fr": LanguagesIcon,
+  "lang-es": LanguagesIcon,
+  "lang-ht": LanguagesIcon,
+  "live2": LanguagesIcon,
 
   "marketplace (2)": Marketplace217,
   "marketplace2": Marketplace2,
@@ -96,8 +104,8 @@ const icons = {
   "meta": Meta21,
   "night-mode": NightMode22,
   "notification": Notification22,
-  "photos2": Photos2Png,
-  "photo2": Photo2Png,
+  "photos2": LanguagesIcon,
+  "photo2": LanguagesIcon,
   "product": Product22,
   "post": Post25,
   "properties": Properties27,
@@ -106,6 +114,8 @@ const icons = {
   "search (1)": Search24,
   "selling": Selling28,
   "share": Share27,
+  "photo-png": PhotoPngIcon,
+  "photo.png": PhotoPngIcon,
   "story": Story26,
   "social_13670340": Social1367034024,
   "social_136g70340": Social136g7034025,

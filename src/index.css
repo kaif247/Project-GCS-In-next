@@ -5,10 +5,19 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+html {
+  --icon-color: #FFD700;
+}
+
+svg {
+  color: var(--icon-color);
 }
 
 body {
@@ -93,6 +102,7 @@ a {
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a:hover {
@@ -113,6 +123,7 @@ button {
   font-family: inherit;
   border: none;
   outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible {
@@ -196,12 +207,12 @@ textarea:focus {
 
 /* Selection Styles */
 ::selection {
-  background-color: rgba(238, 186, 66, 0.35);
+  background-color: rgba(0, 255, 255, 0.35);
   color: inherit;
 }
 
 html.dark-mode ::selection {
-  background-color: rgba(238, 186, 66, 0.45);
+  background-color: rgba(0, 255, 255, 0.45);
 }
 
 /* Utility Classes */

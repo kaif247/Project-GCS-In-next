@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useContext } from 'react';
+import React, { useEffect, useMemo, useState, useContext, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styles from '../components/Feed/StoriesSection.module.css';
 import { LanguageContext } from '../context/LanguageContext';
@@ -11,6 +11,11 @@ const StoriesPage = () => {
   const [current, setCurrent] = useState(0);
   const { stories } = useStories();
   const profile = useProfileData();
+  const [progress, setProgress] = useState(0);
+  const timerRef = useRef(null);
+  const rafRef = useRef(null);
+  const videoRef = useRef(null);
+  const progressIntervalRef = useRef(null);
 
   const groupedStories = useMemo(() => {
     const map = new Map();
@@ -45,10 +50,60 @@ const StoriesPage = () => {
 
   useEffect(() => {
     if (!story) return undefined;
-    const duration = story.video ? 8000 : 5000;
-    const timer = setTimeout(() => nextStory(), duration);
-    return () => clearTimeout(timer);
+    setProgress(0);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+
+    if (story.video) return undefined;
+
+    const duration = 6000;
+    const start = performance.now();
+    const tick = (now) => {
+      const elapsed = now - start;
+      setProgress(Math.min(elapsed / duration, 1));
+      if (elapsed < duration) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    timerRef.current = setTimeout(() => nextStory(), duration);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    };
   }, [story]);
+
+  const handleVideoTimeUpdate = () => {
+    const el = videoRef.current;
+    if (!el.duration || Number.isNaN(el.duration)) return;
+    setProgress(Math.min(el.currentTime / el.duration, 1));
+  };
+
+  const handleVideoLoadedMetadata = () => {
+    const el = videoRef.current;
+    if (!el.duration || Number.isNaN(el.duration)) return;
+    setProgress(Math.min(el.currentTime / el.duration, 1));
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
+    progressIntervalRef.current = setInterval(() => {
+      const player = videoRef.current;
+      if (!player || !player.duration) return;
+      setProgress(Math.min(player.currentTime / player.duration, 1));
+    }, 100);
+  };
 
   if (!story) return null;
 
@@ -100,6 +155,18 @@ const StoriesPage = () => {
 
       <div className={styles.storyViewerStage}>
         <div className={styles.storyViewerCard}>
+          <div className={styles.storyProgress}>
+            {stories.map((_, index) => (
+              <div key={`seg-${index}`} className={styles.storyProgressSegment}>
+                <div
+                  className={styles.storyProgressBar}
+                  style={{
+                    transform: `scaleX(${index < current ? 1 : index === current ? progress : 0})`,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
           <div className={styles.storyViewerHeader}>
             <img src={story.userAvatar} alt={story.userName} />
             <div>
@@ -109,7 +176,19 @@ const StoriesPage = () => {
           </div>
           <div className={styles.storyViewerMedia}>
             {story.video ? (
-              <video src={story.video} autoPlay muted controls />
+              <video
+                ref={videoRef}
+                src={story.video}
+                autoPlay
+                muted
+                controls
+                onTimeUpdate={handleVideoTimeUpdate}
+                onLoadedMetadata={handleVideoLoadedMetadata}
+                onEnded={() => {
+                  setProgress(1);
+                  nextStory();
+                }}
+              />
             ) : story.image ? (
               <img src={story.image} alt={t(story.userName)} />
             ) : (

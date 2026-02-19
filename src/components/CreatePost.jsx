@@ -55,13 +55,13 @@ const CreatePost = () => {
             <div className="post-actions">
               <Link href="/live" className="action-btn live-video" title={t('Live Video')}>
                 <span className="action-icon">
-                  <Icon name="live2" size={18} className="icon--no-circle" aria-hidden="true" />
+                  <Icon name="live" size={18} className="icon--no-circle" aria-hidden="true" />
                 </span>
                 <span className="action-label">{t('Live Video')}</span>
               </Link>
               <button className="action-btn photo-video" title={t('Photo/Video')}>
                 <span className="action-icon">
-                  <Icon name="photo2" size={18} className="icon--no-circle" aria-hidden="true" />
+                  <Icon name="photo-png" size={18} className="icon--no-circle" aria-hidden="true" />
                 </span>
                 <span className="action-label">{t('Photo/Video')}</span>
               </button>
@@ -99,13 +99,13 @@ const CreatePost = () => {
           <div className="post-compact-actions">
             <Link href="/live" className="compact-action-btn live-video" title={t('Live Video')}>
               <span className="action-icon">
-                <Icon name="live2" size={16} className="icon--no-circle" aria-hidden="true" />
+                <Icon name="live" size={16} className="icon--no-circle" aria-hidden="true" />
               </span>
               {t('Live Video')}
             </Link>
             <button className="compact-action-btn photo-video" title={t('Photo/Video')}>
               <span className="action-icon">
-                <Icon name="photo2" size={16} className="icon--no-circle" aria-hidden="true" />
+                <Icon name="photo-png" size={16} className="icon--no-circle" aria-hidden="true" />
               </span>
               {t('Photo/Video')}
             </button>

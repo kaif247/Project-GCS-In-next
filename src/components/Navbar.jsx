@@ -23,9 +23,10 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [profileData, setProfileData] = useState(null);
   const languageIconMap = {
-    fr: 'lang-fr',
-    es: 'lang-es',
-    ht: 'lang-ht',
+    en: 'english',
+    fr: 'francais',
+    es: 'espanol',
+    ht: 'kreyol',
   };
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
     { id: 'home', label: 'Home', icon: <Icon name="home" size={28} />, path: '/' },
     { id: 'marketplace', label: '', icon: <Icon name="marketplace2" size={28} />, path: '/marketplace' },
     { id: 'friends', label: '', icon: <Icon name="friends" size={28} />, path: '/friends' },
-    { id: 'treasury', label: '', icon: <Icon name="product" size={28} />, path: '/treasury' },
+    { id: 'products', label: '', icon: <Icon name="product" size={28} />, path: '/products' },
   ];
 
   const isActiveRoute = (path) => {
@@ -75,7 +76,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
           </Link>
 
           <div className={`navbar-search ${isSearchFocused ? 'focused' : ''}`}>
-            <Icon name="search (1)" size={14} className="search-icon" aria-hidden="true" />
+            <Icon name="search (1)" size={18} className="search-icon" aria-hidden="true" />
             <input
               type="text"
               placeholder={t('Search')}

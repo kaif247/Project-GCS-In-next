@@ -25,6 +25,13 @@ const stripHeavyMedia = (posts) =>
     return post;
   });
 
+const broadcastPosts = (posts) => {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(
+    new CustomEvent('gcs-local-posts-updated', { detail: { posts } })
+  );
+};
+
 const savePosts = (posts) => {
   if (typeof window === 'undefined') return;
   try {
@@ -36,16 +43,22 @@ const savePosts = (posts) => {
     } catch {
       // If quota still exceeded, skip persistence.
     }
-  } finally {
-    window.dispatchEvent(new Event('gcs-local-posts-updated'));
   }
+  broadcastPosts(posts);
 };
 
 const useLocalPosts = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const sync = () => setPosts(loadPosts());
+    const sync = (event) => {
+      const detailPosts = event?.detail?.posts;
+      if (detailPosts) {
+        setPosts(detailPosts);
+        return;
+      }
+      setPosts(loadPosts());
+    };
     sync();
     window.addEventListener('gcs-local-posts-updated', sync);
     return () => window.removeEventListener('gcs-local-posts-updated', sync);

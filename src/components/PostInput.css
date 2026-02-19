@@ -245,13 +245,19 @@
 }
 
 .post-color-btn.active {
-  border-color: #E38F12;
+  border-color: #FFD700;
 }
 
 .post-composer__media {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 10px;
+}
+
+.post-composer__media-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
 }
 
 .post-media-thumb {
@@ -374,7 +380,7 @@
 
 .post-tag-picker__item.selected {
   background: rgba(227, 143, 18, 0.2);
-  border: 1px solid #E38F12;
+  border: 1px solid #FFD700;
 }
 
 .post-tag-picker__item img {
@@ -410,7 +416,7 @@
 .post-composer__submit {
   border: none;
   border-radius: 10px;
-  background: #E38F12;
+  background: #FFD700;
   color: #1d1d1d;
   font-weight: 700;
   padding: 10px;

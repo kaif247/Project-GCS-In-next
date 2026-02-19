@@ -23,6 +23,8 @@ import '../components/ProfileCreate.css';
 import '../components/ProfileView.css';
 import '../components/Friends/friends.css';
 import '../components/live/live.css';
+import '../components/admin/admin.css';
+import '../components/admin/admin-login.css';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -143,7 +145,7 @@ export default function App({ Component, pageProps }) {
                   onOpenLiveProducer={() => setIsLiveOpen(true)}
                   isLiveProducerOpen={isLiveOpen}
                 />
-                <ChatBot />
+                {router.pathname !== '/chats' && !router.pathname.startsWith('/chats') && <ChatBot />}
                 {isLiveOpen && (
                   <LiveProducerSection
                     onRequestClose={handleLiveCloseRequest}
