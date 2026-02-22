@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Icon from '../Icon';
 import { LanguageContext } from '../../context/LanguageContext';
 
@@ -37,6 +38,7 @@ const MarketplaceSidebar = ({
   onSectionChange,
 }) => {
   const { t } = useContext(LanguageContext);
+  const router = useRouter();
   return (
     <aside className="marketplace-sidebar">
       <div className="marketplace-sidebar__header">
@@ -92,7 +94,11 @@ const MarketplaceSidebar = ({
           </span>
           <span>{t('Inbox')}</span>
         </button>
-        <button className="marketplace-sidebar__item">
+        <button
+          type="button"
+          className={`marketplace-sidebar__item ${activeSection === 'access' ? 'active' : ''}`}
+          onClick={() => onSectionChange?.('access')}
+        >
           <span className="marketplace-sidebar__icon">
             <Icon name="marketplace-access" size={18} />
           </span>
@@ -101,7 +107,11 @@ const MarketplaceSidebar = ({
       </nav>
 
       <div className="marketplace-sidebar__section">
-        <button className="marketplace-sidebar__item">
+        <button
+          type="button"
+          className={`marketplace-sidebar__item ${activeSection === 'buying' ? 'active' : ''}`}
+          onClick={() => onSectionChange?.('buying')}
+        >
           <span className="marketplace-sidebar__icon">
             <Icon name="buy_10982864" size={18} />
           </span>
@@ -122,7 +132,13 @@ const MarketplaceSidebar = ({
         </button>
       </div>
 
-      <button className="marketplace-sidebar__primary-btn">+ {t('Create new listing')}</button>
+      <button
+        type="button"
+        className="marketplace-sidebar__primary-btn"
+        onClick={() => router.push('/marketplace/create-listing')}
+      >
+        + {t('Create new listing')}
+      </button>
 
       <div className="marketplace-sidebar__location">
         <span className="marketplace-sidebar__icon">

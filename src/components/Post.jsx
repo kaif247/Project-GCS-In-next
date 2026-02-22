@@ -6,6 +6,8 @@ import useProfileData from '../hooks/useProfileData';
 import useSavedPosts from '../hooks/useSavedPosts';
 import useFeedPreferences from '../hooks/useFeedPreferences';
 import CommentProfileModal from './CommentProfileModal';
+import { blockUser } from '../utils/blockingApi';
+import { addBlockedUser } from '../utils/blockedStore';
 
 const Post = ({ post, canDelete = false, onDelete }) => {
   const [liked, setLiked] = useState(false);
@@ -36,6 +38,7 @@ const Post = ({ post, canDelete = false, onDelete }) => {
     hidePost,
     hideAuthor,
     blockAuthor,
+    blockUserId,
     snoozeAuthor,
     toggleNotifications,
     setFeedback,
@@ -64,6 +67,27 @@ const Post = ({ post, canDelete = false, onDelete }) => {
 
   const handleLike = () => {
     setLiked((prev) => !prev);
+  };
+
+  const handleBlockUser = async () => {
+    const userId = post?.userId;
+    if (!userId) {
+      setMenuNotice(t('Unable to block this user.'));
+      return;
+    }
+    try {
+      await blockUser(userId);
+      blockAuthor(post.userName);
+      blockUserId(userId);
+      addBlockedUser({
+        id: userId,
+        profile_name: post.userName,
+        profile_image: post.userAvatar,
+      });
+      setMenuNotice(t('You will no longer see posts from this profile.'));
+    } catch (error) {
+      setMenuNotice(error.message || t('Block failed.'));
+    }
   };
 
   const handleImageComment = (index, text) => {
@@ -310,9 +334,8 @@ const Post = ({ post, canDelete = false, onDelete }) => {
                   type="button"
                   className="post-menu-item"
                   onClick={() => {
-                    blockAuthor(post.userName);
+                    handleBlockUser();
                     setIsMenuOpen(false);
-                    setMenuNotice(t('You will no longer see posts from this profile.'));
                   }}
                 >
                   {t('Block profile')}

@@ -8,12 +8,56 @@ import useProfileData from '../hooks/useProfileData';
 import useFeedPreferences from '../hooks/useFeedPreferences';
 import useLocalPosts from '../hooks/useLocalPosts';
 
+const engagementOptions = [
+  'Educator',
+  'Protector',
+  'Innovator',
+  'Community Architect',
+];
+
+const contributionTiers = [
+  { label: 'Citizen (Free)', value: 'Citizen' },
+  { label: 'Innovator ($18.49 / mo)', value: 'Innovator' },
+  { label: 'Sovereign Founder ($1,849)', value: 'Sovereign' },
+];
+
+const trinity = [
+  {
+    name: 'H.S.H. Prince Jean II',
+    title: 'Sovereign Architect',
+    image: '/reactivated-boukman.svg',
+  },
+  {
+    name: 'H.I.H. Prince Thierry',
+    title: 'Imperial Steward',
+    image: '/neutral-priest.svg',
+  },
+  {
+    name: 'Cousin Wilson Joseph',
+    title: 'Local Foundation',
+    image: '/imperial-seal.svg',
+  },
+];
+
 const Feed = () => {
   const router = useRouter();
   const profile = useProfileData();
   const { prefs, unhidePost } = useFeedPreferences();
   const { posts: localPosts, addPost, removePost } = useLocalPosts();
   const suggestionsScrollRef = useRef(null);
+  const [registryForm, setRegistryForm] = useState({
+    name: '',
+    email: '',
+    path: engagementOptions[0],
+    tier: contributionTiers[0].value,
+  });
+  const [registryStatus, setRegistryStatus] = useState({ state: 'idle', message: '' });
+  const registryEndpoint =
+    process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
+  const vaultPercent = 33;
+  const selectedTier =
+    contributionTiers.find((tier) => tier.value === registryForm.tier) ||
+    contributionTiers[0];
 
   const suggestionList = useMemo(() => {
     const items = [];
@@ -47,19 +91,151 @@ const Feed = () => {
     );
   }, [profile, localPosts]);
 
-  const filteredPosts = useMemo(() => {
-    const now = Date.now();
-    return resolvedPosts.filter((post) => {
-      if (prefs.hiddenAuthors.includes(post.userName)) return false;
-      if (prefs.blockedAuthors.includes(post.userName)) return false;
-      const snoozeUntil = prefs.snoozedAuthors[post.userName];
-      if (snoozeUntil && snoozeUntil > now) return false;
-      return true;
-    });
-  }, [resolvedPosts, prefs]);
+    const filteredPosts = useMemo(() => {
+      const now = Date.now();
+      return resolvedPosts.filter((post) => {
+        if (prefs.hiddenAuthors.includes(post.userName)) return false;
+        if (prefs.blockedAuthors.includes(post.userName)) return false;
+        if (prefs.blockedUserIds.includes(String(post.userId))) return false;
+        const snoozeUntil = prefs.snoozedAuthors[post.userName];
+        if (snoozeUntil && snoozeUntil > now) return false;
+        return true;
+      });
+    }, [resolvedPosts, prefs]);
+  const handleRegistryChange = (field) => (event) => {
+    setRegistryForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const handleRegistrySubmit = async (event) => {
+    event.preventDefault();
+    if (!registryForm.name.trim() || !registryForm.email.trim()) {
+      setRegistryStatus({ state: 'error', message: 'Please complete all required fields.' });
+      return;
+    }
+    setRegistryStatus({ state: 'loading', message: '' });
+    try {
+      const response = await fetch(registryEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registryForm),
+      });
+      if (!response.ok) throw new Error('Request failed');
+      setRegistryStatus({ state: 'success', message: 'Registry received. Welcome.' });
+      setRegistryForm({
+        name: '',
+        email: '',
+        path: engagementOptions[0],
+        tier: contributionTiers[0].value,
+      });
+    } catch (error) {
+      setRegistryStatus({ state: 'error', message: 'Submission failed. Please try again.' });
+    }
+  };
+
   return (
     <div className="feed-container">
       <div className="feed-content">
+        <section className="sovereign-feed-hero">
+          <div className="sovereign-feed-hero__content">
+            <p className="sovereign-feed-hero__eyebrow">Digital Lakou Command Center</p>
+            <h1 className="sovereign-feed-hero__title">Sovereign Hero: The Trinity Signal</h1>
+            <p className="sovereign-feed-hero__sub">
+              Every visit begins with Imperial Authority. Align before you scroll.
+            </p>
+            <div className="sovereign-feed-hero__actions">
+              <button
+                type="button"
+                className="sovereign-feed-hero__cta"
+                onClick={() => router.push('/imperial-treasury')}
+              >
+                Enter the Imperial Treasury
+              </button>
+              <button
+                type="button"
+                className="sovereign-feed-hero__cta alt"
+                onClick={() => router.push('/landing#registry')}
+              >
+                Open Registry of Blood
+              </button>
+            </div>
+          </div>
+          <div className="sovereign-feed-hero__triptych">
+            {trinity.map((member) => (
+              <div key={member.name} className="sovereign-feed-hero__card">
+                <div className="sovereign-feed-hero__frame">
+                  <img src={member.image} alt={`${member.name} portrait`} />
+                </div>
+                <div className="sovereign-feed-hero__meta">
+                  <span>{member.title}</span>
+                  <strong>{member.name}</strong>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="sovereign-feed-vault">
+          <div className="sovereign-feed-vault__header">
+            <div>
+              <h2>Imperial Treasury Frequency</h2>
+              <p>The vault fills as citizens authenticate their bloodline.</p>
+            </div>
+            <div className="sovereign-feed-vault__key" aria-hidden="true" />
+          </div>
+          <div className="sovereign-feed-vault__bar">
+            <div className="sovereign-feed-vault__fill" style={{ width: `${vaultPercent}%` }}>
+              TREASURY FREQUENCY: {vaultPercent}% ACTIVATED
+            </div>
+          </div>
+        </section>
+
+        <section className="sovereign-feed-registry">
+          <h2>Registry of Blood</h2>
+          <p>Authenticate your coordinate before entering the feed.</p>
+          <form onSubmit={handleRegistrySubmit}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={registryForm.name}
+              onChange={handleRegistryChange('name')}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email Address"
+              value={registryForm.email}
+              onChange={handleRegistryChange('email')}
+              required
+            />
+            <select value={registryForm.path} onChange={handleRegistryChange('path')}>
+              {engagementOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            <select value={registryForm.tier} onChange={handleRegistryChange('tier')}>
+              {contributionTiers.map((tier) => (
+                <option key={tier.value} value={tier.value}>
+                  {tier.label}
+                </option>
+              ))}
+            </select>
+            <button type="submit">
+              {registryStatus.state === 'loading'
+                ? 'Submitting...'
+                : selectedTier.value === 'Innovator'
+                ? 'Contribute $18.49 & Activate'
+                : selectedTier.value === 'Sovereign'
+                ? 'Invest $1,849 & Rule'
+                : 'Authenticate Bloodline (Free)'}
+            </button>
+          </form>
+          {registryStatus.message && (
+            <p className="sovereign-feed-registry__status">{registryStatus.message}</p>
+          )}
+        </section>
+
         {/* Post Input */}
         <PostInput
           username={profile.name}

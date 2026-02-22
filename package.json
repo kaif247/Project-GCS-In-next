@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "server": "node server/index.js",
-    "server:dev": "node --watch server/index.js"
+    "server:dev": "node --watch server/index.js",
+    "backend:dev": ".\\.venv\\Scripts\\python server/manage.py runserver 8000",
+    "backend:dev:clean": "powershell -NoProfile -Command \"$env:PATH = ($env:PATH -split ';' | Where-Object { $_ -notmatch 'Git\\\\usr\\\\bin|Git\\\\mingw64\\\\bin' }) -join ';'; .\\.venv\\Scripts\\python server/manage.py runserver 8000\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

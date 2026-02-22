@@ -4,6 +4,7 @@ import PostInput from '../components/PostInput';
 import Post from '../components/Post';
 import PostsPreview from '../components/FriendsSuggestions/PostsPreview';
 import PhotosPreview from '../components/FriendsSuggestions/PhotosPreview';
+import PhotoViewer from '../components/PhotoViewer';
 import styles from '../components/FriendsSuggestions/friendsSuggestions.module.css';
 import { currentUser, posts as feedPosts } from '../data/facebookData';
 import useProfileData from '../hooks/useProfileData';
@@ -20,7 +21,8 @@ const fallbackPhotos = [
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
-  const [modalImage, setModalImage] = useState('');
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
   const coverInputRef = useRef(null);
   const avatarInputRef = useRef(null);
   const profileRuntime = useProfileData();
@@ -128,6 +130,13 @@ const Profile = () => {
     };
   }, [profile]);
 
+  const openProfileViewer = (image) => {
+    if (!profileData?.photos?.length) return;
+    const index = profileData.photos.findIndex((src) => src === image);
+    setViewerIndex(index >= 0 ? index : 0);
+    setIsViewerOpen(true);
+  };
+
   const myPosts = useMemo(() => {
     const combined = [...localPosts, ...feedPosts].filter((post) => post.userId === currentUser.id);
     return combined.map((post) => ({
@@ -159,7 +168,7 @@ const Profile = () => {
                 src={profileData.cover}
                 alt=""
                 className={styles.coverImage}
-                onClick={() => setModalImage(profileData.cover)}
+                onClick={() => openProfileViewer(profileData.cover)}
               />
             )}
           </div>
@@ -186,7 +195,7 @@ const Profile = () => {
               src={profileData.avatar}
               alt={profileData.name}
               className={styles.profileAvatar}
-              onClick={() => setModalImage(profileData.avatar)}
+              onClick={() => openProfileViewer(profileData.avatar)}
             />
             <button
               type="button"
@@ -221,6 +230,9 @@ const Profile = () => {
             </button>
             <Link href="/profile/create" className="profile-action">
               Edit profile
+            </Link>
+            <Link href="/blocking" className="profile-action">
+              Manage blocking
             </Link>
           </div>
         </div>
@@ -302,16 +314,24 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      {modalImage && (
-        <div className="profile-image-modal" onClick={() => setModalImage('')}>
-          <div className="profile-image-modal__content" onClick={(e) => e.stopPropagation()}>
-            <img src={modalImage} alt="Profile" />
-            <button type="button" onClick={() => setModalImage('')}>
-              ×
-            </button>
-          </div>
-        </div>
-      )}
+
+      <PhotoViewer
+        open={isViewerOpen}
+        photos={profileData.photos}
+        index={viewerIndex}
+        onClose={() => setIsViewerOpen(false)}
+        onPrev={() =>
+          setViewerIndex((prev) =>
+            profileData.photos.length ? (prev - 1 + profileData.photos.length) % profileData.photos.length : 0
+          )
+        }
+        onNext={() =>
+          setViewerIndex((prev) =>
+            profileData.photos.length ? (prev + 1) % profileData.photos.length : 0
+          )
+        }
+      />
+
       {isStoryComposerOpen && (
         <div className="story-modal-backdrop" onClick={() => setIsStoryComposerOpen(false)}>
           <div className="story-modal" onClick={(e) => e.stopPropagation()}>

@@ -67,17 +67,23 @@
   padding: 8px;
   border-radius: 10px;
   text-decoration: none;
-  color: var(--text-primary);
+  color: #ffd700;
   background: transparent;
 }
 
 .menu-dropdown__item:hover {
-  background: var(--bg-hover);
+  background: rgba(0, 255, 255, 0.12);
+  color: #00ffff;
+}
+
+.menu-dropdown__item:hover .menu-dropdown__label {
+  color: #00ffff;
 }
 
 .menu-dropdown__label {
   font-size: 13px;
   font-weight: 600;
+  color: #ffd700;
 }
 
 @media (max-width: 600px) {

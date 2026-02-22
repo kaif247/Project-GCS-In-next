@@ -4,7 +4,9 @@ export const ThemeContext = createContext();
 
 const getInitialTheme = () => {
   if (typeof window === 'undefined') return false;
-  return true;
+  const stored = window.localStorage.getItem('facebook-dark-mode');
+  if (stored !== null) return stored === 'true';
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 };
 
 export const ThemeProvider = ({ children }) => {

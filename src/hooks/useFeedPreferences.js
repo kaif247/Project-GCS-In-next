@@ -10,6 +10,7 @@ const loadPrefs = () => {
       hiddenAuthors: [],
       snoozedAuthors: {},
       blockedAuthors: [],
+      blockedUserIds: [],
       notifications: {},
       feedback: {},
     };
@@ -23,6 +24,7 @@ const loadPrefs = () => {
       hiddenAuthors: parsed.hiddenAuthors || [],
       snoozedAuthors: parsed.snoozedAuthors || {},
       blockedAuthors: parsed.blockedAuthors || [],
+      blockedUserIds: parsed.blockedUserIds || [],
       notifications: parsed.notifications || {},
       feedback: parsed.feedback || {},
     };
@@ -33,6 +35,7 @@ const loadPrefs = () => {
       hiddenAuthors: [],
       snoozedAuthors: {},
       blockedAuthors: [],
+      blockedUserIds: [],
       notifications: {},
       feedback: {},
     };
@@ -52,6 +55,7 @@ const useFeedPreferences = () => {
     hiddenAuthors: [],
     snoozedAuthors: {},
     blockedAuthors: [],
+    blockedUserIds: [],
     notifications: {},
     feedback: {},
   });
@@ -93,6 +97,15 @@ const useFeedPreferences = () => {
   const unblockAuthor = (author) =>
     update({ ...prefs, blockedAuthors: prefs.blockedAuthors.filter((name) => name !== author) });
 
+  const blockUserId = (userId) => {
+    const value = String(userId);
+    update({ ...prefs, blockedUserIds: [...new Set([...prefs.blockedUserIds, value])] });
+  };
+  const unblockUserId = (userId) => {
+    const value = String(userId);
+    update({ ...prefs, blockedUserIds: prefs.blockedUserIds.filter((id) => id !== value) });
+  };
+
   const snoozeAuthor = (author) => {
     const until = Date.now() + 30 * 24 * 60 * 60 * 1000;
     update({ ...prefs, snoozedAuthors: { ...prefs.snoozedAuthors, [author]: until } });
@@ -123,6 +136,8 @@ const useFeedPreferences = () => {
     unhideAuthor,
     blockAuthor,
     unblockAuthor,
+    blockUserId,
+    unblockUserId,
     snoozeAuthor,
     unsnoozeAuthor,
     toggleNotifications,

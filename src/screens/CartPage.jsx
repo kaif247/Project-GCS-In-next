@@ -94,9 +94,9 @@ const CartPage = () => {
             <span>{t('Total')}</span>
             <strong>{formatPrice(total, t)}</strong>
           </div>
-          <button type="button" className="cart-summary__cta">
+          <Link className="cart-summary__cta" href="/checkout">
             {t('Proceed to checkout')}
-          </button>
+          </Link>
           <Link className="cart-summary__back" href="/marketplace">
             {t('Continue shopping')}
           </Link>

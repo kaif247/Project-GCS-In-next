@@ -1,0 +1,150 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  padding: 32px 6vw 80px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 30px;
+  margin: 0 0 8px;
+}
+
+.header p {
+  color: var(--text-muted);
+  max-width: 640px;
+}
+
+.backLink {
+  color: #00ffff;
+  text-decoration: none;
+  background: var(--bg-surface);
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.backLink:hover {
+  color: #ffd700;
+}
+
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.searchRow input {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.searchRow button {
+  background: #ffd700;
+  color: #1c1e21;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+}
+
+.searchRow button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 6px 16px var(--shadow);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.card img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-color);
+}
+
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.primaryBtn {
+  background: #ffd700;
+  color: #1c1e21;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 600;
+}
+
+.secondaryBtn {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+}
+
+.notice {
+  margin-bottom: 14px;
+  color: var(--text-muted);
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .searchRow {
+    grid-template-columns: 1fr;
+  }
+
+  .backLink {
+    width: 100%;
+    text-align: center;
+  }
+}

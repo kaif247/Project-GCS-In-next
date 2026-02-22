@@ -9,6 +9,27 @@ const engagementOptions = [
   'Community Architect',
 ];
 
+const contributionTiers = [
+  {
+    label: 'Citizen (Free)',
+    value: 'Citizen',
+    buttonText: 'Authenticate Bloodline (Free)',
+    detail: 'Access to the Digital Lakou & basic Sovereign Sigil.',
+  },
+  {
+    label: 'Innovator ($18.49 / mo)',
+    value: 'Innovator',
+    buttonText: 'Contribute $18.49 & Activate',
+    detail: 'Early access to sovereign assets & registry certificate.',
+  },
+  {
+    label: 'Sovereign Founder ($1,849)',
+    value: 'Sovereign',
+    buttonText: 'Invest $1,849 & Rule',
+    detail: 'Founder status, regalia, and council seat.',
+  },
+];
+
 const pillars = [
   {
     title: "Frekans Grand'Anse",
@@ -16,42 +37,96 @@ const pillars = [
   },
   {
     title: 'San Manman, San Istwa',
-    text: 'Restoration of Princess Célestine’s legacy.',
+    text: "Restoration of Princess Celestine's legacy.",
   },
   {
-    title: 'Enperval Sovereignité',
+    title: 'Enperval Souverainete',
     text: 'Mission and administrative doctrine.',
   },
   {
-    title: 'Sctivaction',
+    title: 'Activation Dispatch',
     text: 'Live digital movements and sovereign dispatches.',
   },
 ];
 
 const treasuryItems = [
   {
-    title: 'Regalia',
-    text: 'Ceremonial Regalia — Tools for the Restoration.',
+    title: 'Sovereign Sigil (License)',
+    text: 'Digital seal access for verified citizens and innovators.',
   },
   {
-    title: 'Sacred Texts',
-    text: 'Sacred Texts — Tools for the Restoration.',
+    title: 'Imperial Registry Tiers',
+    text: 'Citizen, Innovator, and Sovereign Founder pathways.',
   },
   {
-    title: 'Sovereign Tools',
-    text: 'Sovereign Tools — Tools for the Restoration.',
+    title: 'Physical Regalia (Pre-Order)',
+    text: 'Crowned Hare and Rooster ceremonial apparel.',
+  },
+];
+
+const trinity = [
+  {
+    name: 'H.S.H. Prince Jean II',
+    title: 'Sovereign Architect',
+    image: '/reactivated-boukman.svg',
+  },
+  {
+    name: 'H.I.H. Prince Thierry',
+    title: 'Imperial Steward',
+    image: '/neutral-priest.svg',
+  },
+  {
+    name: 'Cousin Wilson Joseph',
+    title: 'Local Foundation',
+    image: '/imperial-seal.svg',
+  },
+];
+
+const roadmapPhases = [
+  {
+    phase: 'Q1 2026',
+    title: 'Registry Activation & Signal Recruitment',
+    detail: 'Launch the Registry of Blood and sovereign onboarding.',
+    status: 'active',
+  },
+  {
+    phase: 'Q2 2026',
+    title: 'Treasury Expansion & DAIC Integration',
+    detail: 'Expand sovereign assets and treasury reporting.',
+  },
+  {
+    phase: 'Q3 2026',
+    title: 'Groundbreaking: Morn Chandelle Hub',
+    detail: 'Begin physical restoration under local governance.',
+  },
+  {
+    phase: 'Q4 2026',
+    title: 'Global Node Expansion',
+    detail: 'Activate diaspora nodes and annual restoration recap.',
   },
 ];
 
 const LandingPage = () => {
-  const [form, setForm] = useState({ name: '', email: '', path: engagementOptions[0] });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    path: engagementOptions[0],
+    tier: contributionTiers[0].value,
+  });
   const [status, setStatus] = useState({ state: 'idle', message: '' });
+  const [isFooterPulse, setIsFooterPulse] = useState(false);
+
+  const registryEndpoint =
+    process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
 
   const canSubmit = useMemo(() => form.name.trim() && form.email.trim(), [form]);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
+
+  const selectedTier =
+    contributionTiers.find((tier) => tier.value === form.tier) || contributionTiers[0];
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,39 +136,47 @@ const LandingPage = () => {
     }
     setStatus({ state: 'loading', message: '' });
     try {
-      const response = await fetch('/api/sovereign-registry', {
+      const response = await fetch(registryEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
       if (!response.ok) throw new Error('Request failed');
       setStatus({ state: 'success', message: 'Registry received. Welcome.' });
-      setForm({ name: '', email: '', path: engagementOptions[0] });
+      setForm({
+        name: '',
+        email: '',
+        path: engagementOptions[0],
+        tier: contributionTiers[0].value,
+      });
     } catch (error) {
       setStatus({ state: 'error', message: 'Submission failed. Please try again.' });
     }
   };
 
+  const vaultPercent = 33;
+
   return (
     <>
       <Head>
-        <title>House of Dorvilus — Imperial Haiti Restoration</title>
+        <title>House of Dorvilus | Sovereign Intelligence & Imperial Restoration</title>
         <meta
           name="description"
-          content="Join the Sovereign Intelligence movement. Ground your frequency in the Digital Lakou."
+          content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
         />
-        <link rel="icon" href="/imperial-seal.svg" />
+        <meta property="og:image" content="/imperial-seal.svg" />
+        <link rel="icon" href="/crowned-hare.svg" />
       </Head>
       <div className={styles.page}>
         <nav className={styles.nav}>
           <div className={styles.navInner}>
-            <div className={styles.brand}>House of Dorvilus</div>
+            <div className={styles.brand}>Global Creole Society</div>
             <div className={styles.navLinks}>
               <a href="/">Home</a>
               <a href="/imperial-treasury">Imperial Treasury</a>
               <a href="#nexus">Nexus</a>
               <a href="#registry">Registry</a>
-              <a href="#signin">Sign In</a>
+              <a href="#roadmap">Roadmap</a>
             </div>
           </div>
         </nav>
@@ -102,38 +185,42 @@ const LandingPage = () => {
           <div className={styles.heroContent}>
             <p className={styles.eyebrow}>Sovereign Restoration V1.2</p>
             <h1 className={styles.heroTitle}>
-              The Evolution of the <span className={styles.heroFlame}>Flame</span>: The House of Dorvilus
+              The House of Dorvilus <span className={styles.heroFlame}>Signal</span>
             </h1>
             <p className={styles.heroSub}>
-              From the 1791 Spark to the 2026 Sovereign Frequency.
-              Ground your Street Nobility in the Digital Lakou.
+              The Imperial gateway for the Digital Lakou. Ground your lineage in
+              sovereign intelligence and restore the Soulouque legacy.
             </p>
             <div className={styles.heroActions}>
-              <a
-                href="#registry"
-                className={styles.btnPrimary}
-                aria-label="Enter the Sovereign Registry"
-              >
-                Enter the Sovereign Registry
+              <a href="#registry" className={styles.btnPrimary}>
+                Enter the Registry of Blood
               </a>
-              <a
-                href="#nexus"
-                className={styles.btnSecondary}
-                aria-label="Explore the Quadri-Dynastic Nexus"
-              >
-                Explore the Quadri-Dynastic Nexus
+              <a href="#vault" className={styles.btnSecondary}>
+                View the Treasury Activation
               </a>
+            </div>
+            <div className={styles.sealRow}>
+              <img src="/crowned-hare.svg" alt="Crowned Hare emblem" />
+              <span>globalcreolesociety.com</span>
             </div>
           </div>
-          <div className={styles.heroVisual}>
-            <div className={styles.heroFrame}>
-              <div className={styles.heroCircuit} aria-hidden="true" />
-              <img
-                className={styles.heroImage}
-                src="/neutral-priest.svg"
-                alt="Digital High Priest iconography"
-              />
-            </div>
+          <div className={styles.heroTriptych}>
+            {trinity.map((member) => (
+              <div key={member.name} className={styles.triptychCard}>
+                <div className={styles.triptychFrame}>
+                  <img
+                    src={member.image}
+                    alt={`${member.name} portrait`}
+                    className={styles.triptychImage}
+                  />
+                  <div className={styles.triptychGlow} aria-hidden="true" />
+                </div>
+                <div className={styles.triptychMeta}>
+                  <span>{member.title}</span>
+                  <strong>{member.name}</strong>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -151,8 +238,10 @@ const LandingPage = () => {
 
         <section id="registry" className={styles.section}>
           <div className={styles.registryCard}>
-            <h2 className={styles.sectionTitle}>Enter the Sovereign Registry</h2>
-            <p className={styles.sectionLead}>Citizens do not follow. They align.</p>
+            <h2 className={styles.sectionTitle}>Registry of Blood</h2>
+            <p className={styles.sectionLead}>
+              Citizens do not follow. They align their frequency.
+            </p>
             <form className={styles.registryForm} onSubmit={handleSubmit}>
               <label className={styles.srOnly} htmlFor="sovereign-name">
                 Full Name
@@ -160,7 +249,7 @@ const LandingPage = () => {
               <input
                 id="sovereign-name"
                 type="text"
-                placeholder="Your Sovereign Title"
+                placeholder="Full Name"
                 value={form.name}
                 onChange={handleChange('name')}
                 required
@@ -181,11 +270,23 @@ const LandingPage = () => {
               </label>
               <select id="sovereign-path" value={form.path} onChange={handleChange('path')}>
                 {engagementOptions.map((option) => (
-                  <option key={option} value={option}>{option}</option>
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
                 ))}
               </select>
-              <button type="submit" className={styles.btnPrimary} aria-label="Declare Sovereignty">
-                {status.state === 'loading' ? 'Submitting...' : 'Declare Sovereignty'}
+              <label className={styles.srOnly} htmlFor="sovereign-tier">
+                Sovereign Contribution Tier
+              </label>
+              <select id="sovereign-tier" value={form.tier} onChange={handleChange('tier')}>
+                {contributionTiers.map((tier) => (
+                  <option key={tier.value} value={tier.value}>
+                    {tier.label}
+                  </option>
+                ))}
+              </select>
+              <button type="submit" className={styles.btnPrimary}>
+                {status.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
               </button>
             </form>
             {status.message && (
@@ -196,37 +297,25 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section id="frequency" className={styles.section}>
-          <h2 className={styles.sectionTitle}>The Imperial Frequency Expands</h2>
-          <div className={styles.imperialSplit}>
-            <div className={styles.imperialPanel}>
-              <p>
-                From the ashes of revolution to the dawn of digital sovereignty, the Flame endures.
-                The Imperial Frequency reawakens the power of Lakou, forging street nobility into
-                exalted sovereigns.
+        <section id="vault" className={styles.section}>
+          <div className={styles.vaultHeader}>
+            <div>
+              <h2 className={styles.sectionTitle}>Imperial Treasury Activation</h2>
+              <p className={styles.sectionLead}>
+                The vault is not empty. It is waiting for your energy.
               </p>
             </div>
-            <div className={styles.sigilPanel}>
-              <div className={styles.sigil} aria-hidden="true" />
-              <p className={styles.sigilCaption}>Imperial signal array — circuit resonance active.</p>
+            <a href="/imperial-treasury" className={styles.btnSecondary}>
+              Enter the Treasury
+            </a>
+          </div>
+          <div className={styles.vaultBar}>
+            <div className={styles.vaultTrack}>
+              <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
+                <span>Treasury Frequency: {vaultPercent}% Activated</span>
+              </div>
             </div>
           </div>
-        </section>
-
-        <section id="enperval" className={styles.section}>
-          <h2 className={styles.sectionTitle}>Enperval Sovereignité</h2>
-          <div className={styles.dividerGold} />
-          <div className={styles.imperialPanel}>
-            <p>
-              Administrative doctrine, long-term governance vision, and digital sovereignty strategy.
-              The House of Dorvilus aligns policy, culture, and restoration into one sovereign continuum.
-            </p>
-          </div>
-        </section>
-
-        <section id="treasury" className={styles.section}>
-          <h2 className={styles.sectionTitle}>Imperial Treasury</h2>
-          <p className={styles.sectionLead}>Citizens do not follow. They align.</p>
           <div className={styles.treasuryGrid}>
             {treasuryItems.map((item) => (
               <div key={item.title} className={styles.treasuryCard}>
@@ -237,25 +326,89 @@ const LandingPage = () => {
           </div>
         </section>
 
+        <section id="financial-vault" className={styles.section}>
+          <div className={styles.financialVault}>
+            <div>
+              <h2 className={styles.sectionTitle}>The Financial Vault</h2>
+              <p className={styles.sectionLead}>
+                Bridge the Digital Registry with the Imperial Treasury. Paid tiers fund
+                the Morn Chandelle Restoration.
+              </p>
+              <p className={styles.clause}>
+                "Your contribution is the liquidity for the Morn Chandelle Restoration
+                Fund. We are converting digital currency into physical infrastructure.
+                In 1849, we bought our freedom with blood; in 2026, we buy our sovereignty
+                with intelligence and capital."
+              </p>
+            </div>
+            <div className={styles.paymentCard}>
+              <h3>Accepted Contribution Paths</h3>
+              <ul className={styles.paymentList}>
+                <li>Stripe / PayPal for $18.49 (Innovator) and $1,849 (Founder).</li>
+                <li>Crypto (USDC / ETH) for web3-native citizens.</li>
+              </ul>
+              <div className={styles.tierStack}>
+                {contributionTiers.map((tier) => (
+                  <div key={tier.value} className={styles.tierCard}>
+                    <strong>{tier.label}</strong>
+                    <p>{tier.detail}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="roadmap" className={styles.section}>
+          <h2 className={styles.sectionTitle}>Digital Lakou Roadmap 2026</h2>
+          <div className={styles.roadmap}>
+            {roadmapPhases.map((phase) => (
+              <div
+                key={phase.phase}
+                className={`${styles.roadmapItem} ${
+                  phase.status === 'active' ? styles.roadmapActive : ''
+                }`}
+              >
+                <div className={styles.roadmapMarker} />
+                <div>
+                  <p className={styles.roadmapPhase}>{phase.phase}</p>
+                  <h3>{phase.title}</h3>
+                  <p>{phase.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className={styles.roadmapCta}>
+            The timeline of the Empire is written in the blood and intelligence of its
+            citizens. Choose your path. Accelerate the Restoration.
+          </div>
+        </section>
+
         <section className={styles.section}>
           <div className={styles.finalCta}>
             <h2>Join the Sovereign Order.</h2>
             <p>Citizens do not follow. They align.</p>
-            <a
-              href="#registry"
-              className={styles.btnPrimary}
-              aria-label="Enter the Registry"
-            >
+            <a href="#registry" className={styles.btnPrimary}>
               Enter the Registry
             </a>
           </div>
         </section>
 
-        <footer className={styles.footer}>
+        <footer className={`${styles.footer} ${isFooterPulse ? styles.footerPulse : ''}`}>
           <div className={styles.footerGrid}>
             <div>
-              <h4>House of Dorvilus</h4>
+              <h4>
+                House of{' '}
+                <span
+                  className={styles.footerName}
+                  onMouseEnter={() => setIsFooterPulse(true)}
+                  onMouseLeave={() => setIsFooterPulse(false)}
+                >
+                  Dorvilus
+                </span>
+              </h4>
               <a href="#hero">Home</a>
+              <a href="https://globalcreolesociety.com">globalcreolesociety.com</a>
             </div>
             <div>
               <h4>Quadri-Dynastic Nexus</h4>
@@ -270,10 +423,18 @@ const LandingPage = () => {
               <a href="#registry">Registry</a>
             </div>
             <div>
-              <h4>Sctivaction Dispatch</h4>
-              <a href="#frequency">Dispatch</a>
+              <h4>Morn Chandelle</h4>
+              <p className={styles.footerNote}>
+                Administered under the local oversight of the CASEC of Morn Chandelle,
+                Gressier.
+              </p>
             </div>
           </div>
+          <p className={styles.disclaimer}>
+            [Financial and legal disclaimer: This analysis is for informational purposes only
+            and does not constitute financial, legal, or professional advice. Participation
+            in the Registry is a voluntary contribution to a social movement.]
+          </p>
         </footer>
       </div>
     </>

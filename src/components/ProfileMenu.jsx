@@ -1,11 +1,21 @@
 import React, { useEffect, useRef, useContext, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { LanguageContext } from '../context/LanguageContext';
 
-const MenuRow = ({ icon, label, meta, onClick, href }) => {
+const MenuRow = ({ icon, label, meta, onClick, href, currentPath }) => {
   if (href) {
     return (
-      <Link className="profile-menu__item" href={href} onClick={onClick}>
+      <Link
+        className="profile-menu__item"
+        href={href}
+        onClick={(event) => {
+          if (currentPath === href) {
+            event.preventDefault();
+          }
+          onClick?.(event);
+        }}
+      >
         <span className="profile-menu__icon">{icon}</span>
         <span className="profile-menu__label">
           {label}
@@ -34,8 +44,10 @@ const ChevronIcon = () => (
 
 const ProfileMenu = ({ open, onClose, user }) => {
   const menuRef = useRef(null);
+  const router = useRouter();
   const { t } = useContext(LanguageContext);
   const [hasProfile, setHasProfile] = useState(false);
+  const [logoutNotice, setLogoutNotice] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -61,6 +73,31 @@ const ProfileMenu = ({ open, onClose, user }) => {
 
   if (!open) return null;
 
+  const handleLogout = async () => {
+    setLogoutNotice('');
+    if (typeof window === 'undefined') return;
+    const access = window.localStorage.getItem('gcs-access-token') || '';
+    const refresh = window.localStorage.getItem('gcs-refresh-token') || '';
+    try {
+      if (access) {
+        await fetch('/backend/accounts/logout/', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${access}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh }),
+        });
+      }
+    } catch (error) {
+      setLogoutNotice('Logout failed. Please try again.');
+    } finally {
+      window.localStorage.removeItem('gcs-access-token');
+      window.localStorage.removeItem('gcs-refresh-token');
+      onClose();
+    }
+  };
+
   return (
     <div ref={menuRef} className="profile-menu" role="menu" aria-label={t('Profile menu')}>
       <div className="profile-menu__header">
@@ -84,42 +121,54 @@ const ProfileMenu = ({ open, onClose, user }) => {
             label={t('Create profile')}
             href="/profile/create"
             onClick={onClose}
+            currentPath={router.asPath}
           />
         )}
         <MenuRow
           icon={<ChevronIcon />}
-          label={t('Settings & privacy')}
+          label={t('Account Center')}
+          href="/account-center"
           onClick={onClose}
+          currentPath={router.asPath}
+        />
+        <MenuRow
+          icon={<ChevronIcon />}
+          label={t('Blocking')}
+          href="/blocking"
+          onClick={onClose}
+          currentPath={router.asPath}
         />
         <MenuRow
           icon={<ChevronIcon />}
           label={t('Help & support')}
+          href="/help-center"
           onClick={onClose}
+          currentPath={router.asPath}
         />
         <MenuRow
           icon={<ChevronIcon />}
           label={t('Display & accessibility')}
+          href="/display-accessibility"
           onClick={onClose}
+          currentPath={router.asPath}
         />
         <MenuRow
           icon={<ChevronIcon />}
           label={t('Give feedback')}
           meta="CTRL + B"
+          href="/feedback"
           onClick={onClose}
+          currentPath={router.asPath}
         />
         <MenuRow
           icon={<ChevronIcon />}
           label={t('Log out')}
-          onClick={() => {
-            console.log('Logged out');
-            onClose();
-          }}
+          onClick={handleLogout}
         />
+        {logoutNotice && <div className="profile-menu__notice">{logoutNotice}</div>}
       </div>
 
       <div className="profile-menu__footer">
-        <button type="button">{t('Privacy')}</button>
-        <span>·</span>
         <button type="button">{t('Terms')}</button>
         <span>·</span>
         <button type="button">{t('Advertising')}</button>
@@ -135,3 +184,4 @@ const ProfileMenu = ({ open, onClose, user }) => {
 };
 
 export default ProfileMenu;
+

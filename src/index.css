@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
 @import './styles/styles/theme.css';
 
 /* Global Styles */
@@ -13,7 +14,7 @@ html {
 }
 
 html {
-  --icon-color: #FFD700;
+  --icon-color: var(--soulouque-gold);
 }
 
 svg {
@@ -22,14 +23,36 @@ svg {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base, 14px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-page);
   color: var(--text-primary);
   transition: background-color 0.3s, color 0.3s;
+}
+
+html.text-small {
+  --font-size-base: 13px;
+}
+
+html.text-medium {
+  --font-size-base: 14px;
+}
+
+html.text-large {
+  --font-size-base: 16px;
+}
+
+html.reduce-motion * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.compact-mode body {
+  line-height: 1.35;
 }
 
 html.lang-switching #__next {
@@ -53,7 +76,7 @@ html.dark-mode body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 

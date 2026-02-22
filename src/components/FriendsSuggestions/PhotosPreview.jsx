@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './friendsSuggestions.module.css';
 import { LanguageContext } from '../../context/LanguageContext';
+import PhotoViewer from '../PhotoViewer';
 
 const PhotosPreview = ({ photos = [] }) => {
   const { t } = useContext(LanguageContext);
@@ -21,31 +22,6 @@ const PhotosPreview = ({ photos = [] }) => {
   const goNext = () => {
     setActiveIndex((prev) => (prev + 1) % photos.length);
   };
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const onKey = (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        closeViewer();
-      }
-      if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        goPrev();
-      }
-      if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        goNext();
-      }
-    };
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [isOpen, photos.length]);
 
   return (
     <div className={styles.detailCard}>
@@ -68,29 +44,14 @@ const PhotosPreview = ({ photos = [] }) => {
           </button>
         ))}
       </div>
-      {isOpen && (
-        <div className={styles.photoModalOverlay} onClick={closeViewer}>
-          <div className={styles.photoModal} onClick={(e) => e.stopPropagation()}>
-            <button type="button" className={styles.photoCloseBtn} onClick={closeViewer} aria-label={t('Close')}>
-              ×
-            </button>
-            <button type="button" className={styles.photoNavBtn} onClick={goPrev} aria-label={t('Previous photo')}>
-              ‹
-            </button>
-            <img
-              src={photos[activeIndex]}
-              alt={t('Profile')}
-              className={styles.photoModalImage}
-            />
-            <button type="button" className={styles.photoNavBtn} onClick={goNext} aria-label={t('Next photo')}>
-              ›
-            </button>
-            <div className={styles.photoCount}>
-              {activeIndex + 1} / {photos.length}
-            </div>
-          </div>
-        </div>
-      )}
+      <PhotoViewer
+        open={isOpen}
+        photos={photos}
+        index={activeIndex}
+        onClose={closeViewer}
+        onPrev={goPrev}
+        onNext={goNext}
+      />
     </div>
   );
 };

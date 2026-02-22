@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ThemeContext } from '../context/ThemeContext';
 import { LanguageContext } from '../context/LanguageContext';
 import ProfileMenu from './ProfileMenu';
 import NotificationDropdown from './NotificationDropdown';
@@ -11,7 +10,6 @@ import Icon from './Icon';
 
 const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt, hideThemeToggle = false }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   const { t, language, setLanguage, languages } = useContext(LanguageContext);
   const [notificationCount] = useState(3);
   const [messageCount] = useState(1);
@@ -150,7 +148,7 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
             onClick={(event) => handleNavAttempt(event, '/chats')}
           >
             <Icon
-              name={isMessengerHover ? 'messenger_5968771' : (isDarkMode ? 'messenger_5968771' : 'messenger_596877')}
+              name={isMessengerHover ? 'messenger_5968771' : 'messenger_5968771'}
               size={20}
               className="icon--no-circle"
               aria-hidden="true"
@@ -235,21 +233,6 @@ const Navbar = ({ isLiveOpen = false, onToggleLive = () => {}, onNavigateAttempt
             />
           </div>
 
-          {!hideThemeToggle && (
-            <button
-              className="navbar-icon-btn theme-toggle"
-              onClick={toggleTheme}
-              aria-label={t('Toggle dark mode')}
-              title={isDarkMode ? t('Light mode') : t('Dark mode')}
-            >
-              <Icon
-                name={isDarkMode ? 'lightmode' : 'night-mode'}
-                size={18}
-                className="icon--no-circle"
-                aria-hidden="true"
-              />
-            </button>
-          )}
         </div>
       </div>
       <MenuDropdown open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

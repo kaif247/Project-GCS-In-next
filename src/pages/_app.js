@@ -46,6 +46,23 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const raw = window.localStorage.getItem('gcs-display-settings');
+        if (raw) {
+          const next = JSON.parse(raw);
+          const root = document.documentElement;
+          root.classList.remove('text-small', 'text-medium', 'text-large');
+          root.classList.add(`text-${next.textSize || 'medium'}`);
+          root.classList.toggle('reduce-motion', !!next.reduceMotion);
+          root.classList.toggle('high-contrast', !!next.highContrast);
+          root.classList.toggle('compact-mode', !!next.compactMode);
+          root.classList.toggle('captions-on', !!next.captions);
+        }
+      } catch {
+        // ignore
+      }
+    }
     const start = Date.now();
     const hideLoader = () => {
       const elapsed = Date.now() - start;
@@ -122,16 +139,26 @@ export default function App({ Component, pageProps }) {
             <MarketplaceMessagingProvider>
               <div className="app">
                 <Head>
-                  <title>House of Dorvilus — Imperial Haiti Restoration</title>
+                  <title>House of Dorvilus | Sovereign Intelligence & Imperial Restoration</title>
                   <meta
                     name="description"
-                    content="Join the Sovereign Intelligence movement. Ground your frequency in the Digital Lakou."
+                    content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
                   />
                   <meta
                     name="keywords"
                     content="House of Dorvilus, Imperial Haiti Restoration, Sovereign Intelligence, Digital Lakou, Sovereign Authority"
                   />
-                  <link rel="icon" href="/imperial-seal.svg" />
+                  <meta
+                    property="og:title"
+                    content="House of Dorvilus | Sovereign Intelligence & Imperial Restoration"
+                  />
+                  <meta
+                    property="og:description"
+                    content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
+                  />
+                  <meta property="og:image" content="/imperial-seal.svg" />
+                  <link rel="icon" href="/crowned-hare.svg" />
+                  <link rel="apple-touch-icon" href="/crowned-hare.svg" />
                 </Head>
                 {showLoader && <InitialLoader />}
                 <Navbar
@@ -179,3 +206,4 @@ export default function App({ Component, pageProps }) {
     </ThemeProvider>
   );
 }
+

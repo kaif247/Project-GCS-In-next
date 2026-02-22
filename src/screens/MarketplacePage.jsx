@@ -179,6 +179,62 @@ const MarketplacePage = () => {
             </button>
           </div>
         </div>
+      ) : activeSection === 'buying' ? (
+        <div className="marketplace-buying">
+          <div className="marketplace-panel">
+            <div className="marketplace-panel__header">
+              <h2>{t('Buying')}</h2>
+              <button type="button" className="marketplace-btn marketplace-btn--ghost">
+                {t('Saved searches')}
+              </button>
+            </div>
+            <div className="marketplace-panel__grid marketplace-panel__grid--three">
+              {[
+                { value: t('Verified sellers'), label: t('Buy with confidence') },
+                { value: t('Top categories'), label: t('Trending near you') },
+                { value: t('Buyer tips'), label: t('Safe meetups') },
+              ].map((item, index) => (
+                <div key={`${item.label}-${index}`} className="marketplace-stat">
+                  <div className="marketplace-stat__value">{item.value}</div>
+                  <div className="marketplace-stat__label">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="marketplace-panel">
+            <div className="marketplace-panel__header">
+              <h2>{t("Today's picks")}</h2>
+              <button type="button" className="marketplace-btn marketplace-btn--primary">
+                {t('Browse all')}
+              </button>
+            </div>
+            <MarketplaceGrid products={filteredProducts} />
+          </div>
+        </div>
+      ) : activeSection === 'access' ? (
+        <div className="marketplace-access">
+          <div className="marketplace-panel">
+            <div className="marketplace-panel__header">
+              <h2>{t('Marketplace access')}</h2>
+            </div>
+            <div className="marketplace-panel__grid marketplace-panel__grid--three">
+              {[
+                { value: t('Identity verification'), label: t('Build buyer trust') },
+                { value: t('Community guidelines'), label: t('Keep listings safe') },
+                { value: t('Seller eligibility'), label: t('Unlock selling tools') },
+              ].map((item, index) => (
+                <div key={`${item.label}-${index}`} className="marketplace-stat">
+                  <div className="marketplace-stat__value">{item.value}</div>
+                  <div className="marketplace-stat__label">{item.label}</div>
+                </div>
+              ))}
+            </div>
+            <button type="button" className="marketplace-link">
+              {t('Learn more about Marketplace access')}
+            </button>
+          </div>
+        </div>
       ) : activeSection === 'inbox' ? (
         <div className="marketplace-inbox marketplace-inbox--inline">
           <div className="marketplace-inbox__layout">
