@@ -157,8 +157,8 @@ export default function App({ Component, pageProps }) {
                     content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
                   />
                   <meta property="og:image" content="/imperial-seal.svg" />
-                  <link rel="icon" href="/crowned-hare.svg" />
-                  <link rel="apple-touch-icon" href="/crowned-hare.svg" />
+                  <link rel="icon" href="/w%20(1).ico" />
+                  <link rel="apple-touch-icon" href="/w%20(1).ico" />
                 </Head>
                 {showLoader && <InitialLoader />}
                 <Navbar

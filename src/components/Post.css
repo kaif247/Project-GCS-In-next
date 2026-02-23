@@ -221,7 +221,7 @@
 
 .post-hidden-banner button {
   border: none;
-  background: #FFD700;
+  background: #D4AF37;
   color: #121212;
   padding: 6px 12px;
   border-radius: 10px;
@@ -615,7 +615,7 @@
 }
 
 .comment-icon {
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 /* Reactions Popup */
@@ -677,12 +677,12 @@
   width: 100%;
   height: auto;
   display: block;
-  accent-color: #FFD700;
+  accent-color: #D4AF37;
 }
 
 .post-video video::-webkit-media-controls-play-button,
 .post-video video::-webkit-media-controls-start-playback-button {
-  background-color: #FFD700;
+  background-color: #D4AF37;
   border-radius: 50%;
 }
 
@@ -1036,3 +1036,4 @@
     height: 16px;
   }
 }
+

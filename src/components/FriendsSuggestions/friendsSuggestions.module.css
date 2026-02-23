@@ -148,7 +148,7 @@
 }
 
 .primaryBtn {
-  background: #FFD700;
+  background: #D4AF37;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -265,7 +265,7 @@
 }
 
 .tabActive {
-  color: #FFD700;
+  color: #D4AF37;
   background: rgba(227, 143, 18, 0.12);
 }
 
@@ -327,14 +327,14 @@
 .linkBtn {
   border: none;
   background: none;
-  color: #FFD700;
+  color: #D4AF37;
   font-weight: 600;
   font-size: 13px;
 }
 
 .filterBtn {
   border: none;
-  background: #FFD700;
+  background: #D4AF37;
   color: #fff;
   padding: 6px 10px;
   border-radius: 8px;
@@ -342,7 +342,7 @@
 }
 
 :global(.dark-mode) .profileMeta h2 {
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .photosGrid {
@@ -574,3 +574,4 @@
     height: 160px;
   }
 }
+

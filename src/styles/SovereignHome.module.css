@@ -140,6 +140,27 @@
   color: var(--text-soft);
 }
 
+.heroSeal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
+  border-radius: 24px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 18px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroSeal img {
+  width: min(320px, 70vw);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.6));
+  animation: sealPulse 4.2s ease-in-out infinite;
+}
+
 .heroActions {
   margin-top: 18px;
   display: flex;
@@ -417,6 +438,87 @@
 .formStatus {
   margin-top: 12px;
   color: var(--text-soft);
+}
+
+.registrySeal {
+  position: relative;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  overflow: hidden;
+}
+
+.registrySeal img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.55));
+  animation: sealPulse 4s ease-in-out infinite;
+}
+
+.registrySealGlow {
+  position: absolute;
+  inset: -40% 40% -40% -10%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.35), transparent 70%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.registrySealText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.registryMotto {
+  font-size: 11px;
+  color: var(--text-soft);
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.registryBadge {
+  position: absolute;
+  right: 16px;
+  bottom: 10px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: #0a0a0a;
+  background: rgba(0, 245, 255, 0.85);
+  padding: 4px 8px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.registrySeal:hover .registryMotto {
+  color: var(--electric);
+  text-shadow: 0 0 12px rgba(0, 245, 255, 0.75);
+}
+
+.registrySeal:hover .registryBadge {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes sealPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(0, 245, 255, 0.7));
+  }
 }
 
 .vaultHeader {

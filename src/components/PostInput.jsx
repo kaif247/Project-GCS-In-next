@@ -21,7 +21,7 @@ const buildEmojiList = () => {
 
 const colorOptions = [
   { id: 'default', label: 'Default', bg: 'var(--bg-muted)', text: 'var(--text-primary)' },
-  { id: 'sunset', label: 'Sunset', bg: 'linear-gradient(135deg, #f6b73c 0%, #FFD700 100%)', text: '#1b1b1b' },
+  { id: 'sunset', label: 'Sunset', bg: 'linear-gradient(135deg, #f6b73c 0%, #D4AF37 100%)', text: '#1b1b1b' },
   { id: 'ocean', label: 'Ocean', bg: 'linear-gradient(135deg, #22c1c3 0%, #5b86e5 100%)', text: '#0b1b2b' },
   { id: 'violet', label: 'Violet', bg: 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)', text: '#ffffff' },
   { id: 'mint', label: 'Mint', bg: 'linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)', text: '#0e2411' },
@@ -391,3 +391,4 @@ const PostInput = ({ username, avatarUrl, onVideoClick, onPhotoClick, onEmojiCli
 };
 
 export default PostInput;
+

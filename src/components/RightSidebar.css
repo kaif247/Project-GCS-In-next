@@ -9,6 +9,21 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
+body.home-hero .right-sidebar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+body.home-hero.hero-collapsed .right-sidebar {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
 .dark-mode .right-sidebar {
   background-color: var(--bg-page);
   border-left-color: transparent;
@@ -301,7 +316,7 @@
 }
 
 .toggle.on {
-  background: #FFD700;
+  background: #D4AF37;
 }
 
 .toggle.on span {
@@ -395,7 +410,7 @@ color:  white;
 
 .dark-mode .contact-item:hover {
   background-color: var(--bg-hover);
-  color:#FFD700;
+  color:#D4AF37;
 }
 
 .contact-avatar-wrapper {
@@ -531,7 +546,7 @@ color:  white;
 
 .birthday-send-btn {
   border: none;
-  background: #FFD700;
+  background: #D4AF37;
   color: #121212;
   width: 32px;
   height: 32px;
@@ -558,7 +573,7 @@ color:  white;
   margin-top: 12px;
   width: 100%;
   border: none;
-  background: #FFD700;
+  background: #D4AF37;
   color: #121212;
   padding: 10px 12px;
   border-radius: 12px;
@@ -577,3 +592,4 @@ color:  white;
     display: none;
   }
 }
+

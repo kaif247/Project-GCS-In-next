@@ -34,7 +34,7 @@
 }
 
 .backLink:hover {
-  color: #ffd700;
+  color: #D4AF37;
 }
 
 .card {
@@ -60,7 +60,7 @@
 }
 
 .segmentActive {
-  background: #ffd700;
+  background: #D4AF37;
   color: #1c1e21;
   font-weight: 600;
 }
@@ -99,3 +99,4 @@
     text-align: center;
   }
 }
+

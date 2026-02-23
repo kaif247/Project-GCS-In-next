@@ -75,16 +75,16 @@
 
 .friends-sidebar__item:hover {
   background: var(--bg-hover);
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .friends-sidebar__menu a.friends-sidebar__item:hover {
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .friends-sidebar__item.active {
   background: var(--bg-hover);
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .friends-sidebar__icon {
@@ -162,7 +162,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 700;
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .friends-grid__see-all {
@@ -189,7 +189,7 @@
   margin: 0 0 6px;
   font-size: 22px;
   font-weight: 800;
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .birthdays-page__header p {
@@ -213,7 +213,7 @@
   margin: 0 0 6px;
   font-size: 22px;
   font-weight: 800;
-  color: #FFD700;
+  color: #D4AF37;
 }
 
 .friends-panel__header p {
@@ -275,7 +275,7 @@
   border: none;
   border-radius: 10px;
   padding: 8px 12px;
-  background: #FFD700;
+  background: #D4AF37;
   color: #121212;
   font-weight: 700;
   font-size: 13px;
@@ -304,8 +304,8 @@
 }
 
 .friends-panel__list-item.active {
-  border-color: #FFD700;
-  box-shadow: 0 0 0 1px #FFD700 inset;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 1px #D4AF37 inset;
   background: var(--bg-hover);
 }
 
@@ -446,7 +446,7 @@
   border: none;
   border-radius: 10px;
   padding: 8px 12px;
-  background: #FFD700;
+  background: #D4AF37;
   color: #121212;
   font-weight: 700;
   cursor: pointer;
@@ -528,14 +528,14 @@
 
   color: var(--text-primary);
   cursor: pointer;
-  background: #FFD700;
+  background: #D4AF37;
   color: #fff;
 }
 
 .friends-card__btn:hover {
   filter: brightness(0.98);
   background: var(--bg-hover);
-  border: 0.25px soft--solid #FFD700;
+  border: 0.25px soft--solid #D4AF37;
 }
 
 @media (max-width: 1200px) {
@@ -590,3 +590,4 @@
     grid-template-columns: 1fr;
   }
 }
+

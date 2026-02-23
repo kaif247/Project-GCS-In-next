@@ -40,12 +40,12 @@ const pillars = [
     text: "Restoration of Princess Celestine's legacy.",
   },
   {
-    title: 'Enperval Souverainete',
+    title: 'Enperval Sovereignité',
     text: 'Mission and administrative doctrine.',
   },
   {
-    title: 'Activation Dispatch',
-    text: 'Live digital movements and sovereign dispatches.',
+    title: 'Sctivaction',
+    text: 'A dynamic feed for the #PRINS_NAN_SAN movement.',
   },
 ];
 
@@ -165,7 +165,7 @@ const LandingPage = () => {
           content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
         />
         <meta property="og:image" content="/imperial-seal.svg" />
-        <link rel="icon" href="/crowned-hare.svg" />
+        <link rel="icon" href="/w%20(1).ico" />
       </Head>
       <div className={styles.page}>
         <nav className={styles.nav}>
@@ -185,11 +185,11 @@ const LandingPage = () => {
           <div className={styles.heroContent}>
             <p className={styles.eyebrow}>Sovereign Restoration V1.2</p>
             <h1 className={styles.heroTitle}>
-              The House of Dorvilus <span className={styles.heroFlame}>Signal</span>
+              The Evolution of the Flame: The House of Dorvilus
             </h1>
             <p className={styles.heroSub}>
-              The Imperial gateway for the Digital Lakou. Ground your lineage in
-              sovereign intelligence and restore the Soulouque legacy.
+              A Natural Transition from the 1791 Spark to 2026 Sovereign
+              Intelligence. Ground your frequency in the Digital Lakou.
             </p>
             <div className={styles.heroActions}>
               <a href="#registry" className={styles.btnPrimary}>
@@ -203,6 +203,13 @@ const LandingPage = () => {
               <img src="/crowned-hare.svg" alt="Crowned Hare emblem" />
               <span>globalcreolesociety.com</span>
             </div>
+          </div>
+          <div className={styles.heroSeal}>
+            <img
+              src="/registry-seal.svg"
+              alt="Reactivated Double-Headed Eagle"
+              fetchpriority="high"
+            />
           </div>
           <div className={styles.heroTriptych}>
             {trinity.map((member) => (
@@ -249,7 +256,7 @@ const LandingPage = () => {
               <input
                 id="sovereign-name"
                 type="text"
-                placeholder="Full Name"
+                placeholder="Your Sovereign Title"
                 value={form.name}
                 onChange={handleChange('name')}
                 required
@@ -260,7 +267,7 @@ const LandingPage = () => {
               <input
                 id="sovereign-email"
                 type="email"
-                placeholder="Email Address"
+                placeholder="Digital Coordinate"
                 value={form.email}
                 onChange={handleChange('email')}
                 required
@@ -294,6 +301,21 @@ const LandingPage = () => {
                 {status.message}
               </p>
             )}
+            <div className={styles.registrySeal}>
+              <div className={styles.registrySealGlow} aria-hidden="true" />
+              <img
+                src="/registry-seal.svg"
+                alt="Dorvilus Coat of Arms - Seal of Authenticity"
+                loading="lazy"
+              />
+              <div className={styles.registrySealText}>
+                <span>Seal of Authenticity</span>
+                <span className={styles.registryMotto}>Je Renais de mes Cendres</span>
+              </div>
+              <span className={styles.registryBadge}>
+                AUTHENTICATED BLOODLINE | 2026 FREQUENCY
+              </span>
+            </div>
           </div>
         </section>
 

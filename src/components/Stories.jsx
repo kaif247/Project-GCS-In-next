@@ -61,7 +61,7 @@ const Stories = () => {
 
   const backgroundOptions = [
     { key: 'dark', color: '#1f1f1f' },
-    { key: 'accent', color: '#FFD700' },
+    { key: 'accent', color: '#D4AF37' },
     { key: 'cyan', color: '#22c1c3' },
     { key: 'violet', color: '#4a00e0' },
     { key: 'rose', color: '#ff758c' },
@@ -245,3 +245,4 @@ const Stories = () => {
 };
 
 export default Stories;
+

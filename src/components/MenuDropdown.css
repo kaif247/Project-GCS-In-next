@@ -67,7 +67,7 @@
   padding: 8px;
   border-radius: 10px;
   text-decoration: none;
-  color: #ffd700;
+  color: #D4AF37;
   background: transparent;
 }
 
@@ -83,7 +83,7 @@
 .menu-dropdown__label {
   font-size: 13px;
   font-weight: 600;
-  color: #ffd700;
+  color: #D4AF37;
 }
 
 @media (max-width: 600px) {
@@ -92,3 +92,4 @@
     grid-template-columns: 1fr;
   }
 }
+

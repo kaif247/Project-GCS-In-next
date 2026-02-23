@@ -245,7 +245,7 @@
 }
 
 .post-color-btn.active {
-  border-color: #FFD700;
+  border-color: #D4AF37;
 }
 
 .post-composer__media {
@@ -380,7 +380,7 @@
 
 .post-tag-picker__item.selected {
   background: rgba(227, 143, 18, 0.2);
-  border: 1px solid #FFD700;
+  border: 1px solid #D4AF37;
 }
 
 .post-tag-picker__item img {
@@ -416,7 +416,7 @@
 .post-composer__submit {
   border: none;
   border-radius: 10px;
-  background: #FFD700;
+  background: #D4AF37;
   color: #1d1d1d;
   font-weight: 700;
   padding: 10px;
@@ -450,3 +450,4 @@
     padding: 14px;
   }
 }
+

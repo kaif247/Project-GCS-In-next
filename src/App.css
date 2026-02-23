@@ -17,6 +17,7 @@
   margin: 0;
 }
 
+
 .saved-page {
   max-width: 900px;
   margin: 0 auto;
@@ -75,6 +76,8 @@
   .app-container {
     flex-direction: column;
     gap: 0;
+    padding: 0 16px;
   }
 }
+
 

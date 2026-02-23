@@ -37,7 +37,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #ffd700;
+  background: #D4AF37;
   color: #111;
   display: grid;
   place-items: center;
@@ -259,7 +259,7 @@
 
 .admin-severity.medium {
   background: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
+  color: #D4AF37;
 }
 
 .admin-severity.high {
@@ -325,7 +325,7 @@
 }
 
 .admin-btn--primary {
-  background: #ffd700;
+  background: #D4AF37;
   color: #111;
 }
 
@@ -453,7 +453,7 @@
   height: 36px;
   border-radius: 12px;
   background: #111;
-  color: #ffd700;
+  color: #D4AF37;
   display: grid;
   place-items: center;
   font-weight: 700;
@@ -698,3 +698,4 @@
     height: 160px;
   }
 }
+
