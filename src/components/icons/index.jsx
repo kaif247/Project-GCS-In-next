@@ -15,7 +15,7 @@ import { ReactComponent as Entertainment8 } from './entertainment.svg';
 import { ReactComponent as EspanolIcon } from './espanol.svg';
 import { ReactComponent as Event7 } from './event.svg';
 import { ReactComponent as FacebookPage8 } from './facebook-page.svg';
-import { ReactComponent as FrancaisIcon } from './Français.svg';
+import { ReactComponent as FrancaisIcon } from './francais.svg';
 import { ReactComponent as Family11 } from './family.svg';
 import { ReactComponent as Feeds9 } from './feeds.svg';
 import { ReactComponent as Friends10 } from './friends.svg';
@@ -75,7 +75,6 @@ const icons = {
   "event": Event7,
   "facebook-page": FacebookPage8,
   "francais": FrancaisIcon,
-  "français": FrancaisIcon,
   "family": Family11,
   "feeds": Feeds9,
   "friends": Friends10,
@@ -127,3 +126,4 @@ const icons = {
 };
 
 export default icons;
+
