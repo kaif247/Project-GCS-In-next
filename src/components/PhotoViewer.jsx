@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import './PhotoViewer.css';
+import styles from './PhotoViewer.module.css';
 
 const PhotoViewer = ({ open, photos = [], index = 0, onClose, onPrev, onNext }) => {
   useEffect(() => {
@@ -31,24 +31,42 @@ const PhotoViewer = ({ open, photos = [], index = 0, onClose, onPrev, onNext }) 
   if (!open || photos.length === 0 || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div className="photo-viewer" onClick={onClose}>
-      <div className="photo-viewer__content" onClick={(event) => event.stopPropagation()}>
-        <button type="button" className="photo-viewer__close" onClick={onClose} aria-label="Close">
-          ×
+    <div className={styles['photo-viewer']} onClick={onClose}>
+      <div
+        className={styles['photo-viewer__content']}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <button
+          type="button"
+          className={styles['photo-viewer__close']}
+          onClick={onClose}
+          aria-label="Close"
+        >
+          &times;
         </button>
         {photos.length > 1 && (
-          <button type="button" className="photo-viewer__nav" onClick={onPrev} aria-label="Previous photo">
-            ‹
+          <button
+            type="button"
+            className={styles['photo-viewer__nav']}
+            onClick={onPrev}
+            aria-label="Previous photo"
+          >
+            &#8249;
           </button>
         )}
-        <img src={photos[index]} alt="" className="photo-viewer__image" />
+        <img src={photos[index]} alt="" className={styles['photo-viewer__image']} />
         {photos.length > 1 && (
-          <button type="button" className="photo-viewer__nav" onClick={onNext} aria-label="Next photo">
-            ›
+          <button
+            type="button"
+            className={styles['photo-viewer__nav']}
+            onClick={onNext}
+            aria-label="Next photo"
+          >
+            &#8250;
           </button>
         )}
         {photos.length > 1 && (
-          <div className="photo-viewer__count">
+          <div className={styles['photo-viewer__count']}>
             {index + 1} / {photos.length}
           </div>
         )}
