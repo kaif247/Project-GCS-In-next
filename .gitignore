@@ -43,3 +43,8 @@ next-env.d.ts
 node-v22.22.0-x64.msi
 postgresql_16.exe
 postgresql_16.exe-20260220123935
+server/staticfiles/
+server/db.sqlite3
+src/components/icons/ChatGPT*
+public/icons/ChatGPT*
+public/icons/loader.png
