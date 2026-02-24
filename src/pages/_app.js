@@ -130,6 +130,8 @@ export default function App({ Component, pageProps }) {
 
 
   const isLanding = router.pathname === '/landing';
+  const publicRoutes = new Set(['/landing', '/signin']);
+  const hideChatBot = publicRoutes.has(router.pathname);
 
   return (
     <ThemeProvider>
@@ -137,7 +139,7 @@ export default function App({ Component, pageProps }) {
         <MarketplaceProvider>
           <CartProvider>
             <MarketplaceMessagingProvider>
-              <div className="app">
+              <div className="app main-container">
                 <Head>
                   <title>House of Dorvilus | Sovereign Intelligence & Imperial Restoration</title>
                   <meta
@@ -172,7 +174,9 @@ export default function App({ Component, pageProps }) {
                   onOpenLiveProducer={() => setIsLiveOpen(true)}
                   isLiveProducerOpen={isLiveOpen}
                 />
-                {router.pathname !== '/chats' && !router.pathname.startsWith('/chats') && <ChatBot />}
+                {!hideChatBot &&
+                  router.pathname !== '/chats' &&
+                  !router.pathname.startsWith('/chats') && <ChatBot />}
                 {isLiveOpen && (
                   <LiveProducerSection
                     onRequestClose={handleLiveCloseRequest}

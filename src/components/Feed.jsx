@@ -16,9 +16,21 @@ const engagementOptions = [
 ];
 
 const contributionTiers = [
-  { label: 'Citizen (Free)', value: 'Citizen' },
-  { label: 'Innovator ($18.49 / mo)', value: 'Innovator' },
-  { label: 'Sovereign Founder ($1,849)', value: 'Sovereign' },
+  {
+    label: 'Citizen (Free)',
+    value: 'Citizen',
+    buttonText: 'Authenticate Bloodline (Free)',
+  },
+  {
+    label: 'Innovator ($18.49 / mo)',
+    value: 'Innovator',
+    buttonText: 'Contribute $18.49 & Activate',
+  },
+  {
+    label: 'Sovereign Founder ($1,849)',
+    value: 'Sovereign',
+    buttonText: 'Invest $1,849 & Rule',
+  },
 ];
 
 
@@ -121,46 +133,70 @@ const Feed = () => {
           <h2>Registry of Blood</h2>
           <p>Authenticate your coordinate before entering the feed.</p>
           <form onSubmit={handleRegistrySubmit}>
+            <label className="sr-only" htmlFor="sovereign-name">
+              Full Name
+            </label>
             <input
+              id="sovereign-name"
               type="text"
               placeholder="Your Sovereign Title"
               value={registryForm.name}
               onChange={handleRegistryChange('name')}
               required
             />
+            <label className="sr-only" htmlFor="sovereign-email">
+              Email Address
+            </label>
             <input
+              id="sovereign-email"
               type="email"
               placeholder="Digital Coordinate"
               value={registryForm.email}
               onChange={handleRegistryChange('email')}
               required
             />
-            <select value={registryForm.path} onChange={handleRegistryChange('path')}>
+            <label className="sr-only" htmlFor="sovereign-path">
+              Engagement Path
+            </label>
+            <select
+              id="sovereign-path"
+              value={registryForm.path}
+              onChange={handleRegistryChange('path')}
+            >
               {engagementOptions.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
               ))}
             </select>
-            <select value={registryForm.tier} onChange={handleRegistryChange('tier')}>
+            <label className="sr-only" htmlFor="sovereign-tier">
+              Sovereign Contribution Tier
+            </label>
+            <select
+              id="sovereign-tier"
+              value={registryForm.tier}
+              onChange={handleRegistryChange('tier')}
+            >
               {contributionTiers.map((tier) => (
                 <option key={tier.value} value={tier.value}>
                   {tier.label}
                 </option>
               ))}
             </select>
-            <button type="submit">
-              {registryStatus.state === 'loading'
-                ? 'Submitting...'
-                : selectedTier.value === 'Innovator'
-                ? 'Contribute $18.49 & Activate'
-                : selectedTier.value === 'Sovereign'
-                ? 'Invest $1,849 & Rule'
-                : 'Authenticate Bloodline (Free)'}
+            <button type="submit" className="sovereign-feed-registry__submit">
+              <img
+                src="/sacred-antique-key.svg"
+                alt=""
+                aria-hidden="true"
+                className="sovereign-feed-registry__key"
+              />
+              {registryStatus.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
             </button>
           </form>
           {registryStatus.message && (
-            <p className="sovereign-feed-registry__status">{registryStatus.message}</p>
+            <p className="sovereign-feed-registry__status" role="status">
+              {registryStatus.message}
+            </p>
           )}
           <div className="sovereign-feed-registry__seal">
             <div className="sovereign-feed-registry__seal-glow" aria-hidden="true" />
@@ -180,6 +216,7 @@ const Feed = () => {
             </span>
           </div>
         </section>
+        <div className="hero-to-feed-divider" role="presentation" aria-hidden="true" />
 
         {/* Post Input */}
         <PostInput

@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext, useMemo } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import styles from '../styles/Treasury.module.css';
 import InnovatorPortal from '../components/InnovatorPortal';
+import MarketplaceGrid from '../components/Marketplace/MarketplaceGrid';
+import MarketplaceCard from '../components/Marketplace/MarketplaceCard';
+import { MarketplaceContext } from '../context/MarketplaceContext';
 
 const treasuryAssets = [
   {
@@ -27,7 +31,25 @@ const ImperialTreasury = () => {
   const [showDecree, setShowDecree] = useState(false);
   const [showFounderMoment, setShowFounderMoment] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { products } = useContext(MarketplaceContext);
   const vaultPercent = 33;
+  const treasuryProducts = useMemo(
+    () =>
+      products
+        .filter(
+          (product) =>
+            !(
+              (product.title === 'Bridal Dress (Heavy Embroidery)' &&
+                product.price === 10000 &&
+                product.location === 'Manshera') ||
+              (product.title === 'Samsung Galaxy S22 Ultra' &&
+                product.price === 175000 &&
+                product.location === 'Nawabshah')
+            )
+        )
+        .slice(0, 4),
+    [products]
+  );
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -65,6 +87,9 @@ const ImperialTreasury = () => {
           <p className={styles.subhead}>
             The vault is not empty. It is a strategic call to action.
           </p>
+          <p className={styles.subhead}>
+            Access is free. Items within the Imperial Treasury carry their own cost.
+          </p>
         </header>
 
         <section className={styles.vaultBar}>
@@ -83,7 +108,11 @@ const ImperialTreasury = () => {
               contribution unlocks new tools for restoration.
             </p>
           </div>
-          <img src="/sacred-key.svg" alt="Sacred Key icon" className={styles.keyIcon} />
+          <img
+            src="/sacred-antique-key.svg"
+            alt="Sacred Key icon"
+            className={styles.keyIcon}
+          />
         </section>
 
         <section className={styles.grid}>
@@ -101,6 +130,25 @@ const ImperialTreasury = () => {
               </button>
             </article>
           ))}
+        </section>
+
+        <section className={styles.marketplaceSection}>
+          <div className={styles.marketplaceHeader}>
+            <div>
+              <h2>Imperial Treasury Assets</h2>
+              <p>Curated marketplace items presented as sovereign offerings.</p>
+            </div>
+            <Link href="/signin" className={styles.marketplaceLink}>
+              See all
+            </Link>
+          </div>
+          <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
+            {treasuryProducts.map((product) => (
+              <div key={product.id} className={styles.marketplaceSlide}>
+                <MarketplaceCard product={product} />
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className={styles.founderCallout}>
@@ -134,6 +182,10 @@ const ImperialTreasury = () => {
               <p>
                 The gold of the past has been liquidated into the tools of the future.
                 Every enrollment is a digital spark.
+              </p>
+              <p>
+                By decree, access to the vault is granted only to verified contributors
+                who uphold the restoration mandate and protect the registry.
               </p>
               <button type="button" onClick={() => setShowDecree(false)}>
                 Enter the Vault

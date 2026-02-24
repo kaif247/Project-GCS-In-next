@@ -22,7 +22,10 @@ const nextConfig = {
       },
     ];
   },
-  webpack(config) {
+  webpack(config, { dev }) {
+    if (dev) {
+      config.cache = false;
+    }
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,

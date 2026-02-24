@@ -43,6 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 8px;
   border-radius: 0; /* remove circular background for rectangular logo */
   background-color: transparent; /* remove background since logo is full image */
   cursor: pointer;
@@ -65,6 +66,7 @@
 /* Ensure logo displays full (not circular) and keeps aspect ratio */
 .navbar-logo-img {
   height: 44px;        /* adjust height as needed */
+  min-height: 40px;
   width: auto;         /* keep original aspect ratio */
   object-fit: contain;
   border-radius: 0;    /* remove any circular style */

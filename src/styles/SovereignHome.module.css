@@ -5,6 +5,7 @@
   --gold: var(--soulouque-gold);
   --crimson: var(--bloodline-crimson);
   --electric: var(--electric-blue);
+  --imperial-gold: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
   --text: #f5f0e6;
   --text-soft: #c6bda4;
   min-height: 100vh;
@@ -15,10 +16,27 @@
   color: var(--text);
   font-family: var(--font-sans);
   line-height: 1.6;
+  position: relative;
+  overflow: hidden;
 }
 
 .page * {
   box-sizing: border-box;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(45deg, rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+    linear-gradient(-45deg, rgba(212, 175, 55, 0.08) 1px, transparent 1px),
+    radial-gradient(circle, rgba(212, 175, 55, 0.35) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: 0 0, 0 0, 0 0;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .nav {
@@ -40,13 +58,38 @@
   gap: 24px;
 }
 
+.navTop {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.brandWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandLogo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
 .brand {
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-weight: 400;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
+  background: var(--imperial-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   font-size: 12px;
-  font-family: var(--font-serif);
+  font-family: 'Montserrat', var(--font-sans);
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+  position: relative;
+  z-index: 1;
 }
 
 .navLinks {
@@ -54,6 +97,32 @@
   gap: 18px;
   align-items: center;
   font-size: 14px;
+  justify-content: center;
+}
+
+.navToggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: rgba(0, 0, 0, 0.4);
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+}
+
+.navToggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}
+
+.navLinksOpen {
+  display: flex;
 }
 
 .navLinks a {
@@ -112,7 +181,9 @@
 .heroContent {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .eyebrow {
@@ -123,7 +194,7 @@
 }
 
 .heroTitle {
-  font-size: 62px;
+  font-size: clamp(30px, 4.8vw, 62px);
   line-height: 1.08;
   font-weight: 700;
   color: var(--gold);
@@ -135,7 +206,7 @@
 }
 
 .heroSub {
-  font-size: 22px;
+  font-size: clamp(14px, 1.8vw, 22px);
   font-weight: 500;
   color: var(--text-soft);
 }
@@ -146,15 +217,15 @@
   align-items: center;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
   border-radius: 24px;
-  border: 1px solid rgba(212, 175, 55, 0.35);
   padding: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 4px;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 .heroSeal img {
-  width: min(320px, 70vw);
+  width: min(420px, 80vw);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.6));
@@ -174,16 +245,43 @@
   border-radius: 12px;
   font-weight: 600;
   border: 1px solid rgba(212, 175, 55, 0.4);
-  background: var(--gold);
-  color: #111111;
+  background: var(--imperial-gold);
+  color: #0a0a0a;
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.25s ease, transform 0.25s ease;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
 }
 
 .btnSecondary {
   background: transparent;
   color: var(--text);
+  filter: none;
+}
+
+.keyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.keyIcon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.65));
+  animation: keyPulse 4s ease-in-out infinite;
+}
+
+@keyframes keyPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.85));
+  }
 }
 
 .btnPrimary:hover,
@@ -199,13 +297,30 @@
   font-size: 13px;
   color: var(--text-soft);
   margin-top: 8px;
+  padding: 8px 0;
+}
+
+.sealLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sealLink:hover,
+.sealLink:focus-visible {
+  color: var(--electric);
+  text-shadow: 0 0 12px rgba(0, 245, 255, 0.6);
 }
 
 .sealRow img {
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   filter: drop-shadow(0 0 8px rgba(0, 245, 255, 0.4));
   animation: sovereignPulse 4s ease-in-out infinite;
+}
+
+.sealRow span {
+  font-family: 'Nunito', var(--font-sans);
+  letter-spacing: 0.08em;
 }
 
 @keyframes sovereignPulse {
@@ -221,7 +336,17 @@
 .heroTriptych {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.triptychSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 50px;
+  position: relative;
+  z-index: 1;
 }
 
 .triptychCard {
@@ -232,7 +357,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-height: 260px;
+  min-height: 240px;
   position: relative;
   overflow: hidden;
 }
@@ -243,6 +368,9 @@
   padding: 18px;
   background: radial-gradient(circle at top, rgba(212, 175, 55, 0.2), transparent 70%);
   border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .triptychImage {
@@ -274,6 +402,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 70px 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .sectionTitle {
@@ -725,6 +855,12 @@
   text-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
 }
 
+.footerName:hover,
+.footerName:focus-visible {
+  color: var(--electric);
+  text-shadow: 0 0 16px rgba(0, 245, 255, 0.85);
+}
+
 .footerNote {
   color: var(--text-soft);
   font-size: 13px;
@@ -744,11 +880,17 @@
 
 @media (max-width: 1100px) {
   .hero {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 28px;
+    padding-top: 70px;
   }
 
   .heroTitle {
-    font-size: 50px;
+    font-size: clamp(26px, 4.2vw, 46px);
+  }
+
+  .heroSub {
+    font-size: clamp(14px, 1.9vw, 20px);
   }
 
   .heroTriptych {
@@ -773,27 +915,82 @@
 
 @media (max-width: 820px) {
   .heroTriptych {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .triptychCard {
+    padding: 10px;
+    min-height: 190px;
+  }
+
+  .triptychImage {
+    height: 80px;
   }
 }
 
 @media (max-width: 768px) {
   .navInner {
-    flex-direction: column;
+    align-items: center;
   }
 
   .navLinks {
-    flex-wrap: wrap;
-    justify-content: center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding-top: 12px;
+  }
+
+  .navToggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .navLinksOpen {
+    display: flex;
+    background: rgba(5, 5, 5, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 14px;
+    padding: 14px;
   }
 
   .heroTitle {
-    font-size: 40px;
+    font-size: clamp(22px, 5vw, 30px);
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 18px;
+    padding-top: 60px;
+    align-items: start;
   }
 
   .heroSub {
-    font-size: 18px;
+    font-size: clamp(12px, 3.2vw, 16px);
   }
+
+  .heroSeal {
+    padding: 12px;
+    margin-bottom: 16px;
+    margin-top: -6px;
+    align-self: start;
+  }
+
+  .heroSeal img {
+    width: min(300px, 55vw);
+  }
+
+  .triptychFrame {
+    padding: 8px;
+  }
+
+  .triptychImage {
+    height: auto;
+    max-height: 110px;
+  }
+
 
   .pillars,
   .treasuryGrid,
@@ -805,3 +1002,18 @@
     padding-left: 16px;
   }
 }
+  .heroActions {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+  }

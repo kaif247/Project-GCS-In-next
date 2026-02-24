@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
 
@@ -68,17 +68,17 @@ const trinity = [
   {
     name: 'H.S.H. Prince Jean II',
     title: 'Sovereign Architect',
-    image: '/reactivated-boukman.svg',
+    image: '/H.S.H. Prince Jean II.svg',
   },
   {
     name: 'H.I.H. Prince Thierry',
     title: 'Imperial Steward',
-    image: '/neutral-priest.svg',
+    image: '/H.I.H. Prince Thierry.svg',
   },
   {
     name: 'Cousin Wilson Joseph',
     title: 'Local Foundation',
-    image: '/imperial-seal.svg',
+    image: '/Cousin Wilson Joseph.svg',
   },
 ];
 
@@ -115,6 +115,8 @@ const LandingPage = () => {
   });
   const [status, setStatus] = useState({ state: 'idle', message: '' });
   const [isFooterPulse, setIsFooterPulse] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const registryEndpoint =
     process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
@@ -127,6 +129,10 @@ const LandingPage = () => {
 
   const selectedTier =
     contributionTiers.find((tier) => tier.value === form.tier) || contributionTiers[0];
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -170,13 +176,35 @@ const LandingPage = () => {
       <div className={styles.page}>
         <nav className={styles.nav}>
           <div className={styles.navInner}>
-            <div className={styles.brand}>Global Creole Society</div>
-            <div className={styles.navLinks}>
-              <a href="/">Home</a>
+            <div className={styles.navTop}>
+              <div className={styles.brandWrap}>
+                <img src="/GCS.png" alt="GCS" className={styles.brandLogo} />
+              </div>
+              {isMounted && (
+                <button
+                  type="button"
+                  className={styles.navToggle}
+                  aria-label="Toggle navigation"
+                  aria-expanded={isNavOpen}
+                  onClick={() => setIsNavOpen((prev) => !prev)}
+                >
+                  <span />
+                  <span />
+                  <span />
+                </button>
+              )}
+            </div>
+            <div
+              className={`${styles.navLinks} ${
+                isMounted && isNavOpen ? styles.navLinksOpen : ''
+              }`}
+            >
+              <a href="/landing">Home</a>
               <a href="/imperial-treasury">Imperial Treasury</a>
               <a href="#nexus">Nexus</a>
               <a href="#registry">Registry</a>
               <a href="#roadmap">Roadmap</a>
+              <a href="/signin">Sign in</a>
             </div>
           </div>
         </nav>
@@ -201,16 +229,21 @@ const LandingPage = () => {
             </div>
             <div className={styles.sealRow}>
               <img src="/crowned-hare.svg" alt="Crowned Hare emblem" />
-              <span>globalcreolesociety.com</span>
+              <a href="https://globalcreolesociety.com" className={styles.sealLink}>
+                globalcreolesociety.com
+              </a>
             </div>
           </div>
           <div className={styles.heroSeal}>
             <img
-              src="/registry-seal.svg"
-              alt="Reactivated Double-Headed Eagle"
+              src="/landing page.svg"
+              alt="Landing page emblem"
               fetchpriority="high"
             />
           </div>
+        </section>
+
+        <section className={styles.triptychSection}>
           <div className={styles.heroTriptych}>
             {trinity.map((member) => (
               <div key={member.name} className={styles.triptychCard}>
@@ -292,7 +325,13 @@ const LandingPage = () => {
                   </option>
                 ))}
               </select>
-              <button type="submit" className={styles.btnPrimary}>
+              <button type="submit" className={`${styles.btnPrimary} ${styles.keyButton}`}>
+                <img
+                  src="/sacred-antique-key.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className={styles.keyIcon}
+                />
                 {status.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
               </button>
             </form>

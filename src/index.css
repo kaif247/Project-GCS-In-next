@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap');
 @import './styles/styles/theme.css';
 
 /* Global Styles */
@@ -30,6 +30,19 @@ body {
   background-color: var(--bg-page);
   color: var(--text-primary);
   transition: background-color 0.3s, color 0.3s;
+}
+
+/* Smooth transition between Imperial Authority and Community Content */
+.main-container {
+  background-color: var(--sovereign-black);
+  scroll-behavior: smooth;
+}
+
+.hero-to-feed-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--soulouque-gold), transparent);
+  margin: 40px 0;
+  box-shadow: 0 0 10px var(--electric-blue);
 }
 
 html.text-small {
@@ -198,6 +211,7 @@ button:focus-visible {
 .initial-loader__gcs {
   width: clamp(52px, 9vw, 88px);
   height: auto;
+  min-height: 40px;
   object-fit: contain;
 }
 

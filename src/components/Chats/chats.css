@@ -305,7 +305,7 @@
   display: inline-block;
   width: auto;
   max-width: 100%;
-  min-width: 44px;
+  min-width: 70px;
   line-height: 1.35;
 }
 
@@ -600,6 +600,7 @@
   flex-direction: column;
   gap: 6px;
   position: relative;
+  min-width: 70px;
 }
 
 .chats-message--outgoing .chats-bubble {

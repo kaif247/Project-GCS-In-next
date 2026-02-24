@@ -37,21 +37,21 @@ const HomeHero = forwardRef((props, ref) => {
 
         <div className={styles.heroTriptych}>
           <div className={styles.triptychCard}>
-            <img src="/reactivated-boukman.svg" alt="H.S.H. Prince Jean II" />
+            <img src="/H.S.H. Prince Jean II.svg" alt="H.S.H. Prince Jean II" />
             <div>
               <span>H.S.H. Prince Jean II</span>
               <strong>Sovereign Architect</strong>
             </div>
           </div>
           <div className={styles.triptychCard}>
-            <img src="/neutral-priest.svg" alt="H.I.H. Prince Thierry" />
+            <img src="/H.I.H. Prince Thierry.svg" alt="H.I.H. Prince Thierry" />
             <div>
               <span>H.I.H. Prince Thierry</span>
               <strong>Imperial Steward</strong>
             </div>
           </div>
           <div className={styles.triptychCard}>
-            <img src="/imperial-seal.svg" alt="Cousin Wilson Joseph" />
+            <img src="/Cousin Wilson Joseph.svg" alt="Cousin Wilson Joseph" />
             <div>
               <span>Cousin Wilson Joseph</span>
               <strong>Local Foundation</strong>

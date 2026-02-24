@@ -1,0 +1,119 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 10% 15%, rgba(0, 245, 255, 0.14), transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(212, 175, 55, 0.2), transparent 55%),
+    #0a0a0a;
+  color: #f5f0e6;
+}
+
+.center {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 120px 20px 80px;
+}
+
+.card {
+  width: min(520px, 92vw);
+  background: rgba(8, 8, 8, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.brandRow img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.brandRow h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.brandRow p {
+  margin: 4px 0 0;
+  color: #cfc4a5;
+  font-size: 13px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  color: #f5f0e6;
+  font-weight: 600;
+}
+
+.tabActive {
+  background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  color: #0a0a0a;
+}
+
+.googleBtn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 245, 255, 0.4);
+  background: rgba(0, 0, 0, 0.4);
+  color: #f5f0e6;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
+}
+
+.form label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: #cfc4a5;
+}
+
+.form input {
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: #000000;
+  color: #f5f0e6;
+  padding: 12px 14px;
+  font-size: 14px;
+}
+
+.submitBtn {
+  margin-top: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  color: #0a0a0a;
+}
+
+.status {
+  margin-top: 12px;
+  color: #cfc4a5;
+  font-size: 13px;
+}

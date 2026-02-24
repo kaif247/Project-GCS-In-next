@@ -20,63 +20,94 @@
 
 .sovereign-feed-registry {
   margin: 0 0 16px;
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  background: rgba(8, 8, 8, 0.8);
+  padding: 32px;
+  border-radius: 22px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: #0f0f0f;
   display: grid;
-  gap: 8px;
+  gap: 12px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
 }
 
 .sovereign-feed-registry h2 {
-  font-size: 16px;
-  color: var(--primary);
+  font-size: 20px;
+  color: #d4af37;
   font-family: var(--font-serif);
 }
 
 .sovereign-feed-registry p {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 13px;
+  color: #c6bda4;
 }
 
 .sovereign-feed-registry form {
+  margin-top: 18px;
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .sovereign-feed-registry input,
 .sovereign-feed-registry select {
-  border-radius: 10px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
   background: #000000;
-  color: var(--text-primary);
-  padding: 10px 12px;
-  font-size: 13px;
+  color: #f5f0e6;
+  font-size: 14px;
 }
 
 .sovereign-feed-registry button {
-  border-radius: 999px;
-  background: var(--primary);
-  color: #0a0a0a;
+  margin-top: 8px;
+  padding: 12px 20px;
+  border-radius: 12px;
   font-weight: 600;
-  padding: 10px 12px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  color: #111111;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
+
+.sovereign-feed-registry button:hover {
+  box-shadow: 0 0 18px rgba(0, 245, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.sovereign-feed-registry__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sovereign-feed-registry__key {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.65));
+  animation: keyPulse 4s ease-in-out infinite;
 }
 
 .sovereign-feed-registry__status {
+  margin-top: 12px;
   font-size: 12px;
-  color: var(--text-muted);
+  color: #c6bda4;
 }
 
 .sovereign-feed-registry__seal {
   position: relative;
-  margin-top: 6px;
-  padding: 10px 12px;
-  border-radius: 14px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 16px;
   border: 1px solid rgba(212, 175, 55, 0.35);
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--primary);
+  justify-content: center;
+  gap: 12px;
+  color: #d4af37;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -84,16 +115,16 @@
 }
 
 .sovereign-feed-registry__seal img {
-  width: 46px;
-  height: 46px;
+  width: 54px;
+  height: 54px;
   object-fit: contain;
-  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.55));
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.55));
   animation: sealPulse 4s ease-in-out infinite;
 }
 
 .sovereign-feed-registry__seal-glow {
   position: absolute;
-  inset: -30% 40% -30% -10%;
+  inset: -40% 40% -40% -10%;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.35), transparent 70%);
   opacity: 0.9;
   pointer-events: none;
@@ -107,14 +138,14 @@
 
 .sovereign-feed-registry__motto {
   font-size: 11px;
-  color: var(--text-muted);
+  color: #c6bda4;
   transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
 .sovereign-feed-registry__badge {
   position: absolute;
   right: 12px;
-  bottom: 8px;
+  bottom: 10px;
   font-size: 10px;
   letter-spacing: 0.12em;
   color: #0a0a0a;

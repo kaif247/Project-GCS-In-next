@@ -83,7 +83,47 @@
 .keyIcon {
   width: 68px;
   height: 68px;
-  filter: drop-shadow(0 0 15px rgba(0, 245, 255, 0.5));
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+  animation:
+    keyFloat 3.8s ease-in-out infinite,
+    keyPulse 4s ease-in-out infinite,
+    keySpin 9s ease-in-out infinite;
+}
+
+@keyframes keyFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes keyPulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.55));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.85));
+  }
+}
+
+@keyframes keySpin {
+  0% {
+    transform: translateY(0) rotateY(0deg);
+  }
+  40% {
+    transform: translateY(-4px) rotateY(160deg);
+  }
+  60% {
+    transform: translateY(-4px) rotateY(200deg);
+  }
+  100% {
+    transform: translateY(0) rotateY(360deg);
+  }
 }
 
 .grid {
@@ -92,6 +132,70 @@
   gap: 20px;
   max-width: 1000px;
   margin: 0 auto;
+}
+
+.marketplaceSection {
+  max-width: 1100px;
+  margin: 40px auto 0;
+}
+
+.marketplaceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.marketplaceHeader h2 {
+  color: var(--primary);
+  font-family: var(--font-serif);
+}
+
+.marketplaceHeader p {
+  color: #cfc4a5;
+}
+
+.marketplaceLink {
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #f5f0e6;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.marketplaceLink:hover,
+.marketplaceLink:focus-visible {
+  box-shadow: 0 0 18px rgba(0, 245, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.marketplaceSlider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 6px 2px 12px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.marketplaceSlide {
+  flex: 0 0 260px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+  .marketplaceHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .marketplaceSlide {
+    flex-basis: 220px;
+  }
 }
 
 .card {
