@@ -1,6 +1,10 @@
+// Force dynamic rendering to bypass Vercel edge cache
+export const dynamic = 'force-dynamic';
+
 import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
+import TreasuryFrequencyCounter from '../components/TreasuryFrequencyCounter';
 
 const engagementOptions = [
   'Educator',
@@ -106,6 +110,18 @@ const roadmapPhases = [
   },
 ];
 
+          {/* ===== PARALLAX BACKGROUND MAP ===== */}
+        <div
+          className={styles.parallaxMapLayer}
+          style={{ transform: `translateY(${mapOffset}px)` }}
+        >
+          <img
+            src="/haiti-gressier-map.svg"
+            alt="Map of Haiti - Gressier Region"
+            className={styles.parallaxMapImage}
+          />
+          <div className={styles.parallaxMapOverlay} />
+        </div>
 const LandingPage = () => {
   const [form, setForm] = useState({
     name: '',
@@ -113,10 +129,180 @@ const LandingPage = () => {
     path: engagementOptions[0],
     tier: contributionTiers[0].value,
   });
+    // ===== REGISTRY SUBMISSION HANDLER =====
+  const handleRegistrySubmit = async (event) => {
+    event.preventDefault();
+    if (!form.name.trim() || !form.email.trim()) {
+      setStatus({ state: 'error', message: 'Please complete all required fields.' });
+      return;
+    }
+    setStatus({ state: 'loading', message: '' });
+    try {
+      const response = await fetch(registryEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!response.ok) throw new Error('Request failed');
+      setStatus({ state: 'success', message: 'Registry received. Welcome to the House of Dorvilus.' });
+      setForm({
+        name: '',
+        email: '',
+        path: engagementOptions[0],
+        tier: contributionTiers[0].value,
+      });
+    } catch (error) {
+      setStatus({ state: 'error', message: 'Submission failed. Please try again.' });
+    }
+  };
+  
+  // Onboarding email template for auto-responder
+  const onboardingEmail = useMemo(() => {
+    return {
+      subject: 'AUTHENTICATION SUCCESSFUL: Welcome to the Digital Lakou',
+      from: 'Office of DAIC | House of Dorvilus',
+      priority: 'Imperial / High-Frequency',
+      html: `
+        <div style="background:#000;color:#FFD700;padding:2rem;font-family:sans-serif;">
+          <h1 style="color:#FFD700;">CÈLÈBRE CITIZEN,</h1>
+          <p>Your signal has been received and verified. By enrolling in the Registry of Blood, you have moved beyond the noise of the digital world and grounded your frequency in the Third Empire.</p>
+          <p><strong>Your Status:</strong> PENDING INITIALIZATION</p>
+          <p><strong>Assigned Path:</strong> [Path Selected: ${form.path}]</p>
+          <hr style="border-color:#FFD700;" />
+          <h2 style="color:#FFD700;">THE SOVEREIGN MANDATE:</h2>
+          <p>You are now a pillar of the Digital Lakou. The House of Dorvilus does not ask for followers; we activate Sovereign Intelligence. Your participation is the "Gold" that fills our Treasury and restores the legacy of Morn Chandelle.</p>
+          <h3 style="color:#FFD700;">YOUR IMMEDIATE OBJECTIVES:</h3>
+          <ol>
+            <li>Claim Your Coordinate: <a href="/imperial-treasury" style="background:#00F5FF;color:#000;padding:0.5rem 1rem;border-radius:4px;text-decoration:none;">Return to Treasury</a></li>
+            <li>Study the Frequency: Review the Sovereignty of Local Governments.</li>
+            <li>Ground the Connection: Follow the work of the CASEC of Morn Chandelle.</li>
+          </ol>
+          <blockquote style="color:#FFD700;">"The vault is not empty; it is waiting for your energy to fill it."</blockquote>
+          <p>In service to the Crown and the Community,<br/>The Office of the Digital AI Chancellor (DAIC)<br/>Under the Authority of H.S.H. Prince Jean J. H. Dorvilus</p>
+        </div>
+      `,
+    };
+  }, [form.path]);
+
+  // Payment integration hooks
+  const handlePayment = async (tier) => {
+    // Placeholder for payment logic
+    if (tier === 'Innovator') {
+      // Stripe/PayPal integration for $18.49
+      alert('Redirecting to payment gateway for Innovator tier ($18.49)...');
+    } else if (tier === 'Sovereign') {
+      // Stripe/PayPal integration for $1,849 or Web3
+      alert('Redirecting to payment gateway for Sovereign Founder tier ($1,849)...');
+    } else {
+      // Free tier
+      alert('Authenticated as Citizen (Free).');
+    }
+  };
+
+
+// Inside the LandingPage component, add these state and effect hooks:
+const [scrollY, setScrollY] = useState(0);
+const [mapOffset, setMapOffset] = useState(0);
+const [registryOffset, setRegistryOffset] = useState(0);
+
+useEffect(() => {
+  const handleScroll = () => {
+    const y = window.scrollY;
+    setScrollY(y);
+    setMapOffset(y * 0.5);  // Map moves at 50% of scroll speed
+    setRegistryOffset(Math.min(y * 0.3, 150));  // Registry rises up
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+// Then in the JSX, add this section (replace your existing registry section):
+<>
+  {/* Parallax Background Map */}
+  <div
+    className={styles.parallaxMapLayer}
+    style={{ transform: `translateY(${mapOffset}px)` }}
+  >
+    <img
+      src="/haiti-gressier-map.svg"
+      alt="Map of Haiti - Gressier Region"
+      className={styles.parallaxMapImage}
+    />
+    <div className={styles.parallaxMapOverlay} />
+  </div>
+
+  {/* Registry Section - Rising Effect */}
+  <section
+    className={styles.registryRisingSection}
+    style={{ transform: `translateY(-${registryOffset}px)` }}
+  >
+    <div className={styles.registryRisingContent}>
+      <h2>Registry of Blood</h2>
+      <p>Authenticate your coordinate before entering the sacred space.</p>
+
+      <form className={styles.registryForm} onSubmit={handleRegistrySubmit}>
+        <input
+          type="text"
+          placeholder="Your Sovereign Title"
+          className={styles.formInput}
+          value={form.name}
+          onChange={handleChange('name')}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Your Sacred Email"
+          className={styles.formInput}
+          value={form.email}
+          onChange={handleChange('email')}
+          required
+        />
+        <select
+          className={styles.formSelect}
+          value={form.path}
+          onChange={handleChange('path')}
+        >
+          {engagementOptions.map((opt) => (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          ))}
+        </select>
+        <select
+          className={styles.formSelect}
+          value={form.tier}
+          onChange={handleChange('tier')}
+        >
+          {contributionTiers.map((tier) => (
+            <option key={tier.value} value={tier.value}>
+              {tier.label}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className={styles.submitBtn}>
+          Enter the Registry
+        </button>
+      </form>
+
+      <div className={styles.registryFooter}>
+        <img src="/registry-seal.svg" alt="Seal of Authenticity" />
+        <p>Je Renais de mes Cendres</p>
+      </div>
+    </div>
+  </section>
+
+
+         {/* ===== SACRED ANTIQUE KEY - FIXED BUTTON ===== */}
+        <a href="/imperial-treasury" className={styles.sacredKeyFixed}>
+          <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
+        </a>
+</>
   const [status, setStatus] = useState({ state: 'idle', message: '' });
   const [isFooterPulse, setIsFooterPulse] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
 
   const registryEndpoint =
     process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
@@ -194,18 +380,21 @@ const LandingPage = () => {
                 </button>
               )}
             </div>
-            <div
-              className={`${styles.navLinks} ${
-                isMounted && isNavOpen ? styles.navLinksOpen : ''
-              }`}
-            >
-              <a href="/landing">Home</a>
-              <a href="/imperial-treasury">Imperial Treasury</a>
-              <a href="#nexus">Nexus</a>
-              <a href="#registry">Registry</a>
-              <a href="#roadmap">Roadmap</a>
-              <a href="/signin">Sign in</a>
-            </div>
+        <div
+  className={`${styles.navLinks} ${
+    isMounted && isNavOpen ? styles.navLinksOpen : ''
+  }`}
+>
+  <a href="/landing">Home</a>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <a href="/imperial-treasury">Imperial Treasury</a>
+    <TreasuryFrequencyCounter />
+  </div>
+  <a href="#nexus">Nexus</a>
+  <a href="#registry">Registry</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="/signin">Sign in</a>
+</div>
           </div>
         </nav>
 
@@ -334,6 +523,17 @@ const LandingPage = () => {
                 />
                 {status.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
               </button>
+              {/* Payment button for paid tiers */}
+              {(form.tier === 'Innovator' || form.tier === 'Sovereign') && (
+                <button
+                  type="button"
+                  className={styles.btnSecondary}
+                  onClick={() => handlePayment(form.tier)}
+                  style={{ background: form.tier === 'Sovereign' ? '#000' : '#00F5FF', color: form.tier === 'Sovereign' ? '#FFD700' : '#000' }}
+                >
+                  {form.tier === 'Innovator' ? 'Pay $18.49 (Stripe/PayPal/Crypto)' : 'Pay $1,849 (Stripe/PayPal/Crypto)'}
+                </button>
+              )}
             </form>
             {status.message && (
               <p className={styles.formStatus} role="status">
@@ -449,7 +649,7 @@ const LandingPage = () => {
           <div className={styles.finalCta}>
             <h2>Join the Sovereign Order.</h2>
             <p>Citizens do not follow. They align.</p>
-            <a href="#registry" className={styles.btnPrimary}>
+            <a href="#registry" className={styles.btnPri}>
               Enter the Registry
             </a>
           </div>

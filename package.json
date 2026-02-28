@@ -1,40 +1,43 @@
 {
-    "name":  "my-app-next",
-    "version":  "0.1.0",
-    "private":  true,
-    "scripts":  {
-                    "dev":  "powershell -NoProfile -Command \"$devPid = (Get-NetTCPConnection -State Listen -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess); if ($devPid) { Stop-Process -Id $devPid -Force; Start-Sleep -Seconds 1 }; next dev --webpack\"",
-                    "dev:clean":  "powershell -NoProfile -Command \"if (Test-Path .next) { Remove-Item -Recurse -Force .next }\"; next dev --webpack",
-                    "build":  "next build --webpack",
-                    "start":  "next start",
-                    "lint":  "eslint",
-                    "server":  "node server/index.js",
-                    "server:dev":  "node --watch server/index.js",
-                    "backend:dev":  ".\\.venv\\Scripts\\python server/manage.py runserver 8000",
-                    "backend:dev:clean":  "powershell -NoProfile -Command \"$env:PATH = ($env:PATH -split \u0027;\u0027 | Where-Object { $_ -notmatch \u0027Git\\\\usr\\\\bin|Git\\\\mingw64\\\\bin\u0027 }) -join \u0027;\u0027; .\\.venv\\Scripts\\python server/manage.py runserver 8000\""
-                },
-    "dependencies":  {
-                         "bcryptjs":  "^2.4.3",
-                         "cors":  "^2.8.5",
-                         "dotenv":  "^16.4.5",
-                         "helmet":  "^7.1.0",
-                         "jsonwebtoken":  "^9.0.2",
-                         "morgan":  "^1.10.0",
-                         "next":  "^16.1.6",
-                         "nodemailer":  "^6.9.14",
-                         "pg":  "^8.12.0",
-                         "react":  "19.2.3",
-                         "react-dom":  "19.2.3",
-                         "react-icons":  "^5.5.0"
-                     },
-    "devDependencies":  {
-                            "@svgr/webpack":  "^8.1.0",
-                            "@types/node":  "25.2.3",
-                            "@types/react":  "19.2.14",
-                            "autoprefixer":  "^10.4.24",
-                            "eslint":  "^9",
-                            "eslint-config-next":  "16.1.6",
-                            "postcss":  "^8.5.6",
-                            "tailwindcss":  "^3.4.19"
-                        }
+    "name": "my-app-next",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "powershell -NoProfile -Command \"$devPid = (Get-NetTCPConnection -State Listen -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess); if ($devPid) { Stop-Process -Id $devPid -Force; Start-Sleep -Seconds 1 }; next dev --webpack\"",
+        "dev:clean": "powershell -NoProfile -Command \"if (Test-Path .next) { Remove-Item -Recurse -Force .next }\"; next dev --webpack",
+        "build": "next build --webpack",
+        "start": "next start",
+        "lint": "eslint",
+        "server": "node server/index.js",
+        "server:dev": "node --watch server/index.js",
+        "backend:dev": ".\\.venv\\Scripts\\python server/manage.py runserver 8000",
+        "backend:dev:clean": "powershell -NoProfile -Command \"$env:PATH = ($env:PATH -split ';' | Where-Object { $_ -notmatch 'Git\\\\usr\\\\bin|Git\\\\mingw64\\\\bin' }) -join ';'; .\\.venv\\Scripts\\python server/manage.py runserver 8000\""
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "fuse.js": "^7.1.0",
+        "helmet": "^7.1.0",
+        "html2canvas": "^1.4.1",
+        "jsonwebtoken": "^9.0.2",
+        "jspdf": "^4.2.0",
+        "morgan": "^1.10.0",
+        "next": "^16.1.6",
+        "nodemailer": "^6.9.14",
+        "pg": "^8.12.0",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "react-icons": "^5.5.0"
+    },
+    "devDependencies": {
+        "@svgr/webpack": "^8.1.0",
+        "@types/node": "25.2.3",
+        "@types/react": "19.2.14",
+        "autoprefixer": "^10.4.24",
+        "eslint": "^9",
+        "eslint-config-next": "16.1.6",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^3.4.19"
+    }
 }

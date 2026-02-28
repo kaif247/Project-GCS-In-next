@@ -45,6 +45,7 @@ const Feed = () => {
     email: '',
     path: engagementOptions[0],
     tier: contributionTiers[0].value,
+    paymentMethod: 'Stripe',
   });
   const [registryStatus, setRegistryStatus] = useState({ state: 'idle', message: '' });
   const registryEndpoint =
@@ -115,11 +116,23 @@ const Feed = () => {
       });
       if (!response.ok) throw new Error('Request failed');
       setRegistryStatus({ state: 'success', message: 'Registry received. Welcome.' });
+      // Redirect to certificate page if Sovereign Founder
+      if (registryForm.tier === 'Sovereign') {
+        router.push({
+          pathname: '/founder-certificate',
+          query: {
+            founderName: registryForm.name,
+            activationDate: new Date().toLocaleDateString(),
+            serialNumber: `HD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+          },
+        });
+      }
       setRegistryForm({
         name: '',
         email: '',
         path: engagementOptions[0],
         tier: contributionTiers[0].value,
+        paymentMethod: 'Stripe',
       });
     } catch (error) {
       setRegistryStatus({ state: 'error', message: 'Submission failed. Please try again.' });
@@ -183,6 +196,21 @@ const Feed = () => {
                 </option>
               ))}
             </select>
+            {/* Payment Method for paid tiers */}
+            {(registryForm.tier === 'Innovator' || registryForm.tier === 'Sovereign') && (
+              <div style={{ margin: '1rem 0' }}>
+                <label htmlFor="payment-method">Payment Method</label>
+                <select
+                  id="payment-method"
+                  value={registryForm.paymentMethod}
+                  onChange={handleRegistryChange('paymentMethod')}
+                >
+                  <option value="Stripe">Stripe</option>
+                  <option value="PayPal">PayPal</option>
+                  <option value="Crypto">Crypto (USDC/ETH)</option>
+                </select>
+              </div>
+            )}
             <button type="submit" className="sovereign-feed-registry__submit">
               <img
                 src="/sacred-antique-key.svg"

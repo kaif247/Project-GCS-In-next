@@ -2,34 +2,16 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ToggleButton from '../components/ToggleButton';
 import AdminPanel from '../components/admin/AdminPanel';
-import {
-  statsSeed,
-  reportsSeed,
-  usersSeed,
-  auditSeed,
-  securitySeed,
-  flagsSeed,
-  announcementsSeed,
-  alertsSeed,
-  policiesSeed,
-  paymentsSeed,
-  usageSeriesSeed,
-} from '../components/admin/adminData';
 
-const loadLocal = (key, fallback) => {
-  if (typeof window === 'undefined') return fallback;
-  try {
-    const stored = window.localStorage.getItem(key);
-    if (!stored) return fallback;
-    return JSON.parse(stored);
-  } catch {
-    return fallback;
-  }
-};
+const API_URL = 'http://localhost:3001';
 
-const saveLocal = (key, value) => {
-  if (typeof window === 'undefined') return;
-  window.localStorage.setItem(key, JSON.stringify(value));
+const fetchData = async (endpoint, method = 'GET', body = null) => {
+  const res = await fetch(`${API_URL}/${endpoint}`, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res.json();
 };
 
 const AdminPage = () => {
@@ -42,40 +24,36 @@ const AdminPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const stats = useMemo(() => statsSeed, []);
-  const payments = useMemo(() => paymentsSeed, []);
-  const usageSeries = useMemo(() => usageSeriesSeed, []);
-  const securityEvents = useMemo(() => securitySeed, []);
-
-  const [reportItems, setReportItems] = useState(() => loadLocal('admin-reports', reportsSeed));
-  const [userItems, setUserItems] = useState(() => loadLocal('admin-users', usersSeed));
-  const [flagItems, setFlagItems] = useState(() => loadLocal('admin-flags', flagsSeed));
-  const [announcementItems, setAnnouncementItems] = useState(() => loadLocal('admin-announcements', announcementsSeed));
-  const [alerts, setAlerts] = useState(() => loadLocal('admin-alerts', alertsSeed));
-  const [policies, setPolicies] = useState(() => loadLocal('admin-policies', policiesSeed));
-  const [incidents, setIncidents] = useState(() => loadLocal('admin-incidents', [
-    { id: 'INC-1', title: 'Login outage', severity: 'High', status: 'Open' },
-  ]));
-  const [broadcasts, setBroadcasts] = useState(() => loadLocal('admin-broadcasts', []));
-  const [auditItems, setAuditItems] = useState(() => loadLocal('admin-audit', auditSeed));
-
-  useEffect(() => saveLocal('admin-reports', reportItems), [reportItems]);
-  useEffect(() => saveLocal('admin-users', userItems), [userItems]);
-  useEffect(() => saveLocal('admin-flags', flagItems), [flagItems]);
-  useEffect(() => saveLocal('admin-announcements', announcementItems), [announcementItems]);
-  useEffect(() => saveLocal('admin-alerts', alerts), [alerts]);
-  useEffect(() => saveLocal('admin-policies', policies), [policies]);
-  useEffect(() => saveLocal('admin-incidents', incidents), [incidents]);
-  useEffect(() => saveLocal('admin-broadcasts', broadcasts), [broadcasts]);
-  useEffect(() => saveLocal('admin-audit', auditItems), [auditItems]);
+  const [stats, setStats] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [usageSeries, setUsageSeries] = useState([]);
+  const [securityEvents, setSecurityEvents] = useState([]);
+  const [reportItems, setReportItems] = useState([]);
+  const [userItems, setUserItems] = useState([]);
+  const [flagItems, setFlagItems] = useState([]);
+  const [announcementItems, setAnnouncementItems] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [policies, setPolicies] = useState([]);
+  const [incidents, setIncidents] = useState([]);
+  const [broadcasts, setBroadcasts] = useState([]);
+  const [auditItems, setAuditItems] = useState([]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const authed = window.localStorage.getItem('admin-auth') === 'true';
-    if (!authed) {
-      router.replace('/admin/login');
-      return;
-    }
+    fetchData('users').then(setUserItems);
+    fetchData('reports').then(setReportItems);
+    fetchData('flags').then(setFlagItems);
+    fetchData('announcements').then(setAnnouncementItems);
+    fetchData('alerts').then(setAlerts);
+    fetchData('policies').then(setPolicies);
+    fetchData('incidents').then(setIncidents);
+    fetchData('audit').then(setAuditItems);
+    fetchData('payments').then(setPayments);
+    fetchData('usage-series').then(setUsageSeries);
+    // Add securityEvents fetch if backend endpoint exists
+  }, []);
+
+  useEffect(() => {
+    // Simple auth check (replace with real backend call if needed)
     setIsReady(true);
   }, [router]);
 
@@ -108,17 +86,18 @@ const AdminPage = () => {
     return null;
   }
 
-  const addAudit = (action) => {
+  const addAudit = async (action) => {
     const entry = {
       id: `A-${Date.now()}`,
       actor: 'Admin - Kaif',
       action,
       time: 'Just now',
     };
-    setAuditItems((prev) => [entry, ...prev]);
+    await fetchData('audit', 'POST', entry);
+    fetchData('audit').then(setAuditItems);
   };
 
-  const handleSavePanel = () => {
+  const handleSavePanel = async () => {
     if (!panel) return;
     if (panel.type === 'create-alert') {
       const next = {
@@ -127,7 +106,8 @@ const AdminPage = () => {
         severity: panel.severity || 'Low',
         message: panel.message || '',
       };
-      setAlerts((prev) => [next, ...prev]);
+      await fetchData('alerts', 'POST', next);
+      fetchData('alerts').then(setAlerts);
       addAudit(`Created alert: ${next.title}`);
     }
     if (panel.type === 'new-policy') {
@@ -137,7 +117,8 @@ const AdminPage = () => {
         category: panel.category || 'Safety',
         summary: panel.summary || '',
       };
-      setPolicies((prev) => [next, ...prev]);
+      await fetchData('policies', 'POST', next);
+      fetchData('policies').then(setPolicies);
       addAudit(`Created policy: ${next.title}`);
     }
     if (panel.type === 'new-announcement') {
@@ -146,7 +127,8 @@ const AdminPage = () => {
         title: panel.title || 'Announcement',
         detail: panel.detail || '',
       };
-      setAnnouncementItems((prev) => [next, ...prev]);
+      await fetchData('announcements', 'POST', next);
+      fetchData('announcements').then(setAnnouncementItems);
       addAudit(`Published announcement: ${next.title}`);
     }
     if (panel.type === 'incident-room' && panel.incidentTitle) {
@@ -156,24 +138,22 @@ const AdminPage = () => {
         severity: panel.incidentSeverity || 'Low',
         status: 'Open',
       };
-      setIncidents((prev) => [next, ...prev]);
+      await fetchData('incidents', 'POST', next);
+      fetchData('incidents').then(setIncidents);
       addAudit(`Opened incident: ${next.title}`);
     }
     if (panel.type === 'suspend-user') {
-      setUserItems((prev) =>
-        prev.map((item) =>
-          item.id === panel.userId ? { ...item, status: 'Suspended' } : item
-        )
-      );
+      await fetchData(`users/${panel.userId}`, 'PUT', { status: 'Suspended' });
+      fetchData('users').then(setUserItems);
       addAudit(`Suspended user ${panel.userId}`);
     }
     if (panel.type === 'block-user') {
-      setUserItems((prev) =>
-        prev.map((item) =>
-          item.name === panel.userName ? { ...item, status: 'Suspended' } : item
-        )
-      );
-      addAudit(`Blocked user ${panel.userName}`);
+      const user = userItems.find(u => u.name === panel.userName);
+      if (user) {
+        await fetchData(`users/${user.id}`, 'PUT', { status: 'Suspended' });
+        fetchData('users').then(setUserItems);
+        addAudit(`Blocked user ${panel.userName}`);
+      }
     }
     if (panel.type === 'send-broadcast') {
       if (broadcastDraft.title || broadcastDraft.message) {
@@ -183,17 +163,17 @@ const AdminPage = () => {
           message: broadcastDraft.message || '',
           time: 'Just now',
         };
-        setBroadcasts((prev) => [next, ...prev]);
+        setBroadcasts((prev) => [next, ...prev]); // Local only, backend endpoint can be added
         setBroadcastDraft({ title: '', message: '' });
         addAudit(`Sent broadcast: ${next.title}`);
       }
     }
     if (panel.type === 'assign-reports' && panel.owner) {
-      setReportItems((prev) =>
-        prev.map((item) =>
-          item.status === 'Open' ? { ...item, owner: panel.owner } : item
-        )
-      );
+      const openReports = reportItems.filter(item => item.status === 'Open');
+      for (const report of openReports) {
+        await fetchData(`reports/${report.id}`, 'PUT', { owner: panel.owner });
+      }
+      fetchData('reports').then(setReportItems);
       addAudit(`Assigned open reports to ${panel.owner}`);
     }
     setPanel(null);

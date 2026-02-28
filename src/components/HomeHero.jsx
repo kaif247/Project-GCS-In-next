@@ -19,10 +19,19 @@ const HomeHero = forwardRef((props, ref) => {
             Authority and a living treasury.
           </p>
           <div className={styles.heroActions}>
-            <a href="/landing#registry" className={styles.ctaPrimary}>
+            <a
+              href="/landing#registry"
+              className={styles.ctaPrimary}
+              style={{ color: '#111111', background: 'linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C)' }}
+            >
               Authenticate Bloodline
             </a>
-            <a href="/imperial-treasury" className={styles.ctaGhost}>
+            
+
+            <a
+              href="/imperial-treasury"
+              className={styles.ctaGhost}
+            >
               Enter the Treasury
             </a>
           </div>

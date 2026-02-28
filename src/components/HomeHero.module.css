@@ -84,9 +84,22 @@
 }
 
 .ctaPrimary {
-  background: var(--primary);
-  color: #0a0a0a;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  color: #111111;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  font-weight: 600;
+  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ctaPrimary {
+    color: #111111;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+    border: 2px solid rgba(212, 175, 55, 0.7);
+    filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.7));
+  }
 }
 
 .ctaGhost {
@@ -95,10 +108,15 @@
 }
 
 .ctaPrimary:hover,
-.ctaGhost:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
-}
+  .ctaGhost:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+  }
+  .ctaPrimary:hover {
+    box-shadow: 0 0 18px rgba(0, 245, 255, 0.55);
+    transform: translateY(-1px);
+  }
+
 
 .vaultBar {
   margin-top: 12px;

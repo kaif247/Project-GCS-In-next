@@ -238,7 +238,33 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+.btnPrimary{
+}
 
+@media (prefers-color-scheme: dark) {
+  .btnPrimary {
+    background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+    color: black !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.55);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.55);
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+  }
+  .btnPrimary:hover {
+    color: black !important;
+    box-shadow: 0 0 18px rgba(0, 245, 255, 0.55);
+    transform: translateY(-1px);
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  color: black;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  font-weight: 600;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
 .btnPrimary,
 .btnSecondary {
   padding: 12px 20px;
@@ -246,7 +272,7 @@
   font-weight: 600;
   border: 1px solid rgba(212, 175, 55, 0.4);
   background: var(--imperial-gold);
-  color: #0a0a0a;
+  color: black;
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -273,7 +299,234 @@
   filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.65));
   animation: keyPulse 4s ease-in-out infinite;
 }
+/* ===== PARALLAX LANDING PAGE ===== */
 
+.parallaxMapLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.parallaxMapImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+.parallaxMapOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+.registryRisingSection {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  will-change: transform;
+}
+
+.registryRisingContent {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 20px;
+  padding: 48px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow:
+    0 0 40px rgba(0, 245, 255, 0.2),
+    inset 0 0 40px rgba(212, 175, 55, 0.1);
+}
+
+.registryRisingContent h2 {
+  font-size: 32px;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.registryRisingContent > p {
+  color: #a8a8a8;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.registryForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.formInput,
+.formSelect {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  color: #f5f5f5;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  outline: none;
+  background: rgba(0, 245, 255, 0.1);
+  border-color: rgba(0, 245, 255, 0.6);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.3);
+}
+
+.formInput::placeholder {
+  color: #888;
+}
+
+.submitBtn {
+  padding: 14px;
+  background: linear-gradient(135deg, #d4af37, #00f5ff);
+  border: none;
+  border-radius: 8px;
+  color: #0a0a0a;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 13px;
+}
+
+.submitBtn:hover {
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.6), 0 0 12px rgba(0, 245, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.registryFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.registryFooter img {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+}
+
+.registryFooter p {
+  color: #c9bd98;
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0.1em;
+}
+
+/* Sacred Antique Key - Fixed Bottom Right */
+.sacredKeyFixed {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #d4af37, #00f5ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  box-shadow:
+    0 8px 32px rgba(212, 175, 55, 0.5),
+    0 0 24px rgba(0, 245, 255, 0.4);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  animation: keyFloat 3s ease-in-out infinite;
+}
+
+.sacredKeyFixed:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 12px 48px rgba(212, 175, 55, 0.7),
+    0 0 32px rgba(0, 245, 255, 0.6);
+}
+
+.sacredKeyFixed img {
+  width: 36px;
+  height: 36px;
+  filter: brightness(1.2);
+}
+
+@keyframes keyFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .registryRisingSection {
+    min-height: 80vh;
+    padding: 40px 16px;
+  }
+
+  .registryRisingContent {
+    padding: 32px 20px;
+    max-width: 100%;
+  }
+
+  .registryRisingContent h2 {
+    font-size: 24px;
+  }
+
+  .sacredKeyFixed {
+    width: 60px;
+    height: 60px;
+    bottom: 24px;
+    right: 24px;
+  }
+
+  .sacredKeyFixed img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registryRisingContent {
+    padding: 24px 16px;
+    border-radius: 12px;
+  }
+
+  .registryRisingContent h2 {
+    font-size: 20px;
+  }
+
+  .sacredKeyFixed {
+    width: 56px;
+    height: 56px;
+    bottom: 16px;
+    right: 16px;
+  }
+}
 @keyframes keyPulse {
   0%,
   100% {
@@ -288,8 +541,40 @@
 .btnSecondary:hover {
   box-shadow: 0 0 18px rgba(0, 245, 255, 0.55);
   transform: translateY(-1px);
+  color: white;
 }
 
+@media (prefers-color-scheme: dark) {
+  .btnPrimary:hover {
+    color: black !important;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .btnPri:hover {
+    color: black !important;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .btnPri {
+    color: black !important;
+  }
+}
+.btnPri{
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    text-align: center;
+     padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  background: var(--imperial-gold);
+  color: black;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
 .sealRow {
   display: flex;
   align-items: center;
@@ -299,6 +584,8 @@
   margin-top: 8px;
   padding: 8px 0;
 }
+
+
 
 .sealLink {
   color: inherit;
@@ -1017,3 +1304,97 @@
     text-align: center;
     width: 100%;
   }
+/* ===== PARALLAX LANDING PAGE STYLES ===== */
+
+.parallaxMapLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.parallaxMapImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+.parallaxMapOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+/* Sacred Antique Key - Fixed Button */
+.sacredKeyFixed {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #d4af37, #00f5ff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  box-shadow:
+    0 8px 32px rgba(212, 175, 55, 0.5),
+    0 0 24px rgba(0, 245, 255, 0.4);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  text-decoration: none;
+  animation: keyFloat 3s ease-in-out infinite;
+}
+
+.sacredKeyFixed:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 12px 48px rgba(212, 175, 55, 0.7),
+    0 0 32px rgba(0, 245, 255, 0.6);
+}
+
+.sacredKeyFixed img {
+  width: 36px;
+  height: 36px;
+  filter: brightness(1.2);
+}
+
+@keyframes keyFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .sacredKeyFixed {
+    width: 60px;
+    height: 60px;
+    bottom: 24px;
+    right: 24px;
+  }
+
+  .sacredKeyFixed img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sacredKeyFixed {
+    width: 56px;
+    height: 56px;
+    bottom: 16px;
+    right: 16px;
+  }
+}

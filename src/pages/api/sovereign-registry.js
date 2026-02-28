@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import { generateFounderSerial } from '../../utils/founderSerial';
+// import { createFounderCertificatePDF } from '../../utils/certificateGenerator'; // Placeholder for PDF logic
 
 const recipient = 'empirehaiti3@gmail.com';
 
@@ -14,6 +16,14 @@ export default async function handler(req, res) {
   }
 
   try {
+    // If Sovereign Founder, generate serial and (optionally) certificate
+    let founderSerial = null;
+    let certificateBuffer = null;
+    if (tier === 'Sovereign') {
+      founderSerial = generateFounderSerial();
+      // certificateBuffer = await createFounderCertificatePDF({ founderName: name, activationDate: new Date().toLocaleDateString(), serialNumber: founderSerial });
+      // TODO: Implement PDF/WebP certificate generation and attach to email
+    }
     const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM } = process.env;
     if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
       return res.status(500).json({
@@ -35,14 +45,16 @@ export default async function handler(req, res) {
       from: SMTP_FROM || 'Sovereign Registry <no-reply@dorvilus.com>',
       to: recipient,
       subject: `Sovereign Registry - ${name}`,
-      text: `Full Name: ${name}\nEmail: ${email}\nEngagement Path: ${path}\nTier: ${tier}`,
+      text: `Full Name: ${name}\nEmail: ${email}\nEngagement Path: ${path}\nTier: ${tier}\nSerial: ${founderSerial || ''}`,
       html: `
         <h2>New Sovereign Registry Submission</h2>
         <p><strong>Full Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Engagement Path:</strong> ${path}</p>
         <p><strong>Tier:</strong> ${tier}</p>
+        ${founderSerial ? `<p><strong>Founder Serial:</strong> ${founderSerial}</p>` : ''}
       `,
+      // attachments: founderSerial && certificateBuffer ? [{ filename: `FounderCertificate-${founderSerial}.pdf`, content: certificateBuffer }] : [],
     });
 
     return res.status(200).json({ ok: true });

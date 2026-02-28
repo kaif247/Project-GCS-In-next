@@ -177,7 +177,7 @@
     filter: drop-shadow(0 0 14px rgba(0, 245, 255, 0.7));
   }
 }
-
+sovereign-feed-registry__badge
 .posts-list {
   display: flex;
   flex-direction: column;
