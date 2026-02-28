@@ -110,53 +110,26 @@ const roadmapPhases = [
   },
 ];
 
-          {/* ===== PARALLAX BACKGROUND MAP ===== */}
-        <div
-          className={styles.parallaxMapLayer}
-          style={{ transform: `translateY(${mapOffset}px)` }}
-        >
-          <img
-            src="/haiti-gressier-map.svg"
-            alt="Map of Haiti - Gressier Region"
-            className={styles.parallaxMapImage}
-          />
-          <div className={styles.parallaxMapOverlay} />
-        </div>
 const LandingPage = () => {
+  // ===== ALL STATE DECLARATIONS FIRST =====
   const [form, setForm] = useState({
     name: '',
     email: '',
     path: engagementOptions[0],
     tier: contributionTiers[0].value,
   });
-    // ===== REGISTRY SUBMISSION HANDLER =====
-  const handleRegistrySubmit = async (event) => {
-    event.preventDefault();
-    if (!form.name.trim() || !form.email.trim()) {
-      setStatus({ state: 'error', message: 'Please complete all required fields.' });
-      return;
-    }
-    setStatus({ state: 'loading', message: '' });
-    try {
-      const response = await fetch(registryEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      if (!response.ok) throw new Error('Request failed');
-      setStatus({ state: 'success', message: 'Registry received. Welcome to the House of Dorvilus.' });
-      setForm({
-        name: '',
-        email: '',
-        path: engagementOptions[0],
-        tier: contributionTiers[0].value,
-      });
-    } catch (error) {
-      setStatus({ state: 'error', message: 'Submission failed. Please try again.' });
-    }
-  };
-  
-  // Onboarding email template for auto-responder
+
+  const [status, setStatus] = useState({ state: 'idle', message: '' });
+  const [isFooterPulse, setIsFooterPulse] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // ===== PARALLAX STATES =====
+  const [scrollY, setScrollY] = useState(0);
+  const [mapOffset, setMapOffset] = useState(0);
+  const [registryOffset, setRegistryOffset] = useState(0);
+
+  // ===== MEMOS AND HOOKS =====
   const onboardingEmail = useMemo(() => {
     return {
       subject: 'AUTHENTICATION SUCCESSFUL: Welcome to the Digital Lakou',
@@ -184,126 +157,6 @@ const LandingPage = () => {
     };
   }, [form.path]);
 
-  // Payment integration hooks
-  const handlePayment = async (tier) => {
-    // Placeholder for payment logic
-    if (tier === 'Innovator') {
-      // Stripe/PayPal integration for $18.49
-      alert('Redirecting to payment gateway for Innovator tier ($18.49)...');
-    } else if (tier === 'Sovereign') {
-      // Stripe/PayPal integration for $1,849 or Web3
-      alert('Redirecting to payment gateway for Sovereign Founder tier ($1,849)...');
-    } else {
-      // Free tier
-      alert('Authenticated as Citizen (Free).');
-    }
-  };
-
-
-// Inside the LandingPage component, add these state and effect hooks:
-const [scrollY, setScrollY] = useState(0);
-const [mapOffset, setMapOffset] = useState(0);
-const [registryOffset, setRegistryOffset] = useState(0);
-
-useEffect(() => {
-  const handleScroll = () => {
-    const y = window.scrollY;
-    setScrollY(y);
-    setMapOffset(y * 0.5);  // Map moves at 50% of scroll speed
-    setRegistryOffset(Math.min(y * 0.3, 150));  // Registry rises up
-  };
-
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
-
-// Then in the JSX, add this section (replace your existing registry section):
-<>
-  {/* Parallax Background Map */}
-  <div
-    className={styles.parallaxMapLayer}
-    style={{ transform: `translateY(${mapOffset}px)` }}
-  >
-    <img
-      src="/haiti-gressier-map.svg"
-      alt="Map of Haiti - Gressier Region"
-      className={styles.parallaxMapImage}
-    />
-    <div className={styles.parallaxMapOverlay} />
-  </div>
-
-  {/* Registry Section - Rising Effect */}
-  <section
-    className={styles.registryRisingSection}
-    style={{ transform: `translateY(-${registryOffset}px)` }}
-  >
-    <div className={styles.registryRisingContent}>
-      <h2>Registry of Blood</h2>
-      <p>Authenticate your coordinate before entering the sacred space.</p>
-
-      <form className={styles.registryForm} onSubmit={handleRegistrySubmit}>
-        <input
-          type="text"
-          placeholder="Your Sovereign Title"
-          className={styles.formInput}
-          value={form.name}
-          onChange={handleChange('name')}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Your Sacred Email"
-          className={styles.formInput}
-          value={form.email}
-          onChange={handleChange('email')}
-          required
-        />
-        <select
-          className={styles.formSelect}
-          value={form.path}
-          onChange={handleChange('path')}
-        >
-          {engagementOptions.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-        <select
-          className={styles.formSelect}
-          value={form.tier}
-          onChange={handleChange('tier')}
-        >
-          {contributionTiers.map((tier) => (
-            <option key={tier.value} value={tier.value}>
-              {tier.label}
-            </option>
-          ))}
-        </select>
-        <button type="submit" className={styles.submitBtn}>
-          Enter the Registry
-        </button>
-      </form>
-
-      <div className={styles.registryFooter}>
-        <img src="/registry-seal.svg" alt="Seal of Authenticity" />
-        <p>Je Renais de mes Cendres</p>
-      </div>
-    </div>
-  </section>
-
-
-         {/* ===== SACRED ANTIQUE KEY - FIXED BUTTON ===== */}
-        <a href="/imperial-treasury" className={styles.sacredKeyFixed}>
-          <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
-        </a>
-</>
-  const [status, setStatus] = useState({ state: 'idle', message: '' });
-  const [isFooterPulse, setIsFooterPulse] = useState(false);
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-
   const registryEndpoint =
     process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
 
@@ -316,13 +169,21 @@ useEffect(() => {
   const selectedTier =
     contributionTiers.find((tier) => tier.value === form.tier) || contributionTiers[0];
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // ===== PAYMENT HANDLER =====
+  const handlePayment = async (tier) => {
+    if (tier === 'Innovator') {
+      alert('Redirecting to payment gateway for Innovator tier ($18.49)...');
+    } else if (tier === 'Sovereign') {
+      alert('Redirecting to payment gateway for Sovereign Founder tier ($1,849)...');
+    } else {
+      alert('Authenticated as Citizen (Free).');
+    }
+  };
 
-  const handleSubmit = async (event) => {
+  // ===== REGISTRY SUBMISSION HANDLER =====
+  const handleRegistrySubmit = async (event) => {
     event.preventDefault();
-    if (!canSubmit) {
+    if (!form.name.trim() || !form.email.trim()) {
       setStatus({ state: 'error', message: 'Please complete all required fields.' });
       return;
     }
@@ -334,7 +195,7 @@ useEffect(() => {
         body: JSON.stringify(form),
       });
       if (!response.ok) throw new Error('Request failed');
-      setStatus({ state: 'success', message: 'Registry received. Welcome.' });
+      setStatus({ state: 'success', message: 'Registry received. Welcome to the House of Dorvilus.' });
       setForm({
         name: '',
         email: '',
@@ -346,8 +207,27 @@ useEffect(() => {
     }
   };
 
+  // ===== USEEFFECT HOOKS =====
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // ===== PARALLAX SCROLL EFFECT =====
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setScrollY(y);
+      setMapOffset(y * 0.5);  // Map moves at 50% of scroll speed
+      setRegistryOffset(Math.min(y * 0.3, 150));  // Registry rises up
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const vaultPercent = 33;
 
+  // ===== RETURN JSX =====
   return (
     <>
       <Head>
@@ -360,6 +240,19 @@ useEffect(() => {
         <link rel="icon" href="/w%20(1).ico" />
       </Head>
       <div className={styles.page}>
+        {/* ===== PARALLAX BACKGROUND MAP ===== */}
+        <div
+          className={styles.parallaxMapLayer}
+          style={{ transform: `translateY(${mapOffset}px)` }}
+        >
+          <img
+            src="/haiti-gressier-map.svg"
+            alt="Map of Haiti - Gressier Region"
+            className={styles.parallaxMapImage}
+          />
+          <div className={styles.parallaxMapOverlay} />
+        </div>
+
         <nav className={styles.nav}>
           <div className={styles.navInner}>
             <div className={styles.navTop}>
@@ -380,21 +273,21 @@ useEffect(() => {
                 </button>
               )}
             </div>
-        <div
-  className={`${styles.navLinks} ${
-    isMounted && isNavOpen ? styles.navLinksOpen : ''
-  }`}
->
-  <a href="/landing">Home</a>
-  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-    <a href="/imperial-treasury">Imperial Treasury</a>
-    <TreasuryFrequencyCounter />
-  </div>
-  <a href="#nexus">Nexus</a>
-  <a href="#registry">Registry</a>
-  <a href="#roadmap">Roadmap</a>
-  <a href="/signin">Sign in</a>
-</div>
+            <div
+              className={`${styles.navLinks} ${
+                isMounted && isNavOpen ? styles.navLinksOpen : ''
+              }`}
+            >
+              <a href="/landing">Home</a>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <a href="/imperial-treasury">Imperial Treasury</a>
+                <TreasuryFrequencyCounter />
+              </div>
+              <a href="#nexus">Nexus</a>
+              <a href="#registry">Registry</a>
+              <a href="#roadmap">Roadmap</a>
+              <a href="/signin">Sign in</a>
+            </div>
           </div>
         </nav>
 
@@ -471,7 +364,7 @@ useEffect(() => {
             <p className={styles.sectionLead}>
               Citizens do not follow. They align their frequency.
             </p>
-            <form className={styles.registryForm} onSubmit={handleSubmit}>
+            <form className={styles.registryForm} onSubmit={handleRegistrySubmit}>
               <label className={styles.srOnly} htmlFor="sovereign-name">
                 Full Name
               </label>
@@ -654,6 +547,11 @@ useEffect(() => {
             </a>
           </div>
         </section>
+
+        {/* ===== SACRED ANTIQUE KEY - FIXED BUTTON ===== */}
+        <a href="/imperial-treasury" className={styles.sacredKeyFixed}>
+          <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
+        </a>
 
         <footer className={`${styles.footer} ${isFooterPulse ? styles.footerPulse : ''}`}>
           <div className={styles.footerGrid}>
