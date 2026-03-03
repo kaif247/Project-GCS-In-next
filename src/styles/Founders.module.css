@@ -25,7 +25,7 @@
   max-width: 900px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
 }
 
@@ -33,6 +33,53 @@
   border-radius: 14px;
   border: 1px solid rgba(212, 175, 55, 0.3);
   padding: 16px;
-  text-align: center;
+  text-align: left;
   background: rgba(0, 0, 0, 0.6);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  color: #ffd56b;
+}
+
+.card p {
+  margin: 4px 0;
+  color: #d5c5a1;
+  font-size: 0.9rem;
+}
+
+.locked {
+  max-width: 680px;
+  margin: 24px auto;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  padding: 20px;
+  text-align: center;
+}
+
+.locked h2 {
+  margin: 0 0 10px;
+  color: #ffd56b;
+}
+
+.locked p {
+  margin: 0 0 14px;
+  color: #d5c5a1;
+}
+
+.cta {
+  display: inline-block;
+  color: #0a0a0a;
+  background: #ffd56b;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 10px 16px;
+}
+
+.state {
+  max-width: 900px;
+  margin: 8px auto 20px;
+  color: #d5c5a1;
 }

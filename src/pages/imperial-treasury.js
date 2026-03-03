@@ -5,6 +5,7 @@ import styles from '../styles/Treasury.module.css';
 import InnovatorPortal from '../components/InnovatorPortal';
 import MarketplaceGrid from '../components/Marketplace/MarketplaceGrid';
 import MarketplaceCard from '../components/Marketplace/MarketplaceCard';
+import FounderActivationAnimation from '../components/FounderActivationAnimation';
 import { MarketplaceContext } from '../context/MarketplaceContext';
 
 const treasuryAssets = [
@@ -66,7 +67,6 @@ const ImperialTreasury = () => {
 
   const handleFounderActivation = () => {
     setShowFounderMoment(true);
-    setTimeout(() => setShowFounderMoment(false), 3000);
   };
 
   return (
@@ -194,14 +194,10 @@ const ImperialTreasury = () => {
           </div>
         )}
 
-        {showFounderMoment && (
-          <div className={styles.founderOverlay} role="dialog" aria-modal="true">
-            <div className={styles.founderCard}>
-              <div className={styles.founderKey} aria-hidden="true" />
-              <p>Sovereign Founder activation confirmed.</p>
-            </div>
-          </div>
-        )}
+        <FounderActivationAnimation
+          show={showFounderMoment}
+          onComplete={() => setShowFounderMoment(false)}
+        />
       </main>
     </>
   );

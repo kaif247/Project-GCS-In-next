@@ -9,29 +9,34 @@ import useFeedPreferences from '../hooks/useFeedPreferences';
 import useLocalPosts from '../hooks/useLocalPosts';
 
 const engagementOptions = [
-  'Educator',
   'Protector',
-  'Innovator',
-  'Community Architect',
+  'Architect / Builder',
+  'Leader / Founder',
 ];
 
 const contributionTiers = [
   {
-    label: 'Citizen (Free)',
+    label: 'The Citizen (FREE - Data Only)',
     value: 'Citizen',
-    buttonText: 'Authenticate Bloodline (Free)',
+    buttonText: 'Authenticate Bloodline (Data Only)',
   },
   {
-    label: 'Innovator ($18.49 / mo)',
+    label: 'The Innovator ($18.49 / Month)',
     value: 'Innovator',
-    buttonText: 'Contribute $18.49 & Activate',
+    buttonText: 'Contribute $18.49 Monthly',
   },
   {
-    label: 'Sovereign Founder ($1,849)',
+    label: 'The Sovereign ($1,849 One-Time)',
     value: 'Sovereign',
-    buttonText: 'Invest $1,849 & Rule',
+    buttonText: 'Contribute $1,849 One-Time',
   },
 ];
+
+const tierToPath = {
+  Citizen: 'Protector',
+  Innovator: 'Architect / Builder',
+  Sovereign: 'Leader / Founder',
+};
 
 
 const Feed = () => {
@@ -99,6 +104,15 @@ const Feed = () => {
     }, [resolvedPosts, prefs]);
   const handleRegistryChange = (field) => (event) => {
     setRegistryForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const handleTierChange = (event) => {
+    const tier = event.target.value;
+    setRegistryForm((prev) => ({
+      ...prev,
+      tier,
+      path: tierToPath[tier] || prev.path,
+    }));
   };
 
   const handleRegistrySubmit = async (event) => {
@@ -188,7 +202,7 @@ const Feed = () => {
             <select
               id="sovereign-tier"
               value={registryForm.tier}
-              onChange={handleRegistryChange('tier')}
+              onChange={handleTierChange}
             >
               {contributionTiers.map((tier) => (
                 <option key={tier.value} value={tier.value}>

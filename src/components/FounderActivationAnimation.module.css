@@ -1,0 +1,48 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sovereignBlack {
+  width: 100vw;
+  height: 100vh;
+  background: #0a0a0a;
+  transition: background 2s;
+}
+.keyWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background: #0a0a0a;
+  animation: fadein 0.5s;
+}
+.keyAnim {
+  width: 230px;
+  height: 230px;
+  animation: spin-anim 3s cubic-bezier(0.7,0,0.3,1) 1;
+  filter: drop-shadow(0 0 32px #FFD70080);
+}
+@keyframes spin-anim {
+  0% { transform: rotate(-25deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(45deg) scale(1.09); }
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.activatedText {
+  margin-top: 36px;
+  color: #FFD700;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.11em;
+  text-shadow: 0 0 16px #FFD70055;
+}

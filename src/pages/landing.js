@@ -5,34 +5,40 @@ import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
 import TreasuryFrequencyCounter from '../components/TreasuryFrequencyCounter';
+import FounderActivationAnimation from '../components/FounderActivationAnimation';
 
 const engagementOptions = [
-  'Educator',
   'Protector',
-  'Innovator',
-  'Community Architect',
+  'Architect / Builder',
+  'Leader / Founder',
 ];
 
 const contributionTiers = [
   {
-    label: 'Citizen (Free)',
+    label: 'The Citizen (FREE - Data Only)',
     value: 'Citizen',
-    buttonText: 'Authenticate Bloodline (Free)',
-    detail: 'Access to the Digital Lakou & basic Sovereign Sigil.',
+    buttonText: 'Authenticate Bloodline (Data Only)',
+    detail: 'Access to the Digital Lakou and Basic Sigil.',
   },
   {
-    label: 'Innovator ($18.49 / mo)',
+    label: 'The Innovator ($18.49 / Month)',
     value: 'Innovator',
-    buttonText: 'Contribute $18.49 & Activate',
-    detail: 'Early access to sovereign assets & registry certificate.',
+    buttonText: 'Contribute $18.49 Monthly',
+    detail: 'Early access to Sovereign Assets and Registry Certificate.',
   },
   {
-    label: 'Sovereign Founder ($1,849)',
+    label: 'The Sovereign ($1,849 One-Time)',
     value: 'Sovereign',
-    buttonText: 'Invest $1,849 & Rule',
-    detail: 'Founder status, regalia, and council seat.',
+    buttonText: 'Contribute $1,849 One-Time',
+    detail: 'Lifetime Founder status, Physical Regalia, and Direct DAO voting.',
   },
 ];
+
+const tierToPath = {
+  Citizen: 'Protector',
+  Innovator: 'Architect / Builder',
+  Sovereign: 'Leader / Founder',
+};
 
 const pillars = [
   {
@@ -117,12 +123,20 @@ const LandingPage = () => {
     email: '',
     path: engagementOptions[0],
     tier: contributionTiers[0].value,
+    paymentGateway: 'stripe_business',
+    transactionRef: '',
+    walletAddress: '',
   });
 
   const [status, setStatus] = useState({ state: 'idle', message: '' });
+  const [paymentStatus, setPaymentStatus] = useState({ state: 'idle', message: '' });
+  const [founderPaymentVerified, setFounderPaymentVerified] = useState(false);
+  const [showFounderAnimation, setShowFounderAnimation] = useState(false);
+  const [isGatewayModalOpen, setIsGatewayModalOpen] = useState(false);
   const [isFooterPulse, setIsFooterPulse] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
 
   // ===== PARALLAX STATES =====
   const [scrollY, setScrollY] = useState(0);
@@ -159,6 +173,8 @@ const LandingPage = () => {
 
   const registryEndpoint =
     process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
+  const activationEndpoint =
+    process.env.NEXT_PUBLIC_FOUNDER_ACTIVATION_ENDPOINT || '/api/founder-activation';
 
   const canSubmit = useMemo(() => form.name.trim() && form.email.trim(), [form]);
 
@@ -166,17 +182,80 @@ const LandingPage = () => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
 
+  const handleTierChange = (event) => {
+    const tier = event.target.value;
+    setForm((prev) => ({
+      ...prev,
+      tier,
+      path: tierToPath[tier] || prev.path,
+    }));
+  };
+
   const selectedTier =
     contributionTiers.find((tier) => tier.value === form.tier) || contributionTiers[0];
 
   // ===== PAYMENT HANDLER =====
-  const handlePayment = async (tier) => {
-    if (tier === 'Innovator') {
-      alert('Redirecting to payment gateway for Innovator tier ($18.49)...');
-    } else if (tier === 'Sovereign') {
-      alert('Redirecting to payment gateway for Sovereign Founder tier ($1,849)...');
-    } else {
-      alert('Authenticated as Citizen (Free).');
+  const handlePayment = async () => {
+    if (form.tier !== 'Sovereign') {
+      setPaymentStatus({
+        state: 'info',
+        message: 'Only Sovereign tier requires the $1,849 founder activation verification.',
+      });
+      return;
+    }
+    if (!form.name.trim() || !form.email.trim()) {
+      setPaymentStatus({
+        state: 'error',
+        message: 'Enter name and email before payment verification.',
+      });
+      return;
+    }
+    if (!form.transactionRef.trim()) {
+      setPaymentStatus({ state: 'error', message: 'Transaction reference is required.' });
+      return;
+    }
+    if (form.paymentGateway === 'daic_web3_verified' && !form.walletAddress.trim()) {
+      setPaymentStatus({
+        state: 'error',
+        message: 'Verified wallet address is required for Web3 verification.',
+      });
+      return;
+    }
+
+    setPaymentStatus({ state: 'loading', message: '' });
+    try {
+      const response = await fetch(activationEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          tier: form.tier,
+          amountUSD: 1849,
+          gateway: form.paymentGateway,
+          transactionRef: form.transactionRef,
+          walletAddress: form.walletAddress,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Founder payment verification failed');
+
+      setFounderPaymentVerified(true);
+      setShowFounderAnimation(true);
+      setPaymentStatus({
+        state: 'success',
+        message: 'High-security payment verified. Founder ceremony initiated.',
+      });
+      setIsGatewayModalOpen(false);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem('imperialFounderAccess', 'granted');
+      }
+    } catch (error) {
+      setFounderPaymentVerified(false);
+      setPaymentStatus({
+        state: 'error',
+        message: error.message || 'Founder payment verification failed.',
+      });
     }
   };
 
@@ -185,6 +264,13 @@ const LandingPage = () => {
     event.preventDefault();
     if (!form.name.trim() || !form.email.trim()) {
       setStatus({ state: 'error', message: 'Please complete all required fields.' });
+      return;
+    }
+    if (form.tier === 'Sovereign' && !founderPaymentVerified) {
+      setStatus({
+        state: 'error',
+        message: 'Verify the $1,849 founder payment through a high-security gateway first.',
+      });
       return;
     }
     setStatus({ state: 'loading', message: '' });
@@ -201,7 +287,12 @@ const LandingPage = () => {
         email: '',
         path: engagementOptions[0],
         tier: contributionTiers[0].value,
+        paymentGateway: 'stripe_business',
+        transactionRef: '',
+        walletAddress: '',
       });
+      setFounderPaymentVerified(false);
+      setPaymentStatus({ state: 'idle', message: '' });
     } catch (error) {
       setStatus({ state: 'error', message: 'Submission failed. Please try again.' });
     }
@@ -226,6 +317,9 @@ const LandingPage = () => {
   }, []);
 
   const vaultPercent = 33;
+  const registryRise = Math.max(0, 170 - scrollY * 0.09);
+  const registryScale = Math.min(1, 0.92 + scrollY / 5200);
+  const registryOpacity = Math.min(1, 0.62 + scrollY / 1800);
 
   // ===== RETURN JSX =====
   return (
@@ -249,6 +343,12 @@ const LandingPage = () => {
             src="/haiti-gressier-map.svg"
             alt="Map of Haiti - Gressier Region"
             className={styles.parallaxMapImage}
+          />
+          <div
+            className={styles.parallaxMapPulse}
+            style={{
+              transform: `translate(-50%, ${registryOffset * -0.35}px) scale(${1 + registryOffset / 1200})`,
+            }}
           />
           <div className={styles.parallaxMapOverlay} />
         </div>
@@ -358,7 +458,15 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section id="registry" className={styles.section}>
+        <section id="registry" className={`${styles.section} ${styles.registryParallaxSection}`}>
+          <div className={styles.registryRiseRail} aria-hidden="true" />
+          <div
+            className={styles.registryCardWrap}
+            style={{
+              transform: `translate3d(0, ${registryRise}px, 0) scale(${registryScale})`,
+              opacity: registryOpacity,
+            }}
+          >
           <div className={styles.registryCard}>
             <h2 className={styles.sectionTitle}>Registry of Blood</h2>
             <p className={styles.sectionLead}>
@@ -400,13 +508,37 @@ const LandingPage = () => {
               <label className={styles.srOnly} htmlFor="sovereign-tier">
                 Sovereign Contribution Tier
               </label>
-              <select id="sovereign-tier" value={form.tier} onChange={handleChange('tier')}>
+              <select id="sovereign-tier" value={form.tier} onChange={handleTierChange}>
                 {contributionTiers.map((tier) => (
                   <option key={tier.value} value={tier.value}>
                     {tier.label}
                   </option>
                 ))}
               </select>
+              {form.tier !== 'Citizen' && (
+                <div className={styles.sovereignTierCard}>
+                  <h4>Sovereign Contribution Verification</h4>
+                  <p>
+                    High-tier activations must be verified through a high-security gateway.
+                    For Founder activation, submit a verified $1,849 transaction in the popup.
+                  </p>
+                  <button
+                    type="button"
+                    className={styles.payNowButton}
+                    onClick={() => setIsGatewayModalOpen(true)}
+                  >
+                    Open Gateway Verification
+                  </button>
+                  <div className={styles.arrHelpText}>
+                    `stripe_business` and `daic_web3_verified` are the only accepted gateways for founder activation.
+                  </div>
+                  {paymentStatus.message && (
+                    <p className={styles.paymentStatus} role="status">
+                      {paymentStatus.message}
+                    </p>
+                  )}
+                </div>
+              )}
               <button type="submit" className={`${styles.btnPrimary} ${styles.keyButton}`}>
                 <img
                   src="/sacred-antique-key.svg"
@@ -416,18 +548,66 @@ const LandingPage = () => {
                 />
                 {status.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
               </button>
-              {/* Payment button for paid tiers */}
-              {(form.tier === 'Innovator' || form.tier === 'Sovereign') && (
-                <button
-                  type="button"
-                  className={styles.btnSecondary}
-                  onClick={() => handlePayment(form.tier)}
-                  style={{ background: form.tier === 'Sovereign' ? '#000' : '#00F5FF', color: form.tier === 'Sovereign' ? '#FFD700' : '#000' }}
-                >
-                  {form.tier === 'Innovator' ? 'Pay $18.49 (Stripe/PayPal/Crypto)' : 'Pay $1,849 (Stripe/PayPal/Crypto)'}
-                </button>
-              )}
             </form>
+            {isGatewayModalOpen && (
+              <div
+                className={styles.gatewayModalBackdrop}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Founder payment gateway verification"
+              >
+                <div className={styles.gatewayModalCard}>
+                  <h4>Verify $1,849 Founder Payment</h4>
+                  <label htmlFor="payment-gateway">Gateway</label>
+                  <select
+                    id="payment-gateway"
+                    value={form.paymentGateway}
+                    onChange={handleChange('paymentGateway')}
+                  >
+                    <option value="stripe_business">Stripe for Business</option>
+                    <option value="daic_web3_verified">DAIC Verified Web3 Wallet</option>
+                  </select>
+                  <label htmlFor="transaction-ref">Transaction Reference</label>
+                  <input
+                    id="transaction-ref"
+                    type="text"
+                    placeholder="cs_test_... / pi_... / 0x..."
+                    value={form.transactionRef}
+                    onChange={handleChange('transactionRef')}
+                  />
+                  {form.paymentGateway === 'daic_web3_verified' && (
+                    <>
+                      <label htmlFor="wallet-address">Verified Wallet Address</label>
+                      <input
+                        id="wallet-address"
+                        type="text"
+                        placeholder="0x..."
+                        value={form.walletAddress}
+                        onChange={handleChange('walletAddress')}
+                      />
+                    </>
+                  )}
+                  <div className={styles.gatewayModalActions}>
+                    <button
+                      type="button"
+                      className={styles.payNowButton}
+                      onClick={handlePayment}
+                    >
+                      {paymentStatus.state === 'loading'
+                        ? 'Verifying...'
+                        : 'Verify Founder Payment'}
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.gatewayModalClose}
+                      onClick={() => setIsGatewayModalOpen(false)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             {status.message && (
               <p className={styles.formStatus} role="status">
                 {status.message}
@@ -448,6 +628,7 @@ const LandingPage = () => {
                 AUTHENTICATED BLOODLINE | 2026 FREQUENCY
               </span>
             </div>
+          </div>
           </div>
         </section>
 
@@ -494,6 +675,11 @@ const LandingPage = () => {
                 In 1849, we bought our freedom with blood; in 2026, we buy our sovereignty
                 with intelligence and capital."
               </p>
+              <p className={styles.clause}>
+                Validation note: governance oversight and project legitimacy claims must be
+                backed by verifiable legal citations from local government records and CASEC
+                documentation before public publication.
+              </p>
             </div>
             <div className={styles.paymentCard}>
               <h3>Accepted Contribution Paths</h3>
@@ -508,6 +694,61 @@ const LandingPage = () => {
                     <p>{tier.detail}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="founder-covenant" className={styles.section}>
+          <p className={styles.covenantKicker}>Imperial Founder Covenant</p>
+          <h2 className={styles.sectionTitle}>II. Imperial Privileges</h2>
+          <div className={styles.covenantLayout}>
+            <div className={styles.covenantCard}>
+              <p className={styles.sectionLead}>
+                Upon execution, the Founder is granted the following irrevocable rights:
+              </p>
+              <ol className={styles.covenantList}>
+                <li>
+                  <strong>The Golden Key:</strong> Lifetime access to all current and future
+                  assets in the Imperial Treasury.
+                </li>
+                <li>
+                  <strong>Sovereign Council Seat:</strong> A direct advisory role in the
+                  Digital AI Chancellor (DAIC) roadmap for 2026.
+                </li>
+                <li>
+                  <strong>Physical Regalia:</strong> A bespoke, hand-crafted Crowned Hare and
+                  Rooster Blazer Patch and a physical, signed Certificate of Imperial Lineage.
+                </li>
+                <li>
+                  <strong>The Gressier Pillar:</strong> The Founder&apos;s name (or Digital
+                  Sigil) will be engraved upon the Foundation Pillar of the first school built
+                  in Morn Chandelle.
+                </li>
+              </ol>
+            </div>
+
+            <div className={styles.covenantSide}>
+              <h3 className={styles.covenantSubheading}>III. The 1849 Frequency</h3>
+              <p className={styles.covenantBody}>
+                This contract honors the coronation of Faustin I. By signing this digital
+                covenant, the Founder is not a customer, but a Co-Architect of the Third
+                Empire.
+              </p>
+              <blockquote className={styles.covenantQuote}>
+                &quot;In 1849, we unified the soil. In 2026, we unify the signal.&quot;
+              </blockquote>
+              <p className={styles.covenantBody}>
+                Founder Status confirms lifetime Treasury access, advisory participation in
+                the DAIC 2026 roadmap, ceremonial regalia, and engraved recognition at the
+                first school pillar in Morn Chandelle.
+              </p>
+              <div className={styles.covenantSeal}>
+                <p>
+                  <strong>OFFICIAL SEAL:</strong>
+                </p>
+                <p>Authenticated by the Digital AI Chancellor (DAIC)</p>
+                <p>Under the Authority of H.S.H. Prince Jean J. H. Dorvilus</p>
               </div>
             </div>
           </div>
@@ -553,49 +794,82 @@ const LandingPage = () => {
           <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
         </a>
 
-        <footer className={`${styles.footer} ${isFooterPulse ? styles.footerPulse : ''}`}>
-          <div className={styles.footerGrid}>
-            <div>
-              <h4>
-                House of{' '}
-                <span
-                  className={styles.footerName}
-                  onMouseEnter={() => setIsFooterPulse(true)}
-                  onMouseLeave={() => setIsFooterPulse(false)}
+        <footer className={styles.territoryFooter}>
+          <div className={styles.territoryFooterInner}>
+            <div className={styles.territoryMapFrame}>
+              <div className={styles.territoryMapHud}>
+                <span className={styles.hudTag}>Gressier Node</span>
+                <span className={styles.hudTag}>Morn Chandelle</span>
+              </div>
+              <iframe
+                title="Morn Chandelle and Gressier Territorial Map"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=-72.62%2C18.46%2C-72.42%2C18.62&amp;layer=mapnik&amp;marker=18.54%2C-72.52"
+                className={styles.territoryMapIframe}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <div className={styles.territoryPanel}>
+              <div className={styles.territoryPanelTop}>
+                <span>Territorial Command Deck</span>
+                <span className={styles.liveSignal}><span /> Live</span>
+              </div>
+              <p className={styles.territoryKicker}>Morn Chandelle Foundation Footer</p>
+              <h4>From Digital Signal to Physical Soil</h4>
+              <p>
+                Every registry interaction is linked to physical restoration work in Gressier.
+                This is how participants become citizens in the living project.
+              </p>
+              <div className={styles.signalMeter} aria-hidden="true">
+                <div className={styles.signalMeterFill} />
+              </div>
+              <div className={styles.territoryGridStats}>
+                <div className={styles.territoryStatCard}>
+                  <strong>Digital Input</strong>
+                  <span>Registry + Treasury Activation</span>
+                </div>
+                <div className={styles.territoryStatCard}>
+                  <strong>Physical Output</strong>
+                  <span>Ground Restoration in Morn Chandelle</span>
+                </div>
+              </div>
+              <ul className={styles.territoryChecklist}>
+                <li>Registry authentication is logged as a civic participation signal.</li>
+                <li>Treasury activity maps to restoration task visibility in Gressier.</li>
+                <li>CASEC coordination provides local governance accountability.</li>
+              </ul>
+              <div className={styles.territoryActions}>
+                <a
+                  className={styles.territoryActionPrimary}
+                  href="https://www.openstreetmap.org/?mlat=18.54&amp;mlon=-72.52#map=12/18.54/-72.52"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Dorvilus
-                </span>
-              </h4>
-              <a href="#hero">Home</a>
-              <a href="https://globalcreolesociety.com">globalcreolesociety.com</a>
-            </div>
-            <div>
-              <h4>Quadri-Dynastic Nexus</h4>
-              <a href="#nexus">Nexus</a>
-            </div>
-            <div>
-              <h4>Imperial Treasury</h4>
-              <a href="/imperial-treasury">Treasury</a>
-            </div>
-            <div>
-              <h4>Sovereign Registry</h4>
-              <a href="#registry">Registry</a>
-            </div>
-            <div>
-              <h4>Morn Chandelle</h4>
-              <p className={styles.footerNote}>
-                Administered under the local oversight of the CASEC of Morn Chandelle,
-                Gressier.
+                  Open Live Map
+                </a>
+                <a className={styles.territoryActionGhost} href="#registry">
+                  Go To Registry
+                </a>
+                <a className={styles.territoryActionGhost} href="/imperial-treasury">
+                  Open Treasury
+                </a>
+              </div>
+              <p className={styles.casecShoutout}>
+                Local legitimacy acknowledgment: In active coordination with the
+                <strong> CASEC of Morn Chandelle, Gressier</strong>.
               </p>
             </div>
           </div>
-          <p className={styles.disclaimer}>
-            [Financial and legal disclaimer: This analysis is for informational purposes only
-            and does not constitute financial, legal, or professional advice. Participation
-            in the Registry is a voluntary contribution to a social movement.]
-          </p>
+          <div className={styles.citizenBridge}>
+            The benefit: citizens can see a direct bridge between Digital Lakou participation
+            and real community restoration in Morn Chandelle.
+          </div>
         </footer>
       </div>
+      <FounderActivationAnimation
+        show={showFounderAnimation}
+        onComplete={() => setShowFounderAnimation(false)}
+      />
     </>
   );
 };

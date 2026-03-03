@@ -1,0 +1,93 @@
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 9, 17, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.modalWrap {
+  background: #191813;
+  border-radius: 18px;
+  border: 2px solid #FFD700;
+  box-shadow: 0 4px 32px #191813cc;
+  min-width: 340px;
+  max-width: 98vw;
+  width: 430px;
+  padding: 36px 30px 30px 30px;
+  color: #FFD700;
+  position: relative;
+  text-align: left;
+}
+.closeBtn {
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  background: none;
+  border: none;
+  color: #FFD700;
+  font-size: 2.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.subscriptionList {
+  list-style: circle inside;
+  margin: 16px 0 14px 0;
+  padding: 0 0 0 12px;
+}
+.paidTier {
+  color: #fff;
+  background: #FFD700;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.97em;
+  margin-left: 7px;
+}
+.impactNote {
+  background: #333010;
+  color: #fffbe2;
+  border-radius: 7px;
+  padding: 13px 12px;
+  margin-bottom: 17px;
+  font-size: 1.01em;
+}
+.payNowBtn {
+  background: #FFD700;
+  color: #191813;
+  padding: 8px 30px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.08em;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #FFD70044;
+  margin-top: 4px;
+}
+.foundersWall {
+  background: #0a0a0a;
+  min-height: 90vh;
+  color: #FFD700;
+  padding: 48px 8vw 38px 8vw;
+}
+.foundersWall h1 {
+  font-size: 2.7em;
+  margin-bottom: 24px;
+  color: #FFD700;
+  text-shadow: 0 0 16px #FFD70044;
+}
+.foundersList {
+  margin: 40px auto 0 auto;
+  max-width: 480px;
+  font-size: 1.3em;
+  list-style: none;
+  padding: 0;
+}
+.founderName {
+  font-weight: 600;
+  color: #fff;
+}
+.founderDate {
+  color: #FFD700a0;
+  font-size: 0.94em;
+}

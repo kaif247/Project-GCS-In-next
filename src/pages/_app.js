@@ -129,18 +129,18 @@ export default function App({ Component, pageProps }) {
   };
 
 
-  const isLanding = router.pathname === '/landing';
-  const publicRoutes = new Set(['/landing', '/signin']);
-  const hideChatBot = publicRoutes.has(router.pathname);
+const isLanding = router.pathname === '/landing';
+const publicRoutes = new Set(['/landing', '/signin']);
+const hideChatBot = publicRoutes.has(router.pathname);
 
-  return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <MarketplaceProvider>
-          <CartProvider>
-            <MarketplaceMessagingProvider>
-              <div className="app main-container">
-                <Head>
+return (
+  <ThemeProvider>
+    <LanguageProvider>
+      <MarketplaceProvider>
+        <CartProvider>
+          <MarketplaceMessagingProvider>
+            <div className="app main-container">
+              <Head>
                   <title>House of Dorvilus | Sovereign Intelligence & Imperial Restoration</title>
                   <meta
                     name="description"
@@ -162,7 +162,7 @@ export default function App({ Component, pageProps }) {
                   <link rel="icon" href="/w%20(1).ico" />
                   <link rel="apple-touch-icon" href="/w%20(1).ico" />
                 </Head>
-                {showLoader && <InitialLoader />}
+
                 <Navbar
                   isLiveOpen={isLiveOpen}
                   onToggleLive={handleToggleLive}
@@ -202,12 +202,12 @@ export default function App({ Component, pageProps }) {
                     </div>
                   </div>
                 )}
-              </div>
-            </MarketplaceMessagingProvider>
-          </CartProvider>
-        </MarketplaceProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+            </div>
+          </MarketplaceMessagingProvider>
+        </CartProvider>
+      </MarketplaceProvider>
+    </LanguageProvider>
+  </ThemeProvider>
   );
 }
 
