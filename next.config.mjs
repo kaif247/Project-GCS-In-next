@@ -27,6 +27,16 @@ const nextConfig = {
     if (dev) {
       config.cache = false;
     }
+    const originalEntry = config.entry;
+    config.entry = async () => {
+      const entries = await originalEntry();
+      for (const key of Object.keys(entries)) {
+        if (key.includes('admin backend')) {
+          delete entries[key];
+        }
+      }
+      return entries;
+    };
     config.module.rules.push({
       test: /\.svg$/i,
       issuer: /\.[jt]sx?$/,
