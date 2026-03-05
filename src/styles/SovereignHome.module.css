@@ -17,7 +17,14 @@
   font-family: var(--font-sans);
   line-height: 1.6;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: visible;
+  --parallax-map-y: 0px;
+  --parallax-pulse-y: 0px;
+  --parallax-pulse-scale: 1;
+  --registry-rise-y: 170px;
+  --registry-scale: 0.92;
+  --registry-opacity: 0.62;
 }
 finalCta
 .page * {
@@ -40,35 +47,50 @@ finalCta
 }
 
 .nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1200;
   background: rgba(5, 5, 5, 0.92);
   border-bottom: 1px solid var(--border-gold);
   backdrop-filter: blur(10px);
 }
 
 .navInner {
-  max-width: 1200px;
+  
   margin: 0 auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
-  padding: 18px 24px;
-  gap: 24px;
+  padding: 10px 9px;
+  gap: 18px;
 }
 
-.navTop {
+.navLeft {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 16px;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 .brandWrap {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-start;
 }
 
 .brandLogo {
@@ -98,6 +120,29 @@ finalCta
   align-items: center;
   font-size: 14px;
   justify-content: center;
+}
+
+.navCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.16), rgba(0, 245, 255, 0.12));
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 10px 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.navCta:hover,
+.navCta:focus-visible {
+  color: var(--electric);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.35);
+  transform: translateY(-1px);
 }
 
 .navToggle {
@@ -156,6 +201,81 @@ finalCta
 .navLinks a:focus-visible::after {
   transform: scaleX(1);
   animation: navGlow 1.6s ease-in-out infinite;
+}
+
+.landingSidebarBackdrop {
+  display: none;
+}
+
+.landingSidebarWrap {
+  display: none;
+}
+
+.landingSidebar {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .navLinks {
+    display: none;
+  }
+
+  .landingSidebarBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 240;
+  }
+
+  .landingSidebarWrap {
+    display: block;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    height: calc(100vh - 64px);
+    width: 320px;
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    z-index: 250;
+  }
+
+  .landingSidebarWrapOpen {
+    transform: translateX(0);
+  }
+
+  .landingSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    background: rgba(5, 5, 5, 0.96);
+    border-right: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 0 12px 12px 0;
+    overflow-y: auto;
+  }
+
+  .landingSidebar a {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+
+  .landingSidebar a:hover,
+  .landingSidebar a:focus-visible {
+    color: var(--electric);
+    border-color: rgba(212, 175, 55, 0.4);
+    background: rgba(212, 175, 55, 0.08);
+  }
 }
 
 @keyframes navGlow {
@@ -230,6 +350,18 @@ finalCta
   object-fit: contain;
   filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.6));
   animation: sealPulse 4.2s ease-in-out infinite;
+}
+
+.heroNexus {
+  position: relative;
+  z-index: 1;
+  padding: 6px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(0, 245, 255, 0.16), transparent 45%),
+    radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.2), transparent 52%),
+    rgba(6, 6, 6, 0.55);
+  border: 1px solid rgba(212, 175, 55, 0.28);
 }
 
 .heroActions {
@@ -307,7 +439,9 @@ finalCta
   width: 100%;
   height: 100vh;
   z-index: 0;
+  transform: translate3d(0, var(--parallax-map-y), 0);
   will-change: transform;
+  backface-visibility: hidden;
   overflow: hidden;
 }
 
@@ -335,9 +469,12 @@ finalCta
   background:
     radial-gradient(circle, rgba(0, 245, 255, 0.22), rgba(0, 245, 255, 0.08) 38%, transparent 70%),
     radial-gradient(circle, rgba(212, 175, 55, 0.22), transparent 72%);
+  transform: translate3d(-50%, var(--parallax-pulse-y), 0) scale(var(--parallax-pulse-scale));
   filter: blur(4px);
   z-index: 1;
   pointer-events: none;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .registryParallaxSection {
@@ -366,8 +503,10 @@ finalCta
 .registryCardWrap {
   width: 100%;
   max-width: 980px;
+  transform: translate3d(0, var(--registry-rise-y), 0) scale(var(--registry-scale));
+  opacity: var(--registry-opacity);
   will-change: transform, opacity;
-  transition: transform 120ms linear, opacity 120ms linear;
+  transition: none;
   position: relative;
   z-index: 3;
 }
@@ -693,6 +832,12 @@ finalCta
   min-height: 240px;
   position: relative;
   overflow: hidden;
+}
+
+.nexusCenter {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(0, 245, 255, 0.4);
+  box-shadow: 0 10px 24px rgba(0, 245, 255, 0.12);
 }
 
 .triptychFrame {
@@ -1434,11 +1579,33 @@ finalCta
   .triptychImage {
     height: 80px;
   }
+
+  .nexusCenter {
+    transform: none;
+  }
 }
 
 @media (max-width: 768px) {
   .navInner {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "left right"
+      "links links";
     align-items: center;
+    row-gap: 10px;
+  }
+
+  .navLeft {
+    grid-area: left;
+  }
+
+  .navRight {
+    grid-area: right;
+    gap: 8px;
+  }
+
+  .navCenter {
+    grid-area: links;
   }
 
   .navLinks {
@@ -1447,12 +1614,12 @@ finalCta
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding-top: 12px;
+    padding-top: 8px;
   }
 
   .navToggle {
     display: inline-flex;
-    margin-left: auto;
+    margin-left: 0;
   }
 
   .navLinksOpen {
@@ -1461,6 +1628,72 @@ finalCta
     border: 1px solid rgba(212, 175, 55, 0.35);
     border-radius: 14px;
     padding: 14px;
+  }
+
+  .brandLogo {
+    height: 38px;
+  }
+
+  .navCta {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .landingSidebarBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 240;
+  }
+
+  .landingSidebarWrap {
+    display: block;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    height: calc(100vh - 64px);
+    width: 320px;
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    z-index: 250;
+  }
+
+  .landingSidebarWrapOpen {
+    transform: translateX(0);
+  }
+
+  .landingSidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    background: rgba(5, 5, 5, 0.96);
+    border-right: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 0 12px 12px 0;
+    overflow-y: auto;
+  }
+
+  .landingSidebar a {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid transparent;
+  }
+
+  .landingSidebar a:hover,
+  .landingSidebar a:focus-visible {
+    color: var(--electric);
+    border-color: rgba(212, 175, 55, 0.4);
+    background: rgba(212, 175, 55, 0.08);
   }
 
   .heroTitle {
@@ -1483,6 +1716,11 @@ finalCta
     margin-bottom: 16px;
     margin-top: -6px;
     align-self: start;
+  }
+
+  .heroNexus {
+    padding: 4px;
+    margin-top: -2px;
   }
 
   .heroSeal img {
@@ -1913,5 +2151,402 @@ finalCta
   .territoryActionGhost {
     text-align: center;
     width: 100%;
+  }
+}
+
+/* Mobile hero hard-fix: prevent overlap and improve readability */
+@media (max-width: 900px) {
+  .page,
+  .hero,
+  .section,
+  .heroContent,
+  .heroNexus,
+  .pillars,
+  .treasuryGrid,
+  .roadmap,
+  .territoryFooterInner {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .hero {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 108px 16px 28px !important;
+    align-items: start !important;
+    min-width: 0 !important;
+  }
+
+  .heroContent {
+    z-index: 2;
+    max-width: 100%;
+    min-width: 0 !important;
+  }
+
+  .heroTitle {
+    font-size: clamp(30px, 8vw, 44px) !important;
+    line-height: 1.06 !important;
+    letter-spacing: 0.01em;
+    white-space: normal !important;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0 !important;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  .heroSub {
+    font-size: clamp(16px, 4.4vw, 20px) !important;
+    line-height: 1.45 !important;
+    max-width: 38ch;
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  .heroNexus {
+    width: 100%;
+    padding: 8px;
+    min-width: 0 !important;
+  }
+
+  .heroTriptych {
+    display: flex !important;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .triptychCard {
+    flex: 0 0 155px;
+    min-width: 155px;
+    min-height: 186px;
+    padding: 10px;
+    scroll-snap-align: start;
+  }
+
+  .triptychFrame {
+    padding: 8px;
+  }
+
+  .triptychImage {
+    max-height: 86px;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .triptychMeta strong {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .heroActions {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+    min-width: 0 !important;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .parallaxMapOverlay {
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.78));
+  }
+}
+
+@media (max-width: 520px) {
+  .hero {
+    padding-top: 102px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .heroTitle {
+    font-size: clamp(28px, 9.2vw, 38px) !important;
+    line-height: 1.08 !important;
+  }
+
+  .triptychCard {
+    flex-basis: 142px;
+    min-width: 142px;
+    min-height: 176px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* Final parallax performance override (wins over duplicate blocks above) */
+.page .parallaxMapLayer {
+  transform: translate3d(0, var(--parallax-map-y), 0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.page .parallaxMapPulse {
+  transform: translate3d(-50%, var(--parallax-pulse-y), 0) scale(var(--parallax-pulse-scale));
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.page .registryCardWrap {
+  transform: translate3d(0, var(--registry-rise-y), 0) scale(var(--registry-scale));
+  opacity: var(--registry-opacity);
+  will-change: transform, opacity;
+  transition: none;
+}
+
+/* Imperial footer redesign */
+.imperialFooter {
+  margin-top: 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.16);
+  background: linear-gradient(180deg, #050608 0%, #030406 100%);
+  padding: 36px 18px 18px;
+}
+
+.imperialFooterTop {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.imperialBrandBlock {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.imperialCrown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  line-height: 1;
+}
+
+.imperialBrandLogo {
+  width: 72px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
+}
+
+.imperialBrandBlock h3 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1;
+  color: #d4af37;
+  font-family: var(--font-serif);
+}
+
+.imperialBrandBlock p {
+  margin: 0;
+  color: #b89e5a;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.imperialFooterCol {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.imperialFooterCol h4 {
+  margin: 0 0 6px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 18px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+}
+
+.imperialFooterCol a {
+  text-decoration: none;
+  color: #b38f2f;
+  font-size: 12px;
+  line-height: 1.45;
+  transition: color 0.2s ease;
+}
+
+.imperialFooterCol a:hover,
+.imperialFooterCol a:focus-visible {
+  color: #27efff;
+}
+
+.imperialFoundationBox {
+  max-width: 1120px;
+  margin: 26px auto 0;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1.2fr minmax(240px, 0.8fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.imperialFoundationText h4 {
+  margin: 0 0 10px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 15px;
+  font-family: var(--font-serif);
+}
+
+.imperialFoundationText p {
+  margin: 0;
+  color: #b99535;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.imperialFoundationText strong {
+  color: #00eefe;
+}
+
+.imperialFoundationMap {
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 170px;
+}
+
+.imperialFooterBottom {
+  max-width: 1120px;
+  margin: 24px auto 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212, 175, 55, 0.18);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.imperialLegal {
+  color: #8f7b3f;
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 80ch;
+}
+
+.imperialLegal p {
+  margin: 0 0 8px;
+}
+
+.imperialConnect h5 {
+  margin: 0 0 10px;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+
+.imperialSocials {
+  display: flex;
+  gap: 12px;
+}
+
+.imperialSocials a {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  color: #d4af37;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.imperialSocials a:hover,
+.imperialSocials a:focus-visible {
+  color: #00ebff;
+  border-color: #00ebff;
+  box-shadow: 0 0 14px rgba(0, 235, 255, 0.35);
+}
+
+@media (max-width: 1024px) {
+  .imperialFooterTop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .imperialFooterCol h4 {
+    font-size: 16px;
+  }
+
+  .imperialFooterCol a {
+    font-size: 11px;
+  }
+
+  .imperialFoundationText h4 {
+    font-size: 17px;
+  }
+
+  .imperialFoundationText p {
+    font-size: 15px;
+  }
+
+  .imperialLegal {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .imperialFooter {
+    padding: 24px 14px 14px;
+  }
+
+  .imperialFooterTop {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .imperialCrown {
+    width: 64px;
+  }
+
+  .imperialBrandLogo {
+    width: 64px;
+  }
+
+  .imperialBrandBlock h3 {
+    font-size: 30px;
+  }
+
+  .imperialFoundationBox {
+    grid-template-columns: 1fr;
+  }
+
+  .imperialFoundationMap {
+    min-height: 150px;
+  }
+
+  .imperialFooterBottom {
+    grid-template-columns: 1fr;
+  }
+
+  .imperialConnect {
+    justify-self: start;
   }
 }

@@ -5,7 +5,10 @@
     radial-gradient(circle at 15% 30%, rgba(212, 175, 55, 0.2), transparent 55%),
     #0a0a0a;
   color: var(--text-light);
-  padding: 120px 24px 80px;
+}
+
+.contentWrap {
+  padding: 104px 24px 80px;
 }
 
 .header {
@@ -385,7 +388,7 @@
 }
 
 @media (max-width: 640px) {
-  .page {
+  .contentWrap {
     padding: 96px 16px 64px;
   }
 }

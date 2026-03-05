@@ -130,8 +130,10 @@ export default function App({ Component, pageProps }) {
 
 
 const isLanding = router.pathname === '/landing';
+const landingFlowRoutes = new Set(['/landing', '/imperial-treasury', '/signin']);
 const publicRoutes = new Set(['/landing', '/signin']);
 const hideChatBot = publicRoutes.has(router.pathname);
+const hideMainNavbar = landingFlowRoutes.has(router.pathname);
 
 return (
   <ThemeProvider>
@@ -163,12 +165,14 @@ return (
                   <link rel="apple-touch-icon" href="/w%20(1).ico" />
                 </Head>
 
-                <Navbar
-                  isLiveOpen={isLiveOpen}
-                  onToggleLive={handleToggleLive}
-                  onNavigateAttempt={handleNavigateAttempt}
-                  hideThemeToggle={isLanding}
-                />
+                {!hideMainNavbar && (
+                  <Navbar
+                    isLiveOpen={isLiveOpen}
+                    onToggleLive={handleToggleLive}
+                    onNavigateAttempt={handleNavigateAttempt}
+                    hideThemeToggle={isLanding}
+                  />
+                )}
                 <Component
                   {...pageProps}
                   onOpenLiveProducer={() => setIsLiveOpen(true)}

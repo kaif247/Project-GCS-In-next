@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SignIn.module.css';
 import landingStyles from '../styles/SovereignHome.module.css';
+import ToggleButton from '../components/ToggleButton';
 
 const SignInPage = () => {
   const [mode, setMode] = useState('signin');
   const [status, setStatus] = useState('');
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -27,10 +27,6 @@ const SignInPage = () => {
     );
   };
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   return (
     <>
       <Head>
@@ -39,37 +35,68 @@ const SignInPage = () => {
       <div className={styles.page}>
         <nav className={landingStyles.nav}>
           <div className={landingStyles.navInner}>
-            <div className={landingStyles.navTop}>
+            <div className={landingStyles.navLeft}>
               <div className={landingStyles.brandWrap}>
                 <img src="/GCS.png" alt="GCS" className={landingStyles.brandLogo} />
               </div>
-              {isMounted && (
-                <button
-                  type="button"
-                  className={landingStyles.navToggle}
-                  aria-label="Toggle navigation"
-                  aria-expanded={isNavOpen}
-                  onClick={() => setIsNavOpen((prev) => !prev)}
-                >
-                  <span />
-                  <span />
-                  <span />
-                </button>
-              )}
             </div>
-            <div
-              className={`${landingStyles.navLinks} ${
-                isMounted && isNavOpen ? landingStyles.navLinksOpen : ''
-              }`}
-            >
-              <a href="/landing">Home</a>
-              <a href="/landing#nexus">Nexus</a>
-              <a href="/landing#registry">Registry</a>
-              <a href="/landing#roadmap">Roadmap</a>
-              <a href="/signin">Sign in</a>
+            <div className={landingStyles.navCenter}>
+              <div className={landingStyles.navLinks}>
+                <a href="/landing">Home</a>
+                <a href="/imperial-treasury">Imperial Treasury</a>
+                <a href="/landing#nexus">Nexus</a>
+                <a href="/landing#registry">Registry</a>
+                <a href="/landing#roadmap">Roadmap</a>
+              </div>
+            </div>
+            <div className={landingStyles.navRight}>
+              <a href="/signin" className={landingStyles.navCta}>
+                Sign in
+              </a>
             </div>
           </div>
         </nav>
+        <ToggleButton
+          isOpen={isSidebarOpen}
+          onToggle={() => setIsSidebarOpen((prev) => !prev)}
+          label="Toggle navigation"
+          style={{ top: '50px', zIndex: 1301 }}
+        />
+        {isSidebarOpen && (
+          <button
+            type="button"
+            className={landingStyles.landingSidebarBackdrop}
+            aria-label="Close navigation"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        <aside
+          className={`${landingStyles.landingSidebarWrap} ${
+            isSidebarOpen ? landingStyles.landingSidebarWrapOpen : ''
+          }`}
+          aria-hidden={!isSidebarOpen}
+        >
+          <div className={landingStyles.landingSidebar}>
+            <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
+              Home
+            </a>
+            <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
+              Imperial Treasury
+            </a>
+            <a href="/landing#nexus" onClick={() => setIsSidebarOpen(false)}>
+              Nexus
+            </a>
+            <a href="/landing#registry" onClick={() => setIsSidebarOpen(false)}>
+              Registry
+            </a>
+            <a href="/landing#roadmap" onClick={() => setIsSidebarOpen(false)}>
+              Roadmap
+            </a>
+            <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
+              Sign in
+            </a>
+          </div>
+        </aside>
 
         <main className={styles.center}>
           <div className={styles.card}>

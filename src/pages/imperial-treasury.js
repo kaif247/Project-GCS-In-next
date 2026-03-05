@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Treasury.module.css';
+import landingStyles from '../styles/SovereignHome.module.css';
 import InnovatorPortal from '../components/InnovatorPortal';
-import MarketplaceGrid from '../components/Marketplace/MarketplaceGrid';
 import MarketplaceCard from '../components/Marketplace/MarketplaceCard';
 import FounderActivationAnimation from '../components/FounderActivationAnimation';
 import { MarketplaceContext } from '../context/MarketplaceContext';
+import ToggleButton from '../components/ToggleButton';
 
 const treasuryAssets = [
   {
@@ -32,6 +33,7 @@ const ImperialTreasury = () => {
   const [showDecree, setShowDecree] = useState(false);
   const [showFounderMoment, setShowFounderMoment] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { products } = useContext(MarketplaceContext);
   const vaultPercent = 33;
   const treasuryProducts = useMemo(
@@ -81,99 +83,166 @@ const ImperialTreasury = () => {
         <link rel="icon" href="/crowned-hare.svg" />
       </Head>
       <main className={styles.page}>
-        <header className={styles.header}>
-          <p className={styles.eyebrow}>Imperial Treasury</p>
-          <h1>Vault of Sovereign Intelligence</h1>
-          <p className={styles.subhead}>
-            The vault is not empty. It is a strategic call to action.
-          </p>
-          <p className={styles.subhead}>
-            Access is free. Items within the Imperial Treasury carry their own cost.
-          </p>
-        </header>
-
-        <section className={styles.vaultBar}>
-          <div className={styles.vaultTrack}>
-            <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
-              TREASURY FREQUENCY: {vaultPercent}% ACTIVATED
-            </div>
-          </div>
-        </section>
-
-        <section className={styles.keySection}>
-          <div>
-            <h2>Sacred Key Access</h2>
-            <p>
-              The Sacred Antique Key signals entry into the Imperial Treasury. Every
-              contribution unlocks new tools for restoration.
-            </p>
-          </div>
-          <img
-            src="/sacred-antique-key.svg"
-            alt="Sacred Key icon"
-            className={styles.keyIcon}
-          />
-        </section>
-
-        <section className={styles.grid}>
-          {treasuryAssets.map((item) => (
-            <article key={item.title} className={styles.card}>
-              <h2>{item.title}</h2>
-              <p>{item.detail}</p>
-              <button
-                type="button"
-                aria-label={`View ${item.title}`}
-                className={isAuthenticated ? styles.cardActive : styles.cardLocked}
-                onClick={handleAuthenticate}
-              >
-                {isAuthenticated ? `Download ${item.title}` : 'Authenticate to Unlock'}
-              </button>
-            </article>
-          ))}
-        </section>
-
-        <section className={styles.marketplaceSection}>
-          <div className={styles.marketplaceHeader}>
-            <div>
-              <h2>Imperial Treasury Assets</h2>
-              <p>Curated marketplace items presented as sovereign offerings.</p>
-            </div>
-            <Link href="/signin" className={styles.marketplaceLink}>
-              See all
-            </Link>
-          </div>
-          <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
-            {treasuryProducts.map((product) => (
-              <div key={product.id} className={styles.marketplaceSlide}>
-                <MarketplaceCard product={product} />
+        <nav className={landingStyles.nav}>
+          <div className={landingStyles.navInner}>
+            <div className={landingStyles.navLeft}>
+              <div className={landingStyles.brandWrap}>
+                <img src="/GCS.png" alt="GCS" className={landingStyles.brandLogo} />
               </div>
-            ))}
+            </div>
+            <div className={landingStyles.navCenter}>
+              <div className={landingStyles.navLinks}>
+                <a href="/landing">Home</a>
+                <a href="/imperial-treasury">Imperial Treasury</a>
+                <a href="/landing#nexus">Nexus</a>
+                <a href="/landing#registry">Registry</a>
+                <a href="/landing#roadmap">Roadmap</a>
+              </div>
+            </div>
+            <div className={landingStyles.navRight}>
+              <a href="/signin" className={landingStyles.navCta}>
+                Sign in
+              </a>
+            </div>
           </div>
-        </section>
+        </nav>
+        <ToggleButton
+          isOpen={isSidebarOpen}
+          onToggle={() => setIsSidebarOpen((prev) => !prev)}
+          label="Toggle navigation"
+          style={{ top: '55px', zIndex: 1301 }}
+        />
+        {isSidebarOpen && (
+          <button
+            type="button"
+            className={landingStyles.landingSidebarBackdrop}
+            aria-label="Close navigation"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        <aside
+          className={`${landingStyles.landingSidebarWrap} ${
+            isSidebarOpen ? landingStyles.landingSidebarWrapOpen : ''
+          }`}
+          aria-hidden={!isSidebarOpen}
+        >
+          <div className={landingStyles.landingSidebar}>
+            <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
+              Home
+            </a>
+            <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
+              Imperial Treasury
+            </a>
+            <a href="/landing#nexus" onClick={() => setIsSidebarOpen(false)}>
+              Nexus
+            </a>
+            <a href="/landing#registry" onClick={() => setIsSidebarOpen(false)}>
+              Registry
+            </a>
+            <a href="/landing#roadmap" onClick={() => setIsSidebarOpen(false)}>
+              Roadmap
+            </a>
+            <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
+              Sign in
+            </a>
+          </div>
+        </aside>
 
-        <section className={styles.founderCallout}>
-          <div>
-            <h3>Sovereign Founder Activation</h3>
-            <p>
-              The $1,849 covenant triggers a sovereign ceremony and unlocks the Founders
-              Wall.
+        <div className={styles.contentWrap}>
+          <header className={styles.header}>
+            <p className={styles.eyebrow}>Imperial Treasury</p>
+            <h1>Vault of Sovereign Intelligence</h1>
+            <p className={styles.subhead}>
+              The vault is not empty. It is a strategic call to action.
             </p>
-          </div>
-          <button type="button" onClick={handleFounderActivation}>
-            Activate Founder Ceremony
-          </button>
-        </section>
+            <p className={styles.subhead}>
+              Access is free. Items within the Imperial Treasury carry their own cost.
+            </p>
+          </header>
 
-        <InnovatorPortal />
+          <section className={styles.vaultBar}>
+            <div className={styles.vaultTrack}>
+              <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
+                TREASURY FREQUENCY: {vaultPercent}% ACTIVATED
+              </div>
+            </div>
+          </section>
 
-        <section className={styles.transparency}>
-          <h3>Local Governance & Transparency</h3>
-          <p>
-            Administrative Oversight: Office of the DAIC. Local Foundation: Overseen
-            by the CASEC of Morn Chandelle, Gressier. Built upon the Soulouque Legacy
-            (1849).
-          </p>
-        </section>
+          <section className={styles.keySection}>
+            <div>
+              <h2>Sacred Key Access</h2>
+              <p>
+                The Sacred Antique Key signals entry into the Imperial Treasury. Every
+                contribution unlocks new tools for restoration.
+              </p>
+            </div>
+            <img
+              src="/sacred-antique-key.svg"
+              alt="Sacred Key icon"
+              className={styles.keyIcon}
+            />
+          </section>
+
+          <section className={styles.grid}>
+            {treasuryAssets.map((item) => (
+              <article key={item.title} className={styles.card}>
+                <h2>{item.title}</h2>
+                <p>{item.detail}</p>
+                <button
+                  type="button"
+                  aria-label={`View ${item.title}`}
+                  className={isAuthenticated ? styles.cardActive : styles.cardLocked}
+                  onClick={handleAuthenticate}
+                >
+                  {isAuthenticated ? `Download ${item.title}` : 'Authenticate to Unlock'}
+                </button>
+              </article>
+            ))}
+          </section>
+
+          <section className={styles.marketplaceSection}>
+            <div className={styles.marketplaceHeader}>
+              <div>
+                <h2>Imperial Treasury Assets</h2>
+                <p>Curated marketplace items presented as sovereign offerings.</p>
+              </div>
+              <Link href="/signin" className={styles.marketplaceLink}>
+                See all
+              </Link>
+            </div>
+            <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
+              {treasuryProducts.map((product) => (
+                <div key={product.id} className={styles.marketplaceSlide}>
+                  <MarketplaceCard product={product} />
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className={styles.founderCallout}>
+            <div>
+              <h3>Sovereign Founder Activation</h3>
+              <p>
+                The $1,849 covenant triggers a sovereign ceremony and unlocks the Founders
+                Wall.
+              </p>
+            </div>
+            <button type="button" onClick={handleFounderActivation}>
+              Activate Founder Ceremony
+            </button>
+          </section>
+
+          <InnovatorPortal />
+
+          <section className={styles.transparency}>
+            <h3>Local Governance & Transparency</h3>
+            <p>
+              Administrative Oversight: Office of the DAIC. Local Foundation: Overseen
+              by the CASEC of Morn Chandelle, Gressier. Built upon the Soulouque Legacy
+              (1849).
+            </p>
+          </section>
+        </div>
 
         {showDecree && (
           <div className={styles.decreeOverlay} role="dialog" aria-modal="true">

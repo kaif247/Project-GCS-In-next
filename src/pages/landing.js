@@ -1,11 +1,11 @@
 // Force dynamic rendering to bypass Vercel edge cache
 export const dynamic = 'force-dynamic';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
-import TreasuryFrequencyCounter from '../components/TreasuryFrequencyCounter';
 import FounderActivationAnimation from '../components/FounderActivationAnimation';
+import ToggleButton from '../components/ToggleButton';
 
 const engagementOptions = [
   'Protector',
@@ -134,14 +134,12 @@ const LandingPage = () => {
   const [showFounderAnimation, setShowFounderAnimation] = useState(false);
   const [isGatewayModalOpen, setIsGatewayModalOpen] = useState(false);
   const [isFooterPulse, setIsFooterPulse] = useState(false);
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
 
-  // ===== PARALLAX STATES =====
-  const [scrollY, setScrollY] = useState(0);
-  const [mapOffset, setMapOffset] = useState(0);
-  const [registryOffset, setRegistryOffset] = useState(0);
+  // ===== PARALLAX REFS (RAF + CSS vars for smooth scroll) =====
+  const pageRef = useRef(null);
+  const scrollRafRef = useRef(null);
 
   // ===== MEMOS AND HOOKS =====
   const onboardingEmail = useMemo(() => {
@@ -299,27 +297,68 @@ const LandingPage = () => {
   };
 
   // ===== USEEFFECT HOOKS =====
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   // ===== PARALLAX SCROLL EFFECT =====
   useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY;
-      setScrollY(y);
-      setMapOffset(y * 0.5);  // Map moves at 50% of scroll speed
-      setRegistryOffset(Math.min(y * 0.3, 150));  // Registry rises up
+    const getParallaxStrength = () => {
+      if (typeof window === 'undefined') return 1;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return 0.08;
+      const w = window.innerWidth || 1200;
+      if (w <= 420) return 0.22;
+      if (w <= 640) return 0.3;
+      if (w <= 900) return 0.45;
+      return 1;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    const setParallaxVars = (y) => {
+      if (!pageRef.current) return;
+      const strength = getParallaxStrength();
+      const mapOffset = y * 0.45 * strength;
+      const registryOffset = Math.min(y * 0.3 * strength, 150 * Math.max(strength, 0.25));
+      const registryRise = Math.max(0, 170 - y * 0.09 * strength);
+      const registryScale = Math.min(1, 0.92 + (y / 5200) * strength);
+      const registryOpacity = Math.min(1, 0.62 + (y / 1800) * strength);
 
+      pageRef.current.style.setProperty('--parallax-map-y', `${mapOffset}px`);
+      pageRef.current.style.setProperty('--parallax-pulse-y', `${registryOffset * -0.35}px`);
+      pageRef.current.style.setProperty(
+        '--parallax-pulse-scale',
+        `${1 + registryOffset / 1200}`
+      );
+      pageRef.current.style.setProperty('--registry-rise-y', `${registryRise}px`);
+      pageRef.current.style.setProperty('--registry-scale', `${registryScale}`);
+      pageRef.current.style.setProperty('--registry-opacity', `${registryOpacity}`);
+    };
+
+    const handleScroll = () => {
+      if (scrollRafRef.current) return;
+      scrollRafRef.current = window.requestAnimationFrame(() => {
+        setParallaxVars(window.scrollY || 0);
+        scrollRafRef.current = null;
+      });
+    };
+
+    const handleResize = () => {
+      if (scrollRafRef.current) return;
+      scrollRafRef.current = window.requestAnimationFrame(() => {
+        setParallaxVars(window.scrollY || 0);
+        scrollRafRef.current = null;
+      });
+    };
+
+    setParallaxVars(window.scrollY || 0);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+      if (scrollRafRef.current) {
+        window.cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = null;
+      }
+    };
+  }, []);
   const vaultPercent = 33;
-  const registryRise = Math.max(0, 170 - scrollY * 0.09);
-  const registryScale = Math.min(1, 0.92 + scrollY / 5200);
-  const registryOpacity = Math.min(1, 0.62 + scrollY / 1800);
 
   // ===== RETURN JSX =====
   return (
@@ -333,63 +372,82 @@ const LandingPage = () => {
         <meta property="og:image" content="/imperial-seal.svg" />
         <link rel="icon" href="/w%20(1).ico" />
       </Head>
-      <div className={styles.page}>
+      <div className={styles.page} ref={pageRef}>
         {/* ===== PARALLAX BACKGROUND MAP ===== */}
-        <div
-          className={styles.parallaxMapLayer}
-          style={{ transform: `translateY(${mapOffset}px)` }}
-        >
+        <div className={styles.parallaxMapLayer}>
           <img
             src="/haiti-gressier-map.svg"
             alt="Map of Haiti - Gressier Region"
             className={styles.parallaxMapImage}
           />
-          <div
-            className={styles.parallaxMapPulse}
-            style={{
-              transform: `translate(-50%, ${registryOffset * -0.35}px) scale(${1 + registryOffset / 1200})`,
-            }}
-          />
+          <div className={styles.parallaxMapPulse} />
           <div className={styles.parallaxMapOverlay} />
         </div>
 
         <nav className={styles.nav}>
           <div className={styles.navInner}>
-            <div className={styles.navTop}>
+            <div className={styles.navLeft}>
               <div className={styles.brandWrap}>
                 <img src="/GCS.png" alt="GCS" className={styles.brandLogo} />
               </div>
-              {isMounted && (
-                <button
-                  type="button"
-                  className={styles.navToggle}
-                  aria-label="Toggle navigation"
-                  aria-expanded={isNavOpen}
-                  onClick={() => setIsNavOpen((prev) => !prev)}
-                >
-                  <span />
-                  <span />
-                  <span />
-                </button>
-              )}
             </div>
-            <div
-              className={`${styles.navLinks} ${
-                isMounted && isNavOpen ? styles.navLinksOpen : ''
-              }`}
-            >
-              <a href="/landing">Home</a>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className={styles.navCenter}>
+              <div className={styles.navLinks}>
+                <a href="/landing">Home</a>
                 <a href="/imperial-treasury">Imperial Treasury</a>
-                <TreasuryFrequencyCounter />
+                <a href="#nexus">Nexus</a>
+                <a href="#registry">Registry</a>
+                <a href="#roadmap">Roadmap</a>
               </div>
-              <a href="#nexus">Nexus</a>
-              <a href="#registry">Registry</a>
-              <a href="#roadmap">Roadmap</a>
-              <a href="/signin">Sign in</a>
+            </div>
+            <div className={styles.navRight}>
+              <a href="/signin" className={styles.navCta}>
+                Sign in
+              </a>
             </div>
           </div>
         </nav>
+        <ToggleButton
+          isOpen={isSidebarOpen}
+          onToggle={() => setIsSidebarOpen((prev) => !prev)}
+          label="Toggle navigation"
+          style={{ top: '50px', zIndex: 1301 }}
+        />
+        {isSidebarOpen && (
+          <button
+            type="button"
+            className={styles.landingSidebarBackdrop}
+            aria-label="Close navigation"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        <aside
+          className={`${styles.landingSidebarWrap} ${
+            isSidebarOpen ? styles.landingSidebarWrapOpen : ''
+          }`}
+          aria-hidden={!isSidebarOpen}
+        >
+          <div className={styles.landingSidebar}>
+            <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
+              Home
+            </a>
+            <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
+              Imperial Treasury
+            </a>
+            <a href="#nexus" onClick={() => setIsSidebarOpen(false)}>
+              Nexus
+            </a>
+            <a href="#registry" onClick={() => setIsSidebarOpen(false)}>
+              Registry
+            </a>
+            <a href="#roadmap" onClick={() => setIsSidebarOpen(false)}>
+              Roadmap
+            </a>
+            <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
+              Sign in
+            </a>
+          </div>
+        </aside>
 
         <section id="hero" className={styles.hero}>
           <div className={styles.heroContent}>
@@ -416,33 +474,28 @@ const LandingPage = () => {
               </a>
             </div>
           </div>
-          <div className={styles.heroSeal}>
-            <img
-              src="/landing page.svg"
-              alt="Landing page emblem"
-              fetchpriority="high"
-            />
-          </div>
-        </section>
-
-        <section className={styles.triptychSection}>
-          <div className={styles.heroTriptych}>
-            {trinity.map((member) => (
-              <div key={member.name} className={styles.triptychCard}>
-                <div className={styles.triptychFrame}>
-                  <img
-                    src={member.image}
-                    alt={`${member.name} portrait`}
-                    className={styles.triptychImage}
-                  />
-                  <div className={styles.triptychGlow} aria-hidden="true" />
+          <div className={styles.heroNexus}>
+            <div className={styles.heroTriptych}>
+              {trinity.map((member, idx) => (
+                <div
+                  key={member.name}
+                  className={`${styles.triptychCard} ${idx === 1 ? styles.nexusCenter : ''}`}
+                >
+                  <div className={styles.triptychFrame}>
+                    <img
+                      src={member.image}
+                      alt={`${member.name} portrait`}
+                      className={styles.triptychImage}
+                    />
+                    <div className={styles.triptychGlow} aria-hidden="true" />
+                  </div>
+                  <div className={styles.triptychMeta}>
+                    <span>{member.title}</span>
+                    <strong>{member.name}</strong>
+                  </div>
                 </div>
-                <div className={styles.triptychMeta}>
-                  <span>{member.title}</span>
-                  <strong>{member.name}</strong>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
@@ -462,10 +515,6 @@ const LandingPage = () => {
           <div className={styles.registryRiseRail} aria-hidden="true" />
           <div
             className={styles.registryCardWrap}
-            style={{
-              transform: `translate3d(0, ${registryRise}px, 0) scale(${registryScale})`,
-              opacity: registryOpacity,
-            }}
           >
           <div className={styles.registryCard}>
             <h2 className={styles.sectionTitle}>Registry of Blood</h2>
@@ -794,13 +843,61 @@ const LandingPage = () => {
           <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
         </a>
 
-        <footer className={styles.territoryFooter}>
-          <div className={styles.territoryFooterInner}>
-            <div className={styles.territoryMapFrame}>
-              <div className={styles.territoryMapHud}>
-                <span className={styles.hudTag}>Gressier Node</span>
-                <span className={styles.hudTag}>Morn Chandelle</span>
+        <footer className={styles.imperialFooter}>
+          <div className={styles.imperialFooterTop}>
+            <div className={styles.imperialBrandBlock}>
+              <div className={styles.imperialCrown}>
+                <img src="/GCS.png" alt="GCS logo" className={styles.imperialBrandLogo} />
               </div>
+              <h3>GCS</h3>
+              <p>Global Creole Society</p>
+              <p>Restoring the Soulouque Legacy through Sovereign Intelligence</p>
+            </div>
+
+            <div className={styles.imperialFooterCol}>
+              <h4>House of Dorvilus</h4>
+              <a href="#nexus">About the Lineage</a>
+              <a href="#hero">Sovereign Restoration</a>
+              <a href="#roadmap">Legacy Archive</a>
+              <a href="#registry">Contact Council</a>
+            </div>
+
+            <div className={styles.imperialFooterCol}>
+              <h4>Imperial Treasury</h4>
+              <a href="/imperial-treasury">Activation Status</a>
+              <a href="#financial-vault">Contribution Tiers</a>
+              <a href="#founder-covenant">Physical Regalia</a>
+              <a href="/imperial-treasury">Digital Assets</a>
+            </div>
+
+            <div className={styles.imperialFooterCol}>
+              <h4>Registry</h4>
+              <a href="#registry">Authenticate Bloodline</a>
+              <a href="#registry">Citizen Portal</a>
+              <a href="#registry">Verification Process</a>
+              <a href="#founder-covenant">Registry Benefits</a>
+            </div>
+
+            <div className={styles.imperialFooterCol}>
+              <h4>Resources</h4>
+              <a href="#nexus">Digital Lakou Guide</a>
+              <a href="#roadmap">Roadmap 2026</a>
+              <a href="#financial-vault">News & Updates</a>
+              <a href="#founder-covenant">Documentation</a>
+            </div>
+          </div>
+
+          <div className={styles.imperialFoundationBox}>
+            <div className={styles.imperialFoundationText}>
+              <h4>Local Foundation</h4>
+              <p>
+                Administered under the local oversight of the
+                <strong> CASEC of Morn Chandelle, Gressier</strong>. For local governance
+                and community infrastructure references, review The Sovereignty of Local
+                Governments.
+              </p>
+            </div>
+            <div className={styles.imperialFoundationMap}>
               <iframe
                 title="Morn Chandelle and Gressier Territorial Map"
                 src="https://www.openstreetmap.org/export/embed.html?bbox=-72.62%2C18.46%2C-72.42%2C18.62&amp;layer=mapnik&amp;marker=18.54%2C-72.52"
@@ -809,60 +906,26 @@ const LandingPage = () => {
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
-            <div className={styles.territoryPanel}>
-              <div className={styles.territoryPanelTop}>
-                <span>Territorial Command Deck</span>
-                <span className={styles.liveSignal}><span /> Live</span>
-              </div>
-              <p className={styles.territoryKicker}>Morn Chandelle Foundation Footer</p>
-              <h4>From Digital Signal to Physical Soil</h4>
-              <p>
-                Every registry interaction is linked to physical restoration work in Gressier.
-                This is how participants become citizens in the living project.
-              </p>
-              <div className={styles.signalMeter} aria-hidden="true">
-                <div className={styles.signalMeterFill} />
-              </div>
-              <div className={styles.territoryGridStats}>
-                <div className={styles.territoryStatCard}>
-                  <strong>Digital Input</strong>
-                  <span>Registry + Treasury Activation</span>
-                </div>
-                <div className={styles.territoryStatCard}>
-                  <strong>Physical Output</strong>
-                  <span>Ground Restoration in Morn Chandelle</span>
-                </div>
-              </div>
-              <ul className={styles.territoryChecklist}>
-                <li>Registry authentication is logged as a civic participation signal.</li>
-                <li>Treasury activity maps to restoration task visibility in Gressier.</li>
-                <li>CASEC coordination provides local governance accountability.</li>
-              </ul>
-              <div className={styles.territoryActions}>
-                <a
-                  className={styles.territoryActionPrimary}
-                  href="https://www.openstreetmap.org/?mlat=18.54&amp;mlon=-72.52#map=12/18.54/-72.52"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Open Live Map
-                </a>
-                <a className={styles.territoryActionGhost} href="#registry">
-                  Go To Registry
-                </a>
-                <a className={styles.territoryActionGhost} href="/imperial-treasury">
-                  Open Treasury
-                </a>
-              </div>
-              <p className={styles.casecShoutout}>
-                Local legitimacy acknowledgment: In active coordination with the
-                <strong> CASEC of Morn Chandelle, Gressier</strong>.
-              </p>
-            </div>
           </div>
-          <div className={styles.citizenBridge}>
-            The benefit: citizens can see a direct bridge between Digital Lakou participation
-            and real community restoration in Morn Chandelle.
+
+          <div className={styles.imperialFooterBottom}>
+            <div className={styles.imperialLegal}>
+              <p>
+                The House of Dorvilus is a sovereign digital institution dedicated to
+                preserving bloodline intelligence and generational wealth through ceremonial
+                frequency alignment.
+              </p>
+              <p>The 1791 spark burns eternal in those who understand.</p>
+            </div>
+            <div className={styles.imperialConnect}>
+              <h5>Connect</h5>
+              <div className={styles.imperialSocials}>
+                <a href="#" aria-label="Email">M</a>
+                <a href="#" aria-label="Facebook">f</a>
+                <a href="#" aria-label="Twitter">X</a>
+                <a href="#" aria-label="Instagram">I</a>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
