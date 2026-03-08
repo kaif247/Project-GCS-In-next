@@ -8,6 +8,7 @@ import MarketplaceCard from '../components/Marketplace/MarketplaceCard';
 import FounderActivationAnimation from '../components/FounderActivationAnimation';
 import { MarketplaceContext } from '../context/MarketplaceContext';
 import ToggleButton from '../components/ToggleButton';
+import CenterModeCarousel from '../components/CenterModeCarousel';
 
 const treasuryAssets = [
   {
@@ -247,7 +248,7 @@ const ImperialTreasury = () => {
         <meta property="og:image" content="/imperial-seal.svg" />
         <link rel="icon" href="/crowned-hare.svg" />
       </Head>
-      <main className={styles.page}>
+      <main className={`${styles.page} ${styles.mobileAppPage}`}>
         <nav className={landingStyles.nav}>
           <div className={landingStyles.navInner}>
             <div className={landingStyles.navLeft}>
@@ -405,31 +406,72 @@ const ImperialTreasury = () => {
           </section>
 
           <section className={styles.grid}>
-            {treasuryAssets.map((item) => (
-              <article key={item.title} className={styles.card}>
-                <h2>{item.title}</h2>
-                <p>{item.detail}</p>
-                {isAuthenticated ? (
-                  <a
-                    href={item.href}
-                    className={`${styles.cardLink} ${styles.cardActive}`}
-                    aria-label={`Access ${item.title}`}
-                    download={item.download || undefined}
-                  >
-                    {item.actionText}
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    aria-label={`Authenticate to unlock ${item.title}`}
-                    className={styles.cardLocked}
-                    onClick={handleAuthenticate}
-                  >
-                    Authenticate to Unlock
-                  </button>
+            <div className={styles.desktopOnly}>
+              <div className={styles.gridDesktop}>
+                {treasuryAssets.map((item) => (
+                  <article key={item.id} className={styles.card}>
+                    <h2>{item.title}</h2>
+                    <p>{item.detail}</p>
+                    {isAuthenticated ? (
+                      <a
+                        href={item.href}
+                        className={`${styles.cardLink} ${styles.cardActive}`}
+                        aria-label={`Access ${item.title}`}
+                        download={item.download || undefined}
+                      >
+                        {item.actionText}
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label={`Authenticate to unlock ${item.title}`}
+                        className={styles.cardLocked}
+                        onClick={handleAuthenticate}
+                      >
+                        Authenticate to Unlock
+                      </button>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </div>
+            <div className={styles.mobileOnly}>
+              <CenterModeCarousel
+                items={treasuryAssets}
+                ariaLabel="Treasury Access Items"
+                className={styles.treasuryCarousel}
+                slideClassName={styles.treasuryCarouselSlide}
+                itemWidth={264}
+                gap={12}
+                initialIndex={1}
+                getKey={(item) => item.id}
+                renderItem={(item) => (
+                  <article className={styles.card}>
+                    <h2>{item.title}</h2>
+                    <p>{item.detail}</p>
+                    {isAuthenticated ? (
+                      <a
+                        href={item.href}
+                        className={`${styles.cardLink} ${styles.cardActive}`}
+                        aria-label={`Access ${item.title}`}
+                        download={item.download || undefined}
+                      >
+                        {item.actionText}
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label={`Authenticate to unlock ${item.title}`}
+                        className={styles.cardLocked}
+                        onClick={handleAuthenticate}
+                      >
+                        Authenticate to Unlock
+                      </button>
+                    )}
+                  </article>
                 )}
-              </article>
-            ))}
+              />
+            </div>
           </section>
 
           <section id="treasury-assets" className={styles.marketplaceSection}>
@@ -442,12 +484,27 @@ const ImperialTreasury = () => {
                 See all
               </Link>
             </div>
-            <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
-              {treasuryProducts.map((product) => (
-                <div key={product.id} className={styles.marketplaceSlide}>
-                  <MarketplaceCard product={product} />
-                </div>
-              ))}
+            <div className={styles.desktopOnly}>
+              <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
+                {treasuryProducts.map((product) => (
+                  <div key={product.id} className={styles.marketplaceSlide}>
+                    <MarketplaceCard product={product} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.mobileOnly}>
+              <CenterModeCarousel
+                items={treasuryProducts}
+                ariaLabel="Imperial Treasury Assets"
+                className={styles.marketplaceCoverflow}
+                slideClassName={styles.marketplaceCoverflowSlide}
+                itemWidth={250}
+                gap={12}
+                initialIndex={1}
+                getKey={(product) => product.id}
+                renderItem={(product) => <MarketplaceCard product={product} />}
+              />
             </div>
           </section>
 
@@ -494,6 +551,13 @@ const ImperialTreasury = () => {
             </div>
           </div>
         )}
+
+        <nav className={landingStyles.mobileDock} aria-label="Treasury quick navigation">
+          <a href="/landing">Home</a>
+          <a href="/imperial-treasury">Treasury</a>
+          <a href="/landing#registry">Registry</a>
+          <a href="/signin">Sign in</a>
+        </nav>
 
         <FounderActivationAnimation
           show={showFounderMoment}

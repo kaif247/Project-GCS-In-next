@@ -465,13 +465,35 @@ finalCta
 .heroNexus {
   position: relative;
   z-index: 1;
-  padding: 6px;
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 50% 12%, rgba(0, 245, 255, 0.16), transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.2), transparent 52%),
-    rgba(6, 6, 6, 0.55);
-  border: 1px solid rgba(212, 175, 55, 0.28);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  border: 0;
+  overflow: visible;
+}
+
+.triptychCarousel {
+  width: 100%;
+}
+
+.triptychCarouselSlide {
+  padding: 6px 0;
+}
+
+.genericCarousel {
+  width: 100%;
+}
+
+.genericCarouselSlide {
+  padding: 6px 0;
+}
+
+.desktopOnly {
+  display: block;
+}
+
+.mobileOnly {
+  display: none;
 }
 
 .heroActions {
@@ -2817,5 +2839,235 @@ finalCta
 
   .imperialConnect {
     justify-self: start;
+  }
+}
+
+.mobileDock {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobileDock {
+    position: fixed;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    width: min(420px, calc(100vw - 20px));
+    z-index: 3100;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+    border-radius: 16px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    background: rgba(3, 8, 14, 0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  .mobileDock a {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #d8c18a;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(0, 245, 255, 0.16);
+    background: rgba(0, 245, 255, 0.06);
+  }
+
+  .mobileDock a:active,
+  .mobileDock a:hover {
+    color: #00141a;
+    background: linear-gradient(135deg, #d4af37, #00f5ff);
+    border-color: rgba(212, 175, 55, 0.7);
+  }
+
+  .mobileAppPage {
+    padding-bottom: 90px;
+  }
+
+  .mobileAppPage .hero {
+    padding: 98px 14px 24px !important;
+    gap: 14px !important;
+  }
+
+  .mobileAppPage .section {
+    padding: 22px 12px;
+  }
+
+  .mobileAppPage .registryCard,
+  .mobileAppPage .vaultBar,
+  .mobileAppPage .financialVault,
+  .mobileAppPage .covenantLayout,
+  .mobileAppPage .imperialFoundationBox {
+    border-radius: 18px;
+    background: rgba(4, 10, 18, 0.86);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+  }
+
+  .mobileAppPage .triptychCard {
+    border-radius: 16px;
+    border-color: rgba(0, 245, 255, 0.25);
+    background: rgba(2, 10, 17, 0.88);
+  }
+}
+
+/* Mobile App Redesign v2: intentionally different from desktop */
+@media (max-width: 900px) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .mobileOnly {
+    display: block !important;
+  }
+
+  .page.mobileAppPage {
+    background:
+      radial-gradient(circle at 50% -30%, rgba(0, 245, 255, 0.18), transparent 54%),
+      linear-gradient(180deg, #02050a 0%, #02070e 100%) !important;
+    padding-bottom: 112px !important;
+  }
+
+  .nav {
+    border-bottom: 0 !important;
+    background: linear-gradient(180deg, rgba(2, 8, 14, 0.94), rgba(2, 8, 14, 0.58)) !important;
+    backdrop-filter: blur(14px) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .navInner {
+    padding: 8px 12px !important;
+    gap: 10px !important;
+  }
+
+  .hero {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 88px 12px 18px !important;
+    display: block !important;
+  }
+
+  .heroContent {
+    padding: 16px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(0, 245, 255, 0.24) !important;
+    background: linear-gradient(160deg, rgba(6, 16, 28, 0.92), rgba(3, 10, 18, 0.92)) !important;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .heroTitle {
+    font-size: clamp(30px, 8.8vw, 44px) !important;
+    line-height: 1.04 !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  .heroSub {
+    margin-top: 10px !important;
+    font-size: 16px !important;
+    color: #d4dbe3 !important;
+  }
+
+  .heroNexus {
+    margin-top: 12px !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    border-color: rgba(212, 175, 55, 0.28) !important;
+    background: linear-gradient(170deg, rgba(5, 13, 22, 0.92), rgba(2, 7, 12, 0.92)) !important;
+  }
+
+  .heroTriptych {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .heroTriptych .triptychCard {
+    min-height: 0 !important;
+    width: 100% !important;
+    padding: 10px !important;
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .mobileOnly .triptychCard {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    padding: 10px !important;
+  }
+
+  .mobileOnly .triptychImage {
+    max-height: 78px !important;
+  }
+
+  .mobileOnly .triptychMeta strong {
+    font-size: 13px !important;
+  }
+
+  .section {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 14px 10px !important;
+  }
+
+  .sectionTitle {
+    text-align: left !important;
+    font-size: 26px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .registryCard,
+  .financialVault,
+  .covenantLayout,
+  .roadmap,
+  .finalCta,
+  .imperialFoundationBox {
+    border-radius: 18px !important;
+    border: 1px solid rgba(212, 175, 55, 0.24) !important;
+    background: linear-gradient(160deg, rgba(5, 12, 20, 0.93), rgba(3, 8, 14, 0.93)) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+  }
+
+  .pillars,
+  .treasuryGrid,
+  .footerGrid {
+    gap: 10px !important;
+  }
+
+  .pillarCard,
+  .treasuryCard,
+  .roadmapItem,
+  .tierCard {
+    border-radius: 14px !important;
+    border-color: rgba(0, 245, 255, 0.2) !important;
+    background: rgba(2, 10, 16, 0.86) !important;
+  }
+
+  .imperialFooter {
+    margin-top: 10px !important;
+    padding: 18px 10px 96px !important;
+    background: linear-gradient(180deg, #04070d 0%, #03050a 100%) !important;
+  }
+
+  .mobileDock {
+    bottom: 8px !important;
+    padding: 7px !important;
+    border-radius: 14px !important;
+    background: rgba(4, 10, 18, 0.96) !important;
+  }
+
+  .mobileDock a {
+    min-height: 40px !important;
+    border-radius: 9px !important;
+    font-size: 10px !important;
   }
 }

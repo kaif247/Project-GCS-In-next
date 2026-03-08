@@ -6,6 +6,7 @@ import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
 import FounderActivationAnimation from '../components/FounderActivationAnimation';
 import ToggleButton from '../components/ToggleButton';
+import CenterModeCarousel from '../components/CenterModeCarousel';
 
 const engagementOptions = [
   'Protector',
@@ -360,7 +361,7 @@ const LandingPage = () => {
         <meta property="og:image" content="/imperial-seal.svg" />
         <link rel="icon" href="/w%20(1).ico" />
       </Head>
-      <div className={styles.page} ref={pageRef}>
+      <div className={`${styles.page} ${styles.mobileAppPage}`} ref={pageRef}>
         {/* ===== PARALLAX BACKGROUND LAYERS ===== */}
         <div className={styles.parallaxMapLayer}>
           <div className={styles.parallaxNebula} aria-hidden="true" />
@@ -477,39 +478,93 @@ const LandingPage = () => {
             </div>
           </div>
           <div className={styles.heroNexus}>
-            <div className={styles.heroTriptych}>
-              {trinity.map((member, idx) => (
-                <div
-                  key={member.name}
-                  className={`${styles.triptychCard} ${idx === 1 ? styles.nexusCenter : ''}`}
-                >
-                  <div className={styles.triptychFrame}>
-                    <img
-                      src={member.image}
-                      alt={`${member.name} portrait`}
-                      className={styles.triptychImage}
-                    />
-                    <div className={styles.triptychGlow} aria-hidden="true" />
+            <div className={styles.desktopOnly}>
+              <div className={styles.heroTriptych}>
+                {trinity.map((member, idx) => (
+                  <div
+                    key={member.name}
+                    className={`${styles.triptychCard} ${idx === 1 ? styles.nexusCenter : ''}`}
+                  >
+                    <div className={styles.triptychFrame}>
+                      <img
+                        src={member.image}
+                        alt={`${member.name} portrait`}
+                        className={styles.triptychImage}
+                      />
+                      <div className={styles.triptychGlow} aria-hidden="true" />
+                    </div>
+                    <div className={styles.triptychMeta}>
+                      <span>{member.title}</span>
+                      <strong>{member.name}</strong>
+                    </div>
                   </div>
-                  <div className={styles.triptychMeta}>
-                    <span>{member.title}</span>
-                    <strong>{member.name}</strong>
+                ))}
+              </div>
+            </div>
+            <div className={styles.mobileOnly}>
+              <CenterModeCarousel
+                items={trinity}
+                ariaLabel="Imperial Trinity"
+                className={styles.triptychCarousel}
+                slideClassName={styles.triptychCarouselSlide}
+                itemWidth={196}
+                gap={10}
+                initialIndex={1}
+                getKey={(member) => member.name}
+                renderItem={(member, idx, meta) => (
+                  <div
+                    className={`${styles.triptychCard} ${
+                      meta.isActive ? styles.nexusCenter : ''
+                    }`}
+                  >
+                    <div className={styles.triptychFrame}>
+                      <img
+                        src={member.image}
+                        alt={`${member.name} portrait`}
+                        className={styles.triptychImage}
+                      />
+                      <div className={styles.triptychGlow} aria-hidden="true" />
+                    </div>
+                    <div className={styles.triptychMeta}>
+                      <span>{member.title}</span>
+                      <strong>{member.name}</strong>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )}
+              />
             </div>
           </div>
         </section>
 
         <section id="nexus" className={styles.section}>
           <h2 className={styles.sectionTitle}>The Quadri-Dynastic Nexus</h2>
-          <div className={styles.pillars}>
-            {pillars.map((pillar) => (
-              <div key={pillar.title} className={styles.pillarCard}>
-                <h3>{pillar.title}</h3>
-                <p>{pillar.text}</p>
-              </div>
-            ))}
+          <div className={styles.desktopOnly}>
+            <div className={styles.pillars}>
+              {pillars.map((pillar) => (
+                <div key={pillar.title} className={styles.pillarCard}>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.mobileOnly}>
+            <CenterModeCarousel
+              items={pillars}
+              ariaLabel="Quadri-Dynastic Nexus"
+              className={styles.genericCarousel}
+              slideClassName={styles.genericCarouselSlide}
+              itemWidth={272}
+              gap={12}
+              initialIndex={1}
+              getKey={(pillar) => pillar.title}
+              renderItem={(pillar) => (
+                <div className={styles.pillarCard}>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.text}</p>
+                </div>
+              )}
+            />
           </div>
         </section>
 
@@ -705,13 +760,33 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-          <div className={styles.treasuryGrid}>
-            {treasuryItems.map((item) => (
-              <div key={item.title} className={styles.treasuryCard}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </div>
-            ))}
+          <div className={styles.desktopOnly}>
+            <div className={styles.treasuryGrid}>
+              {treasuryItems.map((item) => (
+                <div key={item.title} className={styles.treasuryCard}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.mobileOnly}>
+            <CenterModeCarousel
+              items={treasuryItems}
+              ariaLabel="Imperial Treasury Activation Items"
+              className={styles.genericCarousel}
+              slideClassName={styles.genericCarouselSlide}
+              itemWidth={272}
+              gap={12}
+              initialIndex={1}
+              getKey={(item) => item.title}
+              renderItem={(item) => (
+                <div className={styles.treasuryCard}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              )}
+            />
           </div>
         </section>
 
@@ -847,6 +922,13 @@ const LandingPage = () => {
         <a href="/imperial-treasury" className={styles.sacredKeyFixed}>
           <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
         </a>
+
+        <nav className={styles.mobileDock} aria-label="Landing quick navigation">
+          <a href="/landing#hero">Home</a>
+          <a href="/landing#registry">Registry</a>
+          <a href="/imperial-treasury">Treasury</a>
+          <a href="/signin">Sign in</a>
+        </nav>
 
         <footer className={styles.imperialFooter}>
           <div className={styles.imperialFooterTop}>

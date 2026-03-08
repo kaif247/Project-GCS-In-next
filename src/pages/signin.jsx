@@ -32,7 +32,7 @@ const SignInPage = () => {
       <Head>
         <title>Sign in | House of Dorvilus</title>
       </Head>
-      <div className={styles.page}>
+      <div className={`${styles.page} ${styles.mobileAppPage}`}>
         <nav className={landingStyles.nav}>
           <div className={landingStyles.navInner}>
             <div className={landingStyles.navLeft}>
@@ -174,6 +174,13 @@ const SignInPage = () => {
             {status && <div className={styles.status}>{status}</div>}
           </div>
         </main>
+
+        <nav className={landingStyles.mobileDock} aria-label="Sign in quick navigation">
+          <a href="/landing">Home</a>
+          <a href="/landing#registry">Registry</a>
+          <a href="/imperial-treasury">Treasury</a>
+          <a href="/signin">Sign in</a>
+        </nav>
       </div>
     </>
   );
