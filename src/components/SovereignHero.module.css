@@ -1,0 +1,94 @@
+.hero {
+  position: relative;
+  z-index: 15;
+  width: 100%;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.24);
+  background:
+    radial-gradient(circle at 14% 20%, rgba(0, 245, 255, 0.16), transparent 42%),
+    radial-gradient(circle at 82% 0%, rgba(212, 175, 55, 0.2), transparent 48%),
+    #0a0a0a;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+}
+
+.heroSticky {
+  position: sticky;
+  top: 56px;
+}
+
+.heroInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.heroLead h1 {
+  margin: 2px 0 8px;
+  color: #d4af37;
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.08;
+}
+
+.heroLead p {
+  margin: 0;
+  color: #cfc4a5;
+  max-width: 64ch;
+  font-size: 14px;
+}
+
+.kicker {
+  margin: 0;
+  color: #00f5ff;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.heroTrinity {
+  display: grid;
+  gap: 10px;
+}
+
+.trinityCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(0, 0, 0, 0.42);
+  padding: 10px 12px;
+}
+
+.trinityCard img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.trinityCard span {
+  display: block;
+  color: #9acfd5;
+  font-size: 11px;
+}
+
+.trinityCard strong {
+  color: #e7c673;
+  font-size: 14px;
+  font-family: var(--font-serif);
+}
+
+@media (max-width: 900px) {
+  .heroSticky {
+    top: 52px;
+  }
+
+  .heroInner {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+}

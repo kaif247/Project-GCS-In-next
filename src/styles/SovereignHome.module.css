@@ -22,9 +22,9 @@
   --parallax-map-y: 0px;
   --parallax-pulse-y: 0px;
   --parallax-pulse-scale: 1;
-  --registry-rise-y: 170px;
-  --registry-scale: 0.92;
-  --registry-opacity: 0.62;
+  --registry-rise-y: 0px;
+  --registry-scale: 1;
+  --registry-opacity: 1;
 }
 finalCta
 .page * {
@@ -321,6 +321,41 @@ finalCta
   font-family: var(--font-serif);
 }
 
+.heroTypewriter {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.heroTypewriter::before {
+  content: attr(data-fulltext);
+  display: block;
+  visibility: hidden;
+  white-space: normal;
+}
+
+.heroTypewriterLive {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.heroTypeCursor {
+  display: inline-block;
+  color: #00f5ff;
+  text-shadow: 0 0 8px rgba(0, 245, 255, 0.75);
+  animation: landingTypeBlink 0.9s steps(1, end) infinite;
+}
+
+.vaultSection {
+  margin-top: 44px;
+}
+
 .heroFlame {
   color: var(--electric);
 }
@@ -329,6 +364,81 @@ finalCta
   font-size: clamp(14px, 1.8vw, 22px);
   font-weight: 500;
   color: var(--text-soft);
+}
+
+.treasurySignalChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  width: fit-content;
+  border: 1px solid rgba(0, 245, 255, 0.36);
+  background: rgba(0, 245, 255, 0.08);
+  color: #9ff8ff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 8px 12px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.treasurySignalChip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.22), transparent);
+  transform: translateX(-120%);
+  animation: treasuryScan 2.4s linear infinite;
+}
+
+.treasurySignalChip:hover,
+.treasurySignalChip:focus-visible {
+  color: #00ebff;
+  border-color: #00ebff;
+  box-shadow: 0 0 14px rgba(0, 235, 255, 0.32);
+}
+
+.treasurySignalDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ebff;
+  box-shadow: 0 0 8px rgba(0, 235, 255, 0.9);
+  animation: treasuryPulse 1.2s ease-in-out infinite;
+}
+
+.treasurySignalMeta {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  text-transform: none;
+}
+
+.treasurySignalLabel {
+  color: #98b8bf;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.treasurySignalValue {
+  color: #00ebff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 8px rgba(0, 235, 255, 0.45);
+}
+
+.treasurySignalState {
+  color: #9fd6df;
+  font-size: 10px;
+  letter-spacing: 0.1em;
 }
 
 .heroSeal {
@@ -667,6 +777,27 @@ finalCta
   }
 }
 
+@keyframes treasuryPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+
+@keyframes treasuryScan {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
 @media (max-width: 768px) {
   .registryRisingSection {
     min-height: 80vh;
@@ -802,6 +933,17 @@ finalCta
   }
   50% {
     filter: drop-shadow(0 0 18px rgba(0, 245, 255, 0.7));
+  }
+}
+
+@keyframes landingTypeBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 
@@ -1309,11 +1451,20 @@ finalCta
 }
 
 .vaultBar {
+  max-width: 760px;
+  margin: 0 auto 28px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 14px;
   padding: 10px;
   border: 1px solid var(--border-gold);
-  margin-bottom: 28px;
+}
+
+.vaultMeta {
+  margin: 0 0 8px;
+  color: var(--text-soft);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .vaultTrack {
@@ -1328,14 +1479,15 @@ finalCta
   background: linear-gradient(90deg, var(--gold), var(--electric));
   display: flex;
   align-items: center;
-  padding-left: 14px;
+  justify-content: center;
+  padding: 0 8px;
   color: #0a0a0a;
   font-weight: 700;
   transition: width 0.6s ease-in-out;
 }
 
 .vaultFill span {
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -2206,6 +2358,23 @@ finalCta
     min-width: 0 !important;
   }
 
+  .treasurySignalChip {
+    font-size: 11px;
+    padding: 7px 10px;
+  }
+
+  .treasurySignalValue {
+    font-size: 11px;
+  }
+
+  .treasurySignalState {
+    font-size: 9px;
+  }
+
+  .treasurySignalLabel {
+    font-size: 9px;
+  }
+
   .heroNexus {
     width: 100%;
     padding: 8px;
@@ -2252,6 +2421,19 @@ finalCta
     min-width: 0 !important;
   }
 
+  .vaultBar {
+    max-width: 100%;
+  }
+
+  .vaultMeta {
+    font-size: 10px;
+  }
+
+  .vaultFill span {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
   .btnPrimary,
   .btnSecondary {
     width: 100%;
@@ -2274,6 +2456,7 @@ finalCta
     font-size: clamp(28px, 9.2vw, 38px) !important;
     line-height: 1.08 !important;
   }
+
 
   .triptychCard {
     flex-basis: 142px;
@@ -2307,6 +2490,77 @@ finalCta
   transition: none;
 }
 
+/* Final landing parallax override: map-free layered depth */
+.page .parallaxMapLayer {
+  transform: none;
+  will-change: auto;
+  backface-visibility: hidden;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0, 245, 255, 0.12), transparent 42%),
+    radial-gradient(circle at 82% 82%, rgba(212, 175, 55, 0.1), transparent 46%),
+    linear-gradient(180deg, rgba(2, 10, 16, 0.92), rgba(2, 6, 10, 0.96));
+}
+
+.parallaxNebula {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(circle at 24% 30%, rgba(0, 245, 255, 0.18), transparent 40%),
+    radial-gradient(circle at 70% 18%, rgba(65, 160, 255, 0.16), transparent 34%),
+    radial-gradient(circle at 62% 74%, rgba(212, 175, 55, 0.14), transparent 42%);
+  transform: scale(1.04);
+  will-change: auto;
+  pointer-events: none;
+}
+
+.parallaxGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 245, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.16;
+  transform: none;
+  will-change: auto;
+  pointer-events: none;
+}
+
+.page .parallaxMapPulse {
+  transform: translate3d(-50%, -24px, 0) scale(1.05);
+  will-change: auto;
+  backface-visibility: hidden;
+  filter: blur(2px);
+  opacity: 0.9;
+}
+
+.parallaxRings {
+  position: absolute;
+  left: 50%;
+  bottom: -180px;
+  width: min(980px, 110vw);
+  height: min(980px, 110vw);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 45%, rgba(0, 245, 255, 0.14) 46%, transparent 48%),
+    radial-gradient(circle, transparent 56%, rgba(212, 175, 55, 0.11) 57%, transparent 59%),
+    radial-gradient(circle, transparent 67%, rgba(0, 245, 255, 0.09) 68%, transparent 70%);
+  transform: translate3d(-50%, 0, 0);
+  will-change: auto;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.page .parallaxMapOverlay {
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(0, 0, 0, 0.74) 72%,
+    rgba(0, 0, 0, 0.84) 100%
+  );
+}
+
 /* Imperial footer redesign */
 .imperialFooter {
   margin-top: 20px;
@@ -2314,6 +2568,9 @@ finalCta
   border-bottom: 1px solid rgba(212, 175, 55, 0.16);
   background: linear-gradient(180deg, #050608 0%, #030406 100%);
   padding: 36px 18px 18px;
+  position: relative;
+  z-index: 6;
+  isolation: isolate;
 }
 
 .imperialFooterTop {
@@ -2448,6 +2705,18 @@ finalCta
 
 .imperialLegal p {
   margin: 0 0 8px;
+}
+
+.imperialHoverName {
+  color: inherit;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.imperialHoverName:hover,
+.imperialHoverName:focus-visible {
+  color: #00ebff;
+  text-shadow: 0 0 10px rgba(0, 235, 255, 0.45);
 }
 
 .imperialConnect h5 {

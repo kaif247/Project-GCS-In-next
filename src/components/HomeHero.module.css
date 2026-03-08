@@ -119,11 +119,21 @@
 
 
 .vaultBar {
+  max-width: 620px;
+  width: 100%;
   margin-top: 12px;
   padding: 10px;
   border-radius: 16px;
   border: 1px solid rgba(212, 175, 55, 0.35);
   background: rgba(0, 0, 0, 0.55);
+}
+
+.vaultMeta {
+  margin: 0 0 8px;
+  color: #cfc4a5;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .vaultTrack {
@@ -137,8 +147,9 @@
   height: 100%;
   display: flex;
   align-items: center;
-  padding-left: 14px;
-  font-size: 12px;
+  justify-content: center;
+  padding: 0 8px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
@@ -224,6 +235,19 @@
 @media (max-width: 1024px) {
   .heroInner {
     grid-template-columns: 1fr;
+  }
+
+  .vaultBar {
+    max-width: 100%;
+  }
+
+  .vaultMeta {
+    font-size: 10px;
+  }
+
+  .vaultFill {
+    font-size: 11px;
+    letter-spacing: 0.06em;
   }
 
   .hero {

@@ -7,6 +7,10 @@
   transition: background-color 0.3s;
 }
 
+body.sovereign-feed-route .feed-container {
+  padding-top: 28px;
+}
+
 .dark-mode .feed-container {
   background-color: var(--bg-page);
 }
@@ -15,6 +19,10 @@
   width: 100%;
   max-width: 680px;
   padding: 16px 0;
+}
+
+body.sovereign-feed-route .feed-content {
+  padding-top: 18px;
 }
 
 
@@ -358,6 +366,13 @@ sovereign-feed-registry__badge
 }
 
 @media (max-width: 768px) {
+  body.sovereign-feed-route .feed-container {
+    padding-top: 16px;
+  }
+
+  body.sovereign-feed-route .feed-content {
+    padding-top: 10px;
+  }
   .feed-container {
     padding-bottom: 60px;
     background-color: var(--bg-page);
@@ -391,4 +406,3 @@ sovereign-feed-registry__badge
     min-height: 210px;
   }
 }
-

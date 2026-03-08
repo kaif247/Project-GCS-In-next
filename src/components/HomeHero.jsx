@@ -36,9 +36,10 @@ const HomeHero = forwardRef((props, ref) => {
             </a>
           </div>
           <div className={styles.vaultBar}>
+            <p className={styles.vaultMeta}>Treasury Frequency Activated</p>
             <div className={styles.vaultTrack}>
               <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
-                Treasury Frequency: {vaultPercent}% Activated
+                {vaultPercent}%
               </div>
             </div>
           </div>

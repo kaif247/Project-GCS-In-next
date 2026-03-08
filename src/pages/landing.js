@@ -117,6 +117,7 @@ const roadmapPhases = [
 ];
 
 const LandingPage = () => {
+  const landingHeroTitle = 'The Evolution of the Flame: The House of Dorvilus';
   // ===== ALL STATE DECLARATIONS FIRST =====
   const [form, setForm] = useState({
     name: '',
@@ -135,11 +136,14 @@ const LandingPage = () => {
   const [isGatewayModalOpen, setIsGatewayModalOpen] = useState(false);
   const [isFooterPulse, setIsFooterPulse] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [frequencyLevel, setFrequencyLevel] = useState(742);
+  const [frequencyStability, setFrequencyStability] = useState('High Stability');
+  const [landingTitleIndex, setLandingTitleIndex] = useState(0);
+  const [landingTitleDeleting, setLandingTitleDeleting] = useState(false);
 
 
-  // ===== PARALLAX REFS (RAF + CSS vars for smooth scroll) =====
+  // ===== PAGE REFERENCE =====
   const pageRef = useRef(null);
-  const scrollRafRef = useRef(null);
 
   // ===== MEMOS AND HOOKS =====
   const onboardingEmail = useMemo(() => {
@@ -297,67 +301,51 @@ const LandingPage = () => {
   };
 
   // ===== USEEFFECT HOOKS =====
-  // ===== PARALLAX SCROLL EFFECT =====
   useEffect(() => {
-    const getParallaxStrength = () => {
-      if (typeof window === 'undefined') return 1;
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduceMotion) return 0.08;
-      const w = window.innerWidth || 1200;
-      if (w <= 420) return 0.22;
-      if (w <= 640) return 0.3;
-      if (w <= 900) return 0.45;
-      return 1;
-    };
-
-    const setParallaxVars = (y) => {
-      if (!pageRef.current) return;
-      const strength = getParallaxStrength();
-      const mapOffset = y * 0.45 * strength;
-      const registryOffset = Math.min(y * 0.3 * strength, 150 * Math.max(strength, 0.25));
-      const registryRise = Math.max(0, 170 - y * 0.09 * strength);
-      const registryScale = Math.min(1, 0.92 + (y / 5200) * strength);
-      const registryOpacity = Math.min(1, 0.62 + (y / 1800) * strength);
-
-      pageRef.current.style.setProperty('--parallax-map-y', `${mapOffset}px`);
-      pageRef.current.style.setProperty('--parallax-pulse-y', `${registryOffset * -0.35}px`);
-      pageRef.current.style.setProperty(
-        '--parallax-pulse-scale',
-        `${1 + registryOffset / 1200}`
-      );
-      pageRef.current.style.setProperty('--registry-rise-y', `${registryRise}px`);
-      pageRef.current.style.setProperty('--registry-scale', `${registryScale}`);
-      pageRef.current.style.setProperty('--registry-opacity', `${registryOpacity}`);
-    };
-
-    const handleScroll = () => {
-      if (scrollRafRef.current) return;
-      scrollRafRef.current = window.requestAnimationFrame(() => {
-        setParallaxVars(window.scrollY || 0);
-        scrollRafRef.current = null;
-      });
-    };
-
-    const handleResize = () => {
-      if (scrollRafRef.current) return;
-      scrollRafRef.current = window.requestAnimationFrame(() => {
-        setParallaxVars(window.scrollY || 0);
-        scrollRafRef.current = null;
-      });
-    };
-
-    setParallaxVars(window.scrollY || 0);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-      if (scrollRafRef.current) {
-        window.cancelAnimationFrame(scrollRafRef.current);
-        scrollRafRef.current = null;
+    const interval = setInterval(() => {
+      const next = Math.floor(Math.random() * (800 - 700) + 700);
+      setFrequencyLevel(next);
+      if (next >= 750) {
+        setFrequencyStability('High Stability');
+      } else if (next >= 720) {
+        setFrequencyStability('Stable');
+      } else {
+        setFrequencyStability('Calibrating');
       }
-    };
+    }, 2800);
+
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const holdFullMs = 1300;
+    const holdEmptyMs = 340;
+    const typeMs = 54;
+    const deleteMs = 32;
+
+    let delay = landingTitleDeleting ? deleteMs : typeMs;
+    if (!landingTitleDeleting && landingTitleIndex === landingHeroTitle.length) {
+      delay = holdFullMs;
+    }
+    if (landingTitleDeleting && landingTitleIndex === 0) {
+      delay = holdEmptyMs;
+    }
+
+    const timer = window.setTimeout(() => {
+      if (!landingTitleDeleting && landingTitleIndex === landingHeroTitle.length) {
+        setLandingTitleDeleting(true);
+        return;
+      }
+      if (landingTitleDeleting && landingTitleIndex === 0) {
+        setLandingTitleDeleting(false);
+        return;
+      }
+      setLandingTitleIndex((prev) => prev + (landingTitleDeleting ? -1 : 1));
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [landingHeroTitle.length, landingTitleDeleting, landingTitleIndex]);
+
   const vaultPercent = 33;
 
   // ===== RETURN JSX =====
@@ -373,15 +361,13 @@ const LandingPage = () => {
         <link rel="icon" href="/w%20(1).ico" />
       </Head>
       <div className={styles.page} ref={pageRef}>
-        {/* ===== PARALLAX BACKGROUND MAP ===== */}
+        {/* ===== PARALLAX BACKGROUND LAYERS ===== */}
         <div className={styles.parallaxMapLayer}>
-          <img
-            src="/haiti-gressier-map.svg"
-            alt="Map of Haiti - Gressier Region"
-            className={styles.parallaxMapImage}
-          />
+          <div className={styles.parallaxNebula} aria-hidden="true" />
+          <div className={styles.parallaxGrid} aria-hidden="true" />
           <div className={styles.parallaxMapPulse} />
           <div className={styles.parallaxMapOverlay} />
+          <div className={styles.parallaxRings} aria-hidden="true" />
         </div>
 
         <nav className={styles.nav}>
@@ -452,13 +438,29 @@ const LandingPage = () => {
         <section id="hero" className={styles.hero}>
           <div className={styles.heroContent}>
             <p className={styles.eyebrow}>Sovereign Restoration V1.2</p>
-            <h1 className={styles.heroTitle}>
-              The Evolution of the Flame: The House of Dorvilus
+            <h1
+              className={`${styles.heroTitle} ${styles.heroTypewriter}`}
+              data-fulltext={landingHeroTitle}
+            >
+              <span className={styles.heroTypewriterLive}>
+                {landingHeroTitle.slice(0, landingTitleIndex)}
+                <span className={styles.heroTypeCursor} aria-hidden="true">
+                  |
+                </span>
+              </span>
             </h1>
             <p className={styles.heroSub}>
               A Natural Transition from the 1791 Spark to 2026 Sovereign
               Intelligence. Ground your frequency in the Digital Lakou.
             </p>
+            <a href="/imperial-treasury" className={styles.treasurySignalChip}>
+              <span className={styles.treasurySignalDot} aria-hidden="true" />
+              <span className={styles.treasurySignalMeta}>
+                <span className={styles.treasurySignalLabel}>Frequency Level:</span>
+                <span className={styles.treasurySignalValue}>{frequencyLevel}Hz</span>
+                <span className={styles.treasurySignalState}>- {frequencyStability}</span>
+              </span>
+            </a>
             <div className={styles.heroActions}>
               <a href="#registry" className={styles.btnPrimary}>
                 Enter the Registry of Blood
@@ -681,7 +683,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        <section id="vault" className={styles.section}>
+        <section id="vault" className={`${styles.section} ${styles.vaultSection}`}>
           <div className={styles.vaultHeader}>
             <div>
               <h2 className={styles.sectionTitle}>Imperial Treasury Activation</h2>
@@ -694,9 +696,12 @@ const LandingPage = () => {
             </a>
           </div>
           <div className={styles.vaultBar}>
+            <p className={styles.vaultMeta}>
+              Treasury Frequency Activated
+            </p>
             <div className={styles.vaultTrack}>
               <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
-                <span>Treasury Frequency: {vaultPercent}% Activated</span>
+                <span>{vaultPercent}%</span>
               </div>
             </div>
           </div>
@@ -911,7 +916,7 @@ const LandingPage = () => {
           <div className={styles.imperialFooterBottom}>
             <div className={styles.imperialLegal}>
               <p>
-                The House of Dorvilus is a sovereign digital institution dedicated to
+                The <span className={styles.imperialHoverName}>House of Dorvilus</span> is a sovereign digital institution dedicated to
                 preserving bloodline intelligence and generational wealth through ceremonial
                 frequency alignment.
               </p>
