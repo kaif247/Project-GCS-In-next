@@ -2932,7 +2932,7 @@ finalCta
     background:
       radial-gradient(circle at 50% -30%, rgba(0, 245, 255, 0.18), transparent 54%),
       linear-gradient(180deg, #02050a 0%, #02070e 100%) !important;
-    padding-bottom: 112px !important;
+    padding-bottom: 0 !important;
   }
 
   .nav {
@@ -3054,8 +3054,80 @@ finalCta
 
   .imperialFooter {
     margin-top: 10px !important;
-    padding: 18px 10px 96px !important;
+    padding: 18px 10px 86px !important;
     background: linear-gradient(180deg, #04070d 0%, #03050a 100%) !important;
+  }
+
+  .mobileAppPage .imperialFooterTop {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    align-items: start !important;
+  }
+
+  .mobileAppPage .imperialBrandBlock {
+    grid-column: 1 / -1;
+    border: 1px solid rgba(0, 245, 255, 0.18);
+    border-radius: 14px;
+    padding: 10px;
+    background: rgba(3, 11, 18, 0.82);
+  }
+
+  .mobileAppPage .imperialBrandBlock h3 {
+    font-size: 28px !important;
+    margin-top: 2px;
+  }
+
+  .mobileAppPage .imperialBrandBlock p {
+    font-size: 11px !important;
+    line-height: 1.35 !important;
+  }
+
+  .mobileAppPage .imperialFooterCol {
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    border-radius: 12px;
+    padding: 10px;
+    background: rgba(3, 9, 15, 0.8);
+    gap: 6px !important;
+  }
+
+  .mobileAppPage .imperialFooterCol h4 {
+    font-size: 12px !important;
+    margin: 0 0 4px !important;
+    letter-spacing: 0.08em;
+  }
+
+  .mobileAppPage .imperialFooterCol a {
+    font-size: 10.5px !important;
+    line-height: 1.35 !important;
+    color: #c8a74d !important;
+  }
+
+  .mobileAppPage .imperialFoundationBox {
+    margin-top: 12px !important;
+    padding: 10px !important;
+    border-radius: 12px !important;
+  }
+
+  .mobileAppPage .imperialFoundationText h4 {
+    font-size: 12px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .mobileAppPage .imperialFoundationText p {
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+  }
+
+  .mobileAppPage .imperialFooterBottom {
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+    gap: 10px !important;
+  }
+
+  .mobileAppPage .imperialLegal {
+    font-size: 11px !important;
+    line-height: 1.45 !important;
   }
 
   .mobileDock {
@@ -3069,5 +3141,25 @@ finalCta
     min-height: 40px !important;
     border-radius: 9px !important;
     font-size: 10px !important;
+  }
+
+  .sacredKeyFixed {
+    bottom: 86px !important;
+    right: 14px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sacredKeyFixed {
+    bottom: 84px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .sacredKeyFixed {
+    bottom: 82px !important;
+    right: 12px !important;
+    width: 54px !important;
+    height: 54px !important;
   }
 }

@@ -8,7 +8,9 @@
   overflow: hidden;
   width: 100%;
   padding: 8px 0 14px;
-  touch-action: pan-x;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .track {
@@ -16,13 +18,19 @@
   align-items: stretch;
   gap: var(--cm-gap, 16px);
   width: max-content;
-  transform: translateX(
-    calc(
-      50% - (var(--cm-item-width, 260px) / 2) -
-        (var(--cm-active, 0) * (var(--cm-item-width, 260px) + var(--cm-gap, 16px)))
-    )
+  margin-left: calc(
+    50% - (var(--cm-item-width, 260px) / 2) -
+      (var(--cm-active, 0) * (var(--cm-item-width, 260px) + var(--cm-gap, 16px)))
   );
-  transition: transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translate3d(var(--cm-drag-offset, 0px), 0, 0);
+  transition:
+    margin-left 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.12s linear;
+  will-change: margin-left, transform;
+}
+
+.dragging .track {
+  transition: none;
 }
 
 .slide {
@@ -52,6 +60,10 @@
 .far {
   opacity: 0.3;
   filter: blur(2.6px) saturate(0.75);
+}
+
+.slide {
+  cursor: pointer;
 }
 
 .navBtn {
