@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState, useContext } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/HelpCenter.module.css';
+import { LanguageContext } from '../context/LanguageContext';
 
 const faqItems = [
   {
@@ -14,7 +15,7 @@ const faqItems = [
   },
   {
     title: 'How do I reset my password?',
-    body: 'Tap “Forgot password?” on the login screen and follow the steps.',
+    body: 'Tap "Forgot password?" on the login screen and follow the steps.',
   },
   {
     title: 'How do I edit my profile?',
@@ -30,7 +31,7 @@ const faqItems = [
   },
   {
     title: 'How do I edit or delete a post?',
-    body: 'Open the post menu (•••) and choose Edit or Delete.',
+    body: 'Open the post menu (...) and choose Edit or Delete.',
   },
   {
     title: 'How do I like or comment on a post?',
@@ -91,6 +92,7 @@ const faqItems = [
 ];
 
 const HelpCenter = () => {
+  const { t } = useContext(LanguageContext);
   const [query, setQuery] = useState('');
   const results = useMemo(() => {
     const value = query.trim().toLowerCase();
@@ -103,25 +105,25 @@ const HelpCenter = () => {
   return (
     <>
       <Head>
-        <title>Help Center</title>
+        <title>{t('Help Center')}</title>
       </Head>
       <div className={styles.page}>
         <header className={styles.header}>
           <div>
-            <h1>Help</h1>
-            <p>Get answers to common questions, learn how to use features, and find support.</p>
+            <h1>{t('Help')}</h1>
+            <p>{t('Get answers to common questions, learn how to use features, and find support.')}</p>
           </div>
-          <Link href="/profile" className={styles.backLink}>Back to profile</Link>
+          <Link href="/profile" className={styles.backLink}>{t('Back to profile')}</Link>
         </header>
 
         <section className={styles.searchRow}>
           <input
             type="text"
-            placeholder="Search help topics"
+            placeholder={t('Search help topics')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
-          <button type="button">Search Now</button>
+          <button type="button">{t('Search Now')}</button>
         </section>
 
         <section className={styles.grid}>
@@ -129,14 +131,14 @@ const HelpCenter = () => {
             results.map((item) => (
               <article key={item.title} className={styles.card}>
                 <div className={styles.cardTitle}>
-                  <span className={styles.icon}>✉</span>
-                  <h3>{item.title}</h3>
+                  <span className={styles.icon}>@</span>
+                  <h3>{t(item.title)}</h3>
                 </div>
-                <p>{item.body}</p>
+                <p>{t(item.body)}</p>
               </article>
             ))
           ) : (
-            <div className={styles.emptyState}>No results found. Try different keywords.</div>
+            <div className={styles.emptyState}>{t('No results found. Try different keywords.')}</div>
           )}
         </section>
       </div>
@@ -145,3 +147,8 @@ const HelpCenter = () => {
 };
 
 export default HelpCenter;
+
+
+
+
+

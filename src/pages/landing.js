@@ -1,12 +1,13 @@
-// Force dynamic rendering to bypass Vercel edge cache
+﻿// Force dynamic rendering to bypass Vercel edge cache
 export const dynamic = 'force-dynamic';
 
-import React, { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useContext } from 'react';
 import Head from 'next/head';
 import styles from '../styles/SovereignHome.module.css';
 import FounderActivationAnimation from '../components/FounderActivationAnimation';
 import ToggleButton from '../components/ToggleButton';
 import CenterModeCarousel from '../components/CenterModeCarousel';
+import { LanguageContext } from '../context/LanguageContext';
 
 const engagementOptions = [
   'Protector',
@@ -118,7 +119,8 @@ const roadmapPhases = [
 ];
 
 const LandingPage = () => {
-  const landingHeroTitle = 'The Evolution of the Flame: The House of Dorvilus';
+  const { t } = useContext(LanguageContext);
+  const landingHeroTitle = t('The Evolution of the Flame: The House of Dorvilus');
   // ===== ALL STATE DECLARATIONS FIRST =====
   const [form, setForm] = useState({
     name: '',
@@ -149,30 +151,38 @@ const LandingPage = () => {
   // ===== MEMOS AND HOOKS =====
   const onboardingEmail = useMemo(() => {
     return {
-      subject: 'AUTHENTICATION SUCCESSFUL: Welcome to the Digital Lakou',
-      from: 'Office of DAIC | House of Dorvilus',
-      priority: 'Imperial / High-Frequency',
+      subject: t('AUTHENTICATION SUCCESSFUL: Welcome to the Digital Lakou'),
+      from: t('Office of DAIC | House of Dorvilus'),
+      priority: t('Imperial / High-Frequency'),
       html: `
         <div style="background:#000;color:#FFD700;padding:2rem;font-family:sans-serif;">
-          <h1 style="color:#FFD700;">CÈLÈBRE CITIZEN,</h1>
-          <p>Your signal has been received and verified. By enrolling in the Registry of Blood, you have moved beyond the noise of the digital world and grounded your frequency in the Third Empire.</p>
-          <p><strong>Your Status:</strong> PENDING INITIALIZATION</p>
-          <p><strong>Assigned Path:</strong> [Path Selected: ${form.path}]</p>
+          <h1 style="color:#FFD700;">${t('CELEBRATED CITIZEN,')}</h1>
+          <p>${t(
+            'Your signal has been received and verified. By enrolling in the Registry of Blood, you have moved beyond the noise of the digital world and grounded your frequency in the Third Empire.'
+          )}</p>
+          <p><strong>${t('Your Status:')}</strong> ${t('PENDING INITIALIZATION')}</p>
+          <p><strong>${t('Assigned Path:')}</strong> [${t('Path Selected:')} ${t(form.path)}]</p>
           <hr style="border-color:#FFD700;" />
-          <h2 style="color:#FFD700;">THE SOVEREIGN MANDATE:</h2>
-          <p>You are now a pillar of the Digital Lakou. The House of Dorvilus does not ask for followers; we activate Sovereign Intelligence. Your participation is the "Gold" that fills our Treasury and restores the legacy of Morn Chandelle.</p>
-          <h3 style="color:#FFD700;">YOUR IMMEDIATE OBJECTIVES:</h3>
+          <h2 style="color:#FFD700;">${t('THE SOVEREIGN MANDATE:')}</h2>
+          <p>${t(
+            'You are now a pillar of the Digital Lakou. The House of Dorvilus does not ask for followers; we activate Sovereign Intelligence. Your participation is the "Gold" that fills our Treasury and restores the legacy of Morn Chandelle.'
+          )}</p>
+          <h3 style="color:#FFD700;">${t('YOUR IMMEDIATE OBJECTIVES:')}</h3>
           <ol>
-            <li>Claim Your Coordinate: <a href="/imperial-treasury" style="background:#00F5FF;color:#000;padding:0.5rem 1rem;border-radius:4px;text-decoration:none;">Return to Treasury</a></li>
-            <li>Study the Frequency: Review the Sovereignty of Local Governments.</li>
-            <li>Ground the Connection: Follow the work of the CASEC of Morn Chandelle.</li>
+            <li>${t('Claim Your Coordinate:')} <a href="/imperial-treasury" style="background:#00F5FF;color:#000;padding:0.5rem 1rem;border-radius:4px;text-decoration:none;">${t('Return to Treasury')}</a></li>
+            <li>${t('Study the Frequency: Review the Sovereignty of Local Governments.')}</li>
+            <li>${t('Ground the Connection: Follow the work of the CASEC of Morn Chandelle.')}</li>
           </ol>
-          <blockquote style="color:#FFD700;">"The vault is not empty; it is waiting for your energy to fill it."</blockquote>
-          <p>In service to the Crown and the Community,<br/>The Office of the Digital AI Chancellor (DAIC)<br/>Under the Authority of H.S.H. Prince Jean J. H. Dorvilus</p>
+          <blockquote style="color:#FFD700;">"${t(
+            'The vault is not empty; it is waiting for your energy to fill it.'
+          )}"</blockquote>
+          <p>${t('In service to the Crown and the Community,')}<br/>${t(
+            'The Office of the Digital AI Chancellor (DAIC)'
+          )}<br/>${t('Under the Authority of H.S.H. Prince Jean J. H. Dorvilus')}</p>
         </div>
       `,
     };
-  }, [form.path]);
+  }, [form.path, t]);
 
   const registryEndpoint =
     process.env.NEXT_PUBLIC_REGISTRY_ENDPOINT || '/api/sovereign-registry';
@@ -202,25 +212,25 @@ const LandingPage = () => {
     if (form.tier !== 'Sovereign') {
       setPaymentStatus({
         state: 'info',
-        message: 'Only Sovereign tier requires the $1,849 founder activation verification.',
+        message: t('Only Sovereign tier requires the $1,849 founder activation verification.'),
       });
       return;
     }
     if (!form.name.trim() || !form.email.trim()) {
       setPaymentStatus({
         state: 'error',
-        message: 'Enter name and email before payment verification.',
+        message: t('Enter name and email before payment verification.'),
       });
       return;
     }
     if (!form.transactionRef.trim()) {
-      setPaymentStatus({ state: 'error', message: 'Transaction reference is required.' });
+      setPaymentStatus({ state: 'error', message: t('Transaction reference is required.') });
       return;
     }
     if (form.paymentGateway === 'daic_web3_verified' && !form.walletAddress.trim()) {
       setPaymentStatus({
         state: 'error',
-        message: 'Verified wallet address is required for Web3 verification.',
+        message: t('Verified wallet address is required for Web3 verification.'),
       });
       return;
     }
@@ -241,13 +251,13 @@ const LandingPage = () => {
         }),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'Founder payment verification failed');
+      if (!response.ok) throw new Error(result.error || t('Founder payment verification failed'));
 
       setFounderPaymentVerified(true);
       setShowFounderAnimation(true);
       setPaymentStatus({
         state: 'success',
-        message: 'High-security payment verified. Founder ceremony initiated.',
+        message: t('High-security payment verified. Founder ceremony initiated.'),
       });
       setIsGatewayModalOpen(false);
       if (typeof window !== 'undefined') {
@@ -257,7 +267,7 @@ const LandingPage = () => {
       setFounderPaymentVerified(false);
       setPaymentStatus({
         state: 'error',
-        message: error.message || 'Founder payment verification failed.',
+        message: error.message || t('Founder payment verification failed.'),
       });
     }
   };
@@ -266,13 +276,13 @@ const LandingPage = () => {
   const handleRegistrySubmit = async (event) => {
     event.preventDefault();
     if (!form.name.trim() || !form.email.trim()) {
-      setStatus({ state: 'error', message: 'Please complete all required fields.' });
+      setStatus({ state: 'error', message: t('Please complete all required fields.') });
       return;
     }
     if (form.tier === 'Sovereign' && !founderPaymentVerified) {
       setStatus({
         state: 'error',
-        message: 'Verify the $1,849 founder payment through a high-security gateway first.',
+        message: t('Verify the $1,849 founder payment through a high-security gateway first.'),
       });
       return;
     }
@@ -283,8 +293,11 @@ const LandingPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-      if (!response.ok) throw new Error('Request failed');
-      setStatus({ state: 'success', message: 'Registry received. Welcome to the House of Dorvilus.' });
+      if (!response.ok) throw new Error(t('Request failed'));
+      setStatus({
+        state: 'success',
+        message: t('Registry received. Welcome to the House of Dorvilus.'),
+      });
       setForm({
         name: '',
         email: '',
@@ -297,7 +310,7 @@ const LandingPage = () => {
       setFounderPaymentVerified(false);
       setPaymentStatus({ state: 'idle', message: '' });
     } catch (error) {
-      setStatus({ state: 'error', message: 'Submission failed. Please try again.' });
+      setStatus({ state: 'error', message: t('Submission failed. Please try again.') });
     }
   };
 
@@ -353,10 +366,12 @@ const LandingPage = () => {
   return (
     <>
       <Head>
-        <title>House of Dorvilus | Sovereign Intelligence & Imperial Restoration</title>
+        <title>{t('House of Dorvilus | Sovereign Intelligence & Imperial Restoration')}</title>
         <meta
           name="description"
-          content="Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence."
+          content={t(
+            'Official gateway of the House of Dorvilus. Restoring the Soulouque Legacy through the Digital Lakou and Sovereign Intelligence.'
+          )}
         />
         <meta property="og:image" content="/imperial-seal.svg" />
         <link rel="icon" href="/w%20(1).ico" />
@@ -380,16 +395,16 @@ const LandingPage = () => {
             </div>
             <div className={styles.navCenter}>
               <div className={styles.navLinks}>
-                <a href="/landing">Home</a>
-                <a href="/imperial-treasury">Imperial Treasury</a>
-                <a href="#nexus">Nexus</a>
-                <a href="#registry">Registry</a>
-                <a href="#roadmap">Roadmap</a>
+                <a href="/landing">{t('Home')}</a>
+                <a href="/imperial-treasury">{t('Imperial Treasury')}</a>
+                <a href="#nexus">{t('Nexus')}</a>
+                <a href="#registry">{t('Registry')}</a>
+                <a href="#roadmap">{t('Roadmap')}</a>
               </div>
             </div>
             <div className={styles.navRight}>
               <a href="/signin" className={styles.navCta}>
-                Sign in
+                {t('Sign in')}
               </a>
             </div>
           </div>
@@ -397,14 +412,14 @@ const LandingPage = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle navigation"
+          label={t('Toggle navigation')}
           style={{ top: '50px', zIndex: 1301 }}
         />
         {isSidebarOpen && (
           <button
             type="button"
             className={styles.landingSidebarBackdrop}
-            aria-label="Close navigation"
+            aria-label={t('Close navigation')}
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -416,29 +431,29 @@ const LandingPage = () => {
         >
           <div className={styles.landingSidebar}>
             <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
-              Home
+              {t('Home')}
             </a>
             <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
-              Imperial Treasury
+              {t('Imperial Treasury')}
             </a>
             <a href="#nexus" onClick={() => setIsSidebarOpen(false)}>
-              Nexus
+              {t('Nexus')}
             </a>
             <a href="#registry" onClick={() => setIsSidebarOpen(false)}>
-              Registry
+              {t('Registry')}
             </a>
             <a href="#roadmap" onClick={() => setIsSidebarOpen(false)}>
-              Roadmap
+              {t('Roadmap')}
             </a>
             <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
-              Sign in
+              {t('Sign in')}
             </a>
           </div>
         </aside>
 
         <section id="hero" className={styles.hero}>
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}>Sovereign Restoration V1.2</p>
+            <p className={styles.eyebrow}>{t('Sovereign Restoration V1.2')}</p>
             <h1
               className={`${styles.heroTitle} ${styles.heroTypewriter}`}
               data-fulltext={landingHeroTitle}
@@ -451,27 +466,28 @@ const LandingPage = () => {
               </span>
             </h1>
             <p className={styles.heroSub}>
-              A Natural Transition from the 1791 Spark to 2026 Sovereign
-              Intelligence. Ground your frequency in the Digital Lakou.
+              {t(
+                'A Natural Transition from the 1791 Spark to 2026 Sovereign Intelligence. Ground your frequency in the Digital Lakou.'
+              )}
             </p>
             <a href="/imperial-treasury" className={styles.treasurySignalChip}>
               <span className={styles.treasurySignalDot} aria-hidden="true" />
               <span className={styles.treasurySignalMeta}>
-                <span className={styles.treasurySignalLabel}>Frequency Level:</span>
+                <span className={styles.treasurySignalLabel}>{t('Frequency Level:')}</span>
                 <span className={styles.treasurySignalValue}>{frequencyLevel}Hz</span>
-                <span className={styles.treasurySignalState}>- {frequencyStability}</span>
+                <span className={styles.treasurySignalState}>- {t(frequencyStability)}</span>
               </span>
             </a>
             <div className={styles.heroActions}>
               <a href="#registry" className={styles.btnPrimary}>
-                Enter the Registry of Blood
+                {t('Enter the Registry of Blood')}
               </a>
               <a href="#vault" className={styles.btnSecondary}>
-                View the Treasury Activation
+                {t('View the Treasury Activation')}
               </a>
             </div>
             <div className={styles.sealRow}>
-              <img src="/crowned-hare.svg" alt="Crowned Hare emblem" />
+              <img src="/crowned-hare.svg" alt={t('Crowned Hare emblem')} />
               <a href="https://globalcreolesociety.com" className={styles.sealLink}>
                 globalcreolesociety.com
               </a>
@@ -494,7 +510,7 @@ const LandingPage = () => {
                       <div className={styles.triptychGlow} aria-hidden="true" />
                     </div>
                     <div className={styles.triptychMeta}>
-                      <span>{member.title}</span>
+                      <span>{t(member.title)}</span>
                       <strong>{member.name}</strong>
                     </div>
                   </div>
@@ -504,7 +520,7 @@ const LandingPage = () => {
             <div className={styles.mobileOnly}>
               <CenterModeCarousel
                 items={trinity}
-                ariaLabel="Imperial Trinity"
+                ariaLabel={t('Imperial Trinity')}
                 className={styles.triptychCarousel}
                 slideClassName={styles.triptychCarouselSlide}
                 itemWidth={196}
@@ -526,7 +542,7 @@ const LandingPage = () => {
                       <div className={styles.triptychGlow} aria-hidden="true" />
                     </div>
                     <div className={styles.triptychMeta}>
-                      <span>{member.title}</span>
+                      <span>{t(member.title)}</span>
                       <strong>{member.name}</strong>
                     </div>
                   </div>
@@ -537,13 +553,13 @@ const LandingPage = () => {
         </section>
 
         <section id="nexus" className={styles.section}>
-          <h2 className={styles.sectionTitle}>The Quadri-Dynastic Nexus</h2>
+          <h2 className={styles.sectionTitle}>{t('The Quadri-Dynastic Nexus')}</h2>
           <div className={styles.desktopOnly}>
             <div className={styles.pillars}>
               {pillars.map((pillar) => (
                 <div key={pillar.title} className={styles.pillarCard}>
-                  <h3>{pillar.title}</h3>
-                  <p>{pillar.text}</p>
+                  <h3>{t(pillar.title)}</h3>
+                  <p>{t(pillar.text)}</p>
                 </div>
               ))}
             </div>
@@ -551,7 +567,7 @@ const LandingPage = () => {
           <div className={styles.mobileOnly}>
             <CenterModeCarousel
               items={pillars}
-              ariaLabel="Quadri-Dynastic Nexus"
+              ariaLabel={t('Quadri-Dynastic Nexus')}
               className={styles.genericCarousel}
               slideClassName={styles.genericCarouselSlide}
               itemWidth={272}
@@ -560,8 +576,8 @@ const LandingPage = () => {
               getKey={(pillar) => pillar.title}
               renderItem={(pillar) => (
                 <div className={styles.pillarCard}>
-                  <h3>{pillar.title}</h3>
-                  <p>{pillar.text}</p>
+                  <h3>{t(pillar.title)}</h3>
+                  <p>{t(pillar.text)}</p>
                 </div>
               )}
             />
@@ -574,69 +590,72 @@ const LandingPage = () => {
             className={styles.registryCardWrap}
           >
           <div className={styles.registryCard}>
-            <h2 className={styles.sectionTitle}>Registry of Blood</h2>
+            <h2 className={styles.sectionTitle}>{t('Registry of Blood')}</h2>
             <p className={styles.sectionLead}>
-              Citizens do not follow. They align their frequency.
+              {t('Citizens do not follow. They align their frequency.')}
             </p>
             <form className={styles.registryForm} onSubmit={handleRegistrySubmit}>
               <label className={styles.srOnly} htmlFor="sovereign-name">
-                Full Name
+                {t('Full Name')}
               </label>
               <input
                 id="sovereign-name"
                 type="text"
-                placeholder="Your Sovereign Title"
+                placeholder={t('Your Sovereign Title')}
                 value={form.name}
                 onChange={handleChange('name')}
                 required
               />
               <label className={styles.srOnly} htmlFor="sovereign-email">
-                Email Address
+                {t('Email Address')}
               </label>
               <input
                 id="sovereign-email"
                 type="email"
-                placeholder="Digital Coordinate"
+                placeholder={t('Digital Coordinate')}
                 value={form.email}
                 onChange={handleChange('email')}
                 required
               />
               <label className={styles.srOnly} htmlFor="sovereign-path">
-                Engagement Path
+                {t('Engagement Path')}
               </label>
               <select id="sovereign-path" value={form.path} onChange={handleChange('path')}>
                 {engagementOptions.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    {t(option)}
                   </option>
                 ))}
               </select>
               <label className={styles.srOnly} htmlFor="sovereign-tier">
-                Sovereign Contribution Tier
+                {t('Sovereign Contribution Tier')}
               </label>
               <select id="sovereign-tier" value={form.tier} onChange={handleTierChange}>
                 {contributionTiers.map((tier) => (
                   <option key={tier.value} value={tier.value}>
-                    {tier.label}
+                    {t(tier.label)}
                   </option>
                 ))}
               </select>
               {form.tier !== 'Citizen' && (
                 <div className={styles.sovereignTierCard}>
-                  <h4>Sovereign Contribution Verification</h4>
+                  <h4>{t('Sovereign Contribution Verification')}</h4>
                   <p>
-                    High-tier activations must be verified through a high-security gateway.
-                    For Founder activation, submit a verified $1,849 transaction in the popup.
+                    {t(
+                      'High-tier activations must be verified through a high-security gateway. For Founder activation, submit a verified $1,849 transaction in the popup.'
+                    )}
                   </p>
                   <button
                     type="button"
                     className={styles.payNowButton}
                     onClick={() => setIsGatewayModalOpen(true)}
                   >
-                    Open Gateway Verification
+                    {t('Open Gateway Verification')}
                   </button>
                   <div className={styles.arrHelpText}>
-                    `stripe_business` and `daic_web3_verified` are the only accepted gateways for founder activation.
+                    {t(
+                      '`stripe_business` and `daic_web3_verified` are the only accepted gateways for founder activation.'
+                    )}
                   </div>
                   {paymentStatus.message && (
                     <p className={styles.paymentStatus} role="status">
@@ -652,7 +671,7 @@ const LandingPage = () => {
                   aria-hidden="true"
                   className={styles.keyIcon}
                 />
-                {status.state === 'loading' ? 'Submitting...' : selectedTier.buttonText}
+                {status.state === 'loading' ? t('Submitting...') : t(selectedTier.buttonText)}
               </button>
             </form>
             {isGatewayModalOpen && (
@@ -660,34 +679,34 @@ const LandingPage = () => {
                 className={styles.gatewayModalBackdrop}
                 role="dialog"
                 aria-modal="true"
-                aria-label="Founder payment gateway verification"
+                aria-label={t('Founder payment gateway verification')}
               >
                 <div className={styles.gatewayModalCard}>
-                  <h4>Verify $1,849 Founder Payment</h4>
-                  <label htmlFor="payment-gateway">Gateway</label>
+                  <h4>{t('Verify $1,849 Founder Payment')}</h4>
+                  <label htmlFor="payment-gateway">{t('Gateway')}</label>
                   <select
                     id="payment-gateway"
                     value={form.paymentGateway}
                     onChange={handleChange('paymentGateway')}
                   >
-                    <option value="stripe_business">Stripe for Business</option>
-                    <option value="daic_web3_verified">DAIC Verified Web3 Wallet</option>
+                    <option value="stripe_business">{t('Stripe for Business')}</option>
+                    <option value="daic_web3_verified">{t('DAIC Verified Web3 Wallet')}</option>
                   </select>
-                  <label htmlFor="transaction-ref">Transaction Reference</label>
+                  <label htmlFor="transaction-ref">{t('Transaction Reference')}</label>
                   <input
                     id="transaction-ref"
                     type="text"
-                    placeholder="cs_test_... / pi_... / 0x..."
+                    placeholder={t('cs_test_... / pi_... / 0x...')}
                     value={form.transactionRef}
                     onChange={handleChange('transactionRef')}
                   />
                   {form.paymentGateway === 'daic_web3_verified' && (
                     <>
-                      <label htmlFor="wallet-address">Verified Wallet Address</label>
+                      <label htmlFor="wallet-address">{t('Verified Wallet Address')}</label>
                       <input
                         id="wallet-address"
                         type="text"
-                        placeholder="0x..."
+                        placeholder={t('0x...')}
                         value={form.walletAddress}
                         onChange={handleChange('walletAddress')}
                       />
@@ -700,15 +719,15 @@ const LandingPage = () => {
                       onClick={handlePayment}
                     >
                       {paymentStatus.state === 'loading'
-                        ? 'Verifying...'
-                        : 'Verify Founder Payment'}
+                        ? t('Verifying...')
+                        : t('Verify Founder Payment')}
                     </button>
                     <button
                       type="button"
                       className={styles.gatewayModalClose}
                       onClick={() => setIsGatewayModalOpen(false)}
                     >
-                      Close
+                      {t('Close')}
                     </button>
                   </div>
                 </div>
@@ -723,15 +742,15 @@ const LandingPage = () => {
               <div className={styles.registrySealGlow} aria-hidden="true" />
               <img
                 src="/registry-seal.svg"
-                alt="Dorvilus Coat of Arms - Seal of Authenticity"
+                alt={t('Dorvilus Coat of Arms - Seal of Authenticity')}
                 loading="lazy"
               />
               <div className={styles.registrySealText}>
-                <span>Seal of Authenticity</span>
-                <span className={styles.registryMotto}>Je Renais de mes Cendres</span>
+                <span>{t('Seal of Authenticity')}</span>
+                <span className={styles.registryMotto}>{t('Je Renais de mes Cendres')}</span>
               </div>
               <span className={styles.registryBadge}>
-                AUTHENTICATED BLOODLINE | 2026 FREQUENCY
+                {t('AUTHENTICATED BLOODLINE | 2026 FREQUENCY')}
               </span>
             </div>
           </div>
@@ -741,18 +760,18 @@ const LandingPage = () => {
         <section id="vault" className={`${styles.section} ${styles.vaultSection}`}>
           <div className={styles.vaultHeader}>
             <div>
-              <h2 className={styles.sectionTitle}>Imperial Treasury Activation</h2>
+              <h2 className={styles.sectionTitle}>{t('Imperial Treasury Activation')}</h2>
               <p className={styles.sectionLead}>
-                The vault is not empty. It is waiting for your energy.
+                {t('The vault is not empty. It is waiting for your energy.')}
               </p>
             </div>
             <a href="/imperial-treasury" className={styles.btnSecondary}>
-              Enter the Treasury
+              {t('Enter the Treasury')}
             </a>
           </div>
           <div className={styles.vaultBar}>
             <p className={styles.vaultMeta}>
-              Treasury Frequency Activated
+              {t('Treasury Frequency Activated')}
             </p>
             <div className={styles.vaultTrack}>
               <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
@@ -764,8 +783,8 @@ const LandingPage = () => {
             <div className={styles.treasuryGrid}>
               {treasuryItems.map((item) => (
                 <div key={item.title} className={styles.treasuryCard}>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
+                  <h3>{t(item.title)}</h3>
+                  <p>{t(item.text)}</p>
                 </div>
               ))}
             </div>
@@ -773,7 +792,7 @@ const LandingPage = () => {
           <div className={styles.mobileOnly}>
             <CenterModeCarousel
               items={treasuryItems}
-              ariaLabel="Imperial Treasury Activation Items"
+              ariaLabel={t('Imperial Treasury Activation Items')}
               className={styles.genericCarousel}
               slideClassName={styles.genericCarouselSlide}
               itemWidth={272}
@@ -782,8 +801,8 @@ const LandingPage = () => {
               getKey={(item) => item.title}
               renderItem={(item) => (
                 <div className={styles.treasuryCard}>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
+                  <h3>{t(item.title)}</h3>
+                  <p>{t(item.text)}</p>
                 </div>
               )}
             />
@@ -793,34 +812,34 @@ const LandingPage = () => {
         <section id="financial-vault" className={styles.section}>
           <div className={styles.financialVault}>
             <div>
-              <h2 className={styles.sectionTitle}>The Financial Vault</h2>
+              <h2 className={styles.sectionTitle}>{t('The Financial Vault')}</h2>
               <p className={styles.sectionLead}>
-                Bridge the Digital Registry with the Imperial Treasury. Paid tiers fund
-                the Morn Chandelle Restoration.
+                {t(
+                  'Bridge the Digital Registry with the Imperial Treasury. Paid tiers fund the Morn Chandelle Restoration.'
+                )}
               </p>
               <p className={styles.clause}>
-                "Your contribution is the liquidity for the Morn Chandelle Restoration
-                Fund. We are converting digital currency into physical infrastructure.
-                In 1849, we bought our freedom with blood; in 2026, we buy our sovereignty
-                with intelligence and capital."
+                {t(
+                  '"Your contribution is the liquidity for the Morn Chandelle Restoration Fund. We are converting digital currency into physical infrastructure. In 1849, we bought our freedom with blood; in 2026, we buy our sovereignty with intelligence and capital."'
+                )}
               </p>
               <p className={styles.clause}>
-                Validation note: governance oversight and project legitimacy claims must be
-                backed by verifiable legal citations from local government records and CASEC
-                documentation before public publication.
+                {t(
+                  'Validation note: governance oversight and project legitimacy claims must be backed by verifiable legal citations from local government records and CASEC documentation before public publication.'
+                )}
               </p>
             </div>
             <div className={styles.paymentCard}>
-              <h3>Accepted Contribution Paths</h3>
+              <h3>{t('Accepted Contribution Paths')}</h3>
               <ul className={styles.paymentList}>
-                <li>Stripe / PayPal for $18.49 (Innovator) and $1,849 (Founder).</li>
-                <li>Crypto (USDC / ETH) for web3-native citizens.</li>
+                <li>{t('Stripe / PayPal for $18.49 (Innovator) and $1,849 (Founder).')}</li>
+                <li>{t('Crypto (USDC / ETH) for web3-native citizens.')}</li>
               </ul>
               <div className={styles.tierStack}>
                 {contributionTiers.map((tier) => (
                   <div key={tier.value} className={styles.tierCard}>
-                    <strong>{tier.label}</strong>
-                    <p>{tier.detail}</p>
+                    <strong>{t(tier.label)}</strong>
+                    <p>{t(tier.detail)}</p>
                   </div>
                 ))}
               </div>
@@ -829,62 +848,65 @@ const LandingPage = () => {
         </section>
 
         <section id="founder-covenant" className={styles.section}>
-          <p className={styles.covenantKicker}>Imperial Founder Covenant</p>
-          <h2 className={styles.sectionTitle}>II. Imperial Privileges</h2>
+          <p className={styles.covenantKicker}>{t('Imperial Founder Covenant')}</p>
+          <h2 className={styles.sectionTitle}>{t('II. Imperial Privileges')}</h2>
           <div className={styles.covenantLayout}>
             <div className={styles.covenantCard}>
               <p className={styles.sectionLead}>
-                Upon execution, the Founder is granted the following irrevocable rights:
+                {t('Upon execution, the Founder is granted the following irrevocable rights:')}
               </p>
               <ol className={styles.covenantList}>
                 <li>
-                  <strong>The Golden Key:</strong> Lifetime access to all current and future
-                  assets in the Imperial Treasury.
+                  <strong>{t('The Golden Key:')}</strong> {t(
+                    'Lifetime access to all current and future assets in the Imperial Treasury.'
+                  )}
                 </li>
                 <li>
-                  <strong>Sovereign Council Seat:</strong> A direct advisory role in the
-                  Digital AI Chancellor (DAIC) roadmap for 2026.
+                  <strong>{t('Sovereign Council Seat:')}</strong> {t(
+                    'A direct advisory role in the Digital AI Chancellor (DAIC) roadmap for 2026.'
+                  )}
                 </li>
                 <li>
-                  <strong>Physical Regalia:</strong> A bespoke, hand-crafted Crowned Hare and
-                  Rooster Blazer Patch and a physical, signed Certificate of Imperial Lineage.
+                  <strong>{t('Physical Regalia:')}</strong> {t(
+                    'A bespoke, hand-crafted Crowned Hare and Rooster Blazer Patch and a physical, signed Certificate of Imperial Lineage.'
+                  )}
                 </li>
                 <li>
-                  <strong>The Gressier Pillar:</strong> The Founder&apos;s name (or Digital
-                  Sigil) will be engraved upon the Foundation Pillar of the first school built
-                  in Morn Chandelle.
+                  <strong>{t('The Gressier Pillar:')}</strong> {t(
+                    "The Founder's name (or Digital Sigil) will be engraved upon the Foundation Pillar of the first school built in Morn Chandelle."
+                  )}
                 </li>
               </ol>
             </div>
 
             <div className={styles.covenantSide}>
-              <h3 className={styles.covenantSubheading}>III. The 1849 Frequency</h3>
+              <h3 className={styles.covenantSubheading}>{t('III. The 1849 Frequency')}</h3>
               <p className={styles.covenantBody}>
-                This contract honors the coronation of Faustin I. By signing this digital
-                covenant, the Founder is not a customer, but a Co-Architect of the Third
-                Empire.
+                {t(
+                  'This contract honors the coronation of Faustin I. By signing this digital covenant, the Founder is not a customer, but a Co-Architect of the Third Empire.'
+                )}
               </p>
               <blockquote className={styles.covenantQuote}>
-                &quot;In 1849, we unified the soil. In 2026, we unify the signal.&quot;
+                {t('"In 1849, we unified the soil. In 2026, we unify the signal."')}
               </blockquote>
               <p className={styles.covenantBody}>
-                Founder Status confirms lifetime Treasury access, advisory participation in
-                the DAIC 2026 roadmap, ceremonial regalia, and engraved recognition at the
-                first school pillar in Morn Chandelle.
+                {t(
+                  'Founder Status confirms lifetime Treasury access, advisory participation in the DAIC 2026 roadmap, ceremonial regalia, and engraved recognition at the first school pillar in Morn Chandelle.'
+                )}
               </p>
               <div className={styles.covenantSeal}>
                 <p>
-                  <strong>OFFICIAL SEAL:</strong>
+                  <strong>{t('OFFICIAL SEAL:')}</strong>
                 </p>
-                <p>Authenticated by the Digital AI Chancellor (DAIC)</p>
-                <p>Under the Authority of H.S.H. Prince Jean J. H. Dorvilus</p>
+                <p>{t('Authenticated by the Digital AI Chancellor (DAIC)')}</p>
+                <p>{t('Under the Authority of H.S.H. Prince Jean J. H. Dorvilus')}</p>
               </div>
             </div>
           </div>
         </section>
 
         <section id="roadmap" className={styles.section}>
-          <h2 className={styles.sectionTitle}>Digital Lakou Roadmap 2026</h2>
+          <h2 className={styles.sectionTitle}>{t('Digital Lakou Roadmap 2026')}</h2>
           <div className={styles.roadmap}>
             {roadmapPhases.map((phase) => (
               <div
@@ -896,38 +918,39 @@ const LandingPage = () => {
                 <div className={styles.roadmapMarker} />
                 <div>
                   <p className={styles.roadmapPhase}>{phase.phase}</p>
-                  <h3>{phase.title}</h3>
-                  <p>{phase.detail}</p>
+                  <h3>{t(phase.title)}</h3>
+                  <p>{t(phase.detail)}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className={styles.roadmapCta}>
-            The timeline of the Empire is written in the blood and intelligence of its
-            citizens. Choose your path. Accelerate the Restoration.
+            {t(
+              'The timeline of the Empire is written in the blood and intelligence of its citizens. Choose your path. Accelerate the Restoration.'
+            )}
           </div>
         </section>
 
         <section className={styles.section}>
           <div className={styles.finalCta}>
-            <h2>Join the Sovereign Order.</h2>
-            <p>Citizens do not follow. They align.</p>
+            <h2>{t('Join the Sovereign Order.')}</h2>
+            <p>{t('Citizens do not follow. They align.')}</p>
             <a href="#registry" className={styles.btnPri}>
-              Enter the Registry
+              {t('Enter the Registry')}
             </a>
           </div>
         </section>
 
         {/* ===== SACRED ANTIQUE KEY - FIXED BUTTON ===== */}
         <a href="/imperial-treasury" className={styles.sacredKeyFixed}>
-          <img src="/sacred-antique-key.svg" alt="Sacred Antique Key - Treasury Access" />
+          <img src="/sacred-antique-key.svg" alt={t('Sacred Antique Key - Treasury Access')} />
         </a>
 
-        <nav className={styles.mobileDock} aria-label="Landing quick navigation">
-          <a href="/landing#hero">Home</a>
-          <a href="/landing#registry">Registry</a>
-          <a href="/imperial-treasury">Treasury</a>
-          <a href="/signin">Sign in</a>
+        <nav className={styles.mobileDock} aria-label={t('Landing quick navigation')}>
+          <a href="/landing#hero">{t('Home')}</a>
+          <a href="/landing#registry">{t('Registry')}</a>
+          <a href="/imperial-treasury">{t('Treasury')}</a>
+          <a href="/signin">{t('Sign in')}</a>
         </nav>
 
         <footer className={styles.imperialFooter}>
@@ -937,51 +960,51 @@ const LandingPage = () => {
                 <img src="/GCS.png" alt="GCS logo" className={styles.imperialBrandLogo} />
               </div>
               <h3>GCS</h3>
-              <p>Global Creole Society</p>
-              <p>Restoring the Soulouque Legacy through Sovereign Intelligence</p>
+              <p>{t('Global Creole Society')}</p>
+              <p>{t('Restoring the Soulouque Legacy through Sovereign Intelligence')}</p>
             </div>
 
             <div className={styles.imperialFooterCol}>
-              <h4>House of Dorvilus</h4>
-              <a href="#nexus">About the Lineage</a>
-              <a href="#hero">Sovereign Restoration</a>
-              <a href="#roadmap">Legacy Archive</a>
-              <a href="#registry">Contact Council</a>
+              <h4>{t('House of Dorvilus')}</h4>
+              <a href="#nexus">{t('About the Lineage')}</a>
+              <a href="#hero">{t('Sovereign Restoration')}</a>
+              <a href="#roadmap">{t('Legacy Archive')}</a>
+              <a href="#registry">{t('Contact Council')}</a>
             </div>
 
             <div className={styles.imperialFooterCol}>
-              <h4>Imperial Treasury</h4>
-              <a href="/imperial-treasury">Activation Status</a>
-              <a href="#financial-vault">Contribution Tiers</a>
-              <a href="#founder-covenant">Physical Regalia</a>
-              <a href="/imperial-treasury">Digital Assets</a>
+              <h4>{t('Imperial Treasury')}</h4>
+              <a href="/imperial-treasury">{t('Activation Status')}</a>
+              <a href="#financial-vault">{t('Contribution Tiers')}</a>
+              <a href="#founder-covenant">{t('Physical Regalia')}</a>
+              <a href="/imperial-treasury">{t('Digital Assets')}</a>
             </div>
 
             <div className={styles.imperialFooterCol}>
-              <h4>Registry</h4>
-              <a href="#registry">Authenticate Bloodline</a>
-              <a href="#registry">Citizen Portal</a>
-              <a href="#registry">Verification Process</a>
-              <a href="#founder-covenant">Registry Benefits</a>
+              <h4>{t('Registry')}</h4>
+              <a href="#registry">{t('Authenticate Bloodline')}</a>
+              <a href="#registry">{t('Citizen Portal')}</a>
+              <a href="#registry">{t('Verification Process')}</a>
+              <a href="#founder-covenant">{t('Registry Benefits')}</a>
             </div>
 
             <div className={styles.imperialFooterCol}>
-              <h4>Resources</h4>
-              <a href="#nexus">Digital Lakou Guide</a>
-              <a href="#roadmap">Roadmap 2026</a>
-              <a href="#financial-vault">News & Updates</a>
-              <a href="#founder-covenant">Documentation</a>
+              <h4>{t('Resources')}</h4>
+              <a href="#nexus">{t('Digital Lakou Guide')}</a>
+              <a href="#roadmap">{t('Roadmap 2026')}</a>
+              <a href="#financial-vault">{t('News & Updates')}</a>
+              <a href="#founder-covenant">{t('Documentation')}</a>
             </div>
           </div>
 
           <div className={styles.imperialFoundationBox}>
             <div className={styles.imperialFoundationText}>
-              <h4>Local Foundation</h4>
+              <h4>{t('Local Foundation')}</h4>
               <p>
-                Administered under the local oversight of the
-                <strong> CASEC of Morn Chandelle, Gressier</strong>. For local governance
-                and community infrastructure references, review The Sovereignty of Local
-                Governments.
+                {t('Administered under the local oversight of the')}
+                <strong> {t('CASEC of Morn Chandelle, Gressier')}</strong>. {t(
+                  'For local governance and community infrastructure references, review The Sovereignty of Local Governments.'
+                )}
               </p>
             </div>
             <div className={styles.imperialFoundationMap}>
@@ -998,19 +1021,20 @@ const LandingPage = () => {
           <div className={styles.imperialFooterBottom}>
             <div className={styles.imperialLegal}>
               <p>
-                The <span className={styles.imperialHoverName}>House of Dorvilus</span> is a sovereign digital institution dedicated to
-                preserving bloodline intelligence and generational wealth through ceremonial
-                frequency alignment.
+                {t('The')} <span className={styles.imperialHoverName}>{t('House of Dorvilus')}</span>{' '}
+                {t(
+                  'is a sovereign digital institution dedicated to preserving bloodline intelligence and generational wealth through ceremonial frequency alignment.'
+                )}
               </p>
-              <p>The 1791 spark burns eternal in those who understand.</p>
+              <p>{t('The 1791 spark burns eternal in those who understand.')}</p>
             </div>
             <div className={styles.imperialConnect}>
-              <h5>Connect</h5>
+              <h5>{t('Connect')}</h5>
               <div className={styles.imperialSocials}>
-                <a href="#" aria-label="Email">M</a>
-                <a href="#" aria-label="Facebook">f</a>
-                <a href="#" aria-label="Twitter">X</a>
-                <a href="#" aria-label="Instagram">I</a>
+                <a href="#" aria-label={t('Email')}>M</a>
+                <a href="#" aria-label={t('Facebook')}>f</a>
+                <a href="#" aria-label={t('Twitter')}>X</a>
+                <a href="#" aria-label={t('Instagram')}>I</a>
               </div>
             </div>
           </div>
@@ -1025,3 +1049,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+

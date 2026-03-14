@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import styles from '../styles/SignIn.module.css';
 import landingStyles from '../styles/SovereignHome.module.css';
 import ToggleButton from '../components/ToggleButton';
+import { LanguageContext } from '../context/LanguageContext';
 
 const SignInPage = () => {
+  const { t } = useContext(LanguageContext);
+  const router = useRouter();
   const [mode, setMode] = useState('signin');
   const [status, setStatus] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,19 +22,34 @@ const SignInPage = () => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
   };
 
+  const nextPath = useMemo(() => {
+    const raw = router.query?.next;
+    const candidate = Array.isArray(raw) ? raw[0] : raw;
+    if (typeof candidate !== 'string') return '/imperial-treasury';
+    if (!candidate.startsWith('/') || candidate.startsWith('//')) {
+      return '/imperial-treasury';
+    }
+    return candidate;
+  }, [router.query]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    setStatus(
+    const message =
       mode === 'signin'
-        ? 'Sign in submitted (demo). Connect backend to enable access.'
-        : 'Registration submitted (demo). Connect backend to enable access.'
-    );
+        ? t('Sign in submitted (demo). Connect backend to enable access.')
+        : t('Registration submitted (demo). Connect backend to enable access.');
+    setStatus(message);
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('gcs-society-auth', '1');
+    }
+    router.push(nextPath);
   };
 
   return (
     <>
       <Head>
-        <title>Sign in | House of Dorvilus</title>
+        <title>{t('Sign in | House of Dorvilus')}</title>
       </Head>
       <div className={`${styles.page} ${styles.mobileAppPage}`}>
         <nav className={landingStyles.nav}>
@@ -42,16 +61,16 @@ const SignInPage = () => {
             </div>
             <div className={landingStyles.navCenter}>
               <div className={landingStyles.navLinks}>
-                <a href="/landing">Home</a>
-                <a href="/imperial-treasury">Imperial Treasury</a>
-                <a href="/landing#nexus">Nexus</a>
-                <a href="/landing#registry">Registry</a>
-                <a href="/landing#roadmap">Roadmap</a>
+                <a href="/landing">{t('Home')}</a>
+                <a href="/imperial-treasury">{t('Imperial Treasury')}</a>
+                <a href="/landing#nexus">{t('Nexus')}</a>
+                <a href="/landing#registry">{t('Registry')}</a>
+                <a href="/landing#roadmap">{t('Roadmap')}</a>
               </div>
             </div>
             <div className={landingStyles.navRight}>
               <a href="/signin" className={landingStyles.navCta}>
-                Sign in
+                {t('Sign in')}
               </a>
             </div>
           </div>
@@ -59,14 +78,14 @@ const SignInPage = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle navigation"
+          label={t('Toggle navigation')}
           style={{ top: '50px', zIndex: 1301 }}
         />
         {isSidebarOpen && (
           <button
             type="button"
             className={landingStyles.landingSidebarBackdrop}
-            aria-label="Close navigation"
+            aria-label={t('Close navigation')}
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -78,22 +97,22 @@ const SignInPage = () => {
         >
           <div className={landingStyles.landingSidebar}>
             <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
-              Home
+              {t('Home')}
             </a>
             <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
-              Imperial Treasury
+              {t('Imperial Treasury')}
             </a>
             <a href="/landing#nexus" onClick={() => setIsSidebarOpen(false)}>
-              Nexus
+              {t('Nexus')}
             </a>
             <a href="/landing#registry" onClick={() => setIsSidebarOpen(false)}>
-              Registry
+              {t('Registry')}
             </a>
             <a href="/landing#roadmap" onClick={() => setIsSidebarOpen(false)}>
-              Roadmap
+              {t('Roadmap')}
             </a>
             <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
-              Sign in
+              {t('Sign in')}
             </a>
           </div>
         </aside>
@@ -103,12 +122,12 @@ const SignInPage = () => {
             <div className={styles.brandRow}>
               <img src="/GCS.png" alt="GCS" />
               <div>
-                <h1>House of Dorvilus</h1>
-                <p>Access the Digital Lakou</p>
+                <h1>{t('House of Dorvilus')}</h1>
+                <p>{t('Access the Digital Lakou')}</p>
               </div>
             </div>
 
-            <div className={styles.tabs} role="tablist" aria-label="Sign in or register">
+            <div className={styles.tabs} role="tablist" aria-label={t('Sign in or register')}>
               <button
                 type="button"
                 role="tab"
@@ -116,7 +135,7 @@ const SignInPage = () => {
                 className={`${styles.tab} ${mode === 'signin' ? styles.tabActive : ''}`}
                 onClick={() => setMode('signin')}
               >
-                Sign in
+                {t('Sign in')}
               </button>
               <button
                 type="button"
@@ -125,39 +144,39 @@ const SignInPage = () => {
                 className={`${styles.tab} ${mode === 'register' ? styles.tabActive : ''}`}
                 onClick={() => setMode('register')}
               >
-                Register
+                {t('Register')}
               </button>
             </div>
 
             <button type="button" className={styles.googleBtn}>
-              Continue with Google
+              {t('Continue with Google')}
             </button>
 
             <form className={styles.form} onSubmit={handleSubmit}>
               {mode === 'register' && (
                 <label>
-                  Full name
+                  {t('Full name')}
                   <input
                     type="text"
                     value={form.name}
                     onChange={handleChange('name')}
-                    placeholder="Your full name"
+                    placeholder={t('Your full name')}
                     required
                   />
                 </label>
               )}
               <label>
-                Email
+                {t('Email')}
                 <input
                   type="email"
                   value={form.email}
                   onChange={handleChange('email')}
-                  placeholder="you@example.com"
+                  placeholder={t('you@example.com')}
                   required
                 />
               </label>
               <label>
-                Password
+                {t('Password')}
                 <input
                   type="password"
                   value={form.password}
@@ -167,7 +186,7 @@ const SignInPage = () => {
                 />
               </label>
               <button type="submit" className={styles.submitBtn}>
-                {mode === 'signin' ? 'Sign in' : 'Create account'}
+                {mode === 'signin' ? t('Sign in') : t('Create account')}
               </button>
             </form>
 
@@ -175,11 +194,11 @@ const SignInPage = () => {
           </div>
         </main>
 
-        <nav className={landingStyles.mobileDock} aria-label="Sign in quick navigation">
-          <a href="/landing">Home</a>
-          <a href="/landing#registry">Registry</a>
-          <a href="/imperial-treasury">Treasury</a>
-          <a href="/signin">Sign in</a>
+        <nav className={landingStyles.mobileDock} aria-label={t('Sign in quick navigation')}>
+          <a href="/landing">{t('Home')}</a>
+          <a href="/landing#registry">{t('Registry')}</a>
+          <a href="/imperial-treasury">{t('Treasury')}</a>
+          <a href="/signin">{t('Sign in')}</a>
         </nav>
       </div>
     </>

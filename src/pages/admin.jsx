@@ -1,7 +1,8 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import ToggleButton from '../components/ToggleButton';
 import AdminPanel from '../components/admin/AdminPanel';
+import { LanguageContext } from '../context/LanguageContext';
 
 const API_URL = 'http://localhost:3001';
 
@@ -15,6 +16,7 @@ const fetchData = async (endpoint, method = 'GET', body = null) => {
 };
 
 const AdminPage = () => {
+  const { t } = useContext(LanguageContext);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
   const [panel, setPanel] = useState(null);
@@ -185,7 +187,7 @@ const AdminPage = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle admin sidebar"
+          label={t('Toggle admin sidebar')}
         />
       )}
       <div className={`admin-sidebar-wrap ${isSidebarOpen ? 'open' : ''}`}>
@@ -193,20 +195,20 @@ const AdminPage = () => {
           <div className="admin-brand">
             <div className="admin-brand__badge">ADM</div>
             <div>
-              <div className="admin-brand__title">Control Room</div>
-              <div className="admin-brand__meta">Local mode</div>
+              <div className="admin-brand__title">{t('Control Room')}</div>
+              <div className="admin-brand__meta">{t('Local mode')}</div>
             </div>
           </div>
 
           <nav className="admin-nav">
             {[
-              { id: 'overview', label: 'Overview' },
-              { id: 'moderation', label: 'Moderation' },
-              { id: 'users', label: 'Users' },
-              { id: 'reports', label: 'Reports' },
-              { id: 'security', label: 'Security' },
-              { id: 'payments', label: 'Payments' },
-              { id: 'settings', label: 'Settings' },
+              { id: 'overview', label: t('Overview') },
+              { id: 'moderation', label: t('Moderation') },
+              { id: 'users', label: t('Users') },
+              { id: 'reports', label: t('Reports') },
+              { id: 'security', label: t('Security') },
+              { id: 'payments', label: t('Payments') },
+              { id: 'settings', label: t('Settings') },
             ].map((item) => (
               <button
                 key={item.id}
@@ -229,7 +231,7 @@ const AdminPage = () => {
               className="admin-btn admin-btn--primary"
               onClick={() => setPanel({ type: 'create-alert' })}
             >
-              Create alert
+              {t('Create alert')}
             </button>
             <button
               type="button"
@@ -241,10 +243,10 @@ const AdminPage = () => {
                 router.replace('/admin/login');
               }}
             >
-              Log out
+              {t('Log out')}
             </button>
             <button type="button" className="admin-btn admin-btn--ghost" onClick={() => router.push('/')}>
-              Back to site
+              {t('Back to site')}
             </button>
           </div>
         </aside>
@@ -253,15 +255,19 @@ const AdminPage = () => {
       <main className="admin-main">
         <header className="admin-header">
           <div>
-            <div className="admin-header__eyebrow">Admin dashboard</div>
-            <h1>{activeTab === 'overview' ? 'Operational overview' : `${activeTab.charAt(0).toUpperCase()}${activeTab.slice(1)} center`}</h1>
+            <div className="admin-header__eyebrow">{t('Admin dashboard')}</div>
+            <h1>
+              {activeTab === 'overview'
+                ? t('Operational overview')
+                : `${t(activeTab.charAt(0).toUpperCase() + activeTab.slice(1))} ${t('center')}`}
+            </h1>
           </div>
           <div className="admin-header__actions">
             <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'export' })}>
-              Export
+              {t('Export')}
             </button>
             <button type="button" className="admin-btn admin-btn--primary" onClick={() => setPanel({ type: 'new-policy' })}>
-              New policy
+              {t('New policy')}
             </button>
           </div>
         </header>
@@ -269,12 +275,12 @@ const AdminPage = () => {
         {(activeTab === 'overview' || activeTab === 'moderation') && (
           <section className="admin-grid admin-grid--stats">
             {stats.map((item) => (
-              <div key={item.label} className="admin-card admin-stat">
-                <div className="admin-stat__label">{item.label}</div>
+                <div key={item.label} className="admin-card admin-stat">
+                <div className="admin-stat__label">{t(item.label)}</div>
                 <div className="admin-stat__value">{item.value}</div>
                 <div className={`admin-stat__delta ${item.trend}`}>
                   <span>{item.delta}</span>
-                  <span>{item.trend === 'up' ? 'up' : 'down'}</span>
+                  <span>{item.trend === 'up' ? t('up') : t('down')}</span>
                 </div>
               </div>
             ))}
@@ -286,11 +292,11 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Moderation queue</h2>
-                  <p>Newest items requiring review</p>
+                  <h2>{t('Moderation queue')}</h2>
+                  <p>{t('Newest items requiring review')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setActiveTab('reports')}>
-                  View all
+                  {t('View all')}
                 </button>
               </div>
               <div className="admin-list">
@@ -299,16 +305,16 @@ const AdminPage = () => {
                     <div>
                       <div className="admin-list__title">{report.content}</div>
                       <div className="admin-list__meta">
-                        {report.user} - {report.reason}
+                        {report.user} - {t(report.reason)}
                       </div>
                     </div>
                     <div className="admin-list__time">{report.time}</div>
                     <div className="admin-list__actions">
                       <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'review-report', reportId: report.id })}>
-                        Review
+                        {t('Review')}
                       </button>
                       <button type="button" className="admin-btn admin-btn--danger" onClick={() => setPanel({ type: 'block-user', userName: report.user })}>
-                        Block
+                        {t('Block')}
                       </button>
                     </div>
                   </div>
@@ -319,22 +325,22 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>System status</h2>
-                  <p>Live service health checks</p>
+                  <h2>{t('System status')}</h2>
+                  <p>{t('Live service health checks')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setActiveTab('security')}>
-                  Details
+                  {t('Details')}
                 </button>
               </div>
               <div className="admin-status">
-                <div className="admin-status__row"><span>API latency</span><strong>120ms</strong></div>
-                <div className="admin-status__row"><span>Realtime events</span><strong>Normal</strong></div>
-                <div className="admin-status__row"><span>Storage</span><strong>74% used</strong></div>
-                <div className="admin-status__row"><span>Security alerts</span><strong>2 active</strong></div>
+                <div className="admin-status__row"><span>{t('API latency')}</span><strong>120ms</strong></div>
+                <div className="admin-status__row"><span>{t('Realtime events')}</span><strong>{t('Normal')}</strong></div>
+                <div className="admin-status__row"><span>{t('Storage')}</span><strong>{t('74% used')}</strong></div>
+                <div className="admin-status__row"><span>{t('Security alerts')}</span><strong>{t('2 active')}</strong></div>
               </div>
               <div className="admin-card__footer">
                 <button type="button" className="admin-btn admin-btn--primary" onClick={() => setPanel({ type: 'incident-room' })}>
-                  Open incident room
+                  {t('Open incident room')}
                 </button>
               </div>
             </div>
@@ -346,18 +352,18 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Weekly activity</h2>
-                  <p>Daily active users</p>
+                  <h2>{t('Weekly activity')}</h2>
+                  <p>{t('Daily active users')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'trends' })}>
-                  View trends
+                  {t('View trends')}
                 </button>
               </div>
               <div className="admin-chart">
                 {usageSeries.map((item) => (
                   <div key={item.label} className="admin-chart__bar">
                     <div style={{ height: `${item.value}%` }} />
-                    <span>{item.label}</span>
+                    <span>{t(item.label)}</span>
                   </div>
                 ))}
               </div>
@@ -366,21 +372,21 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Security center</h2>
-                  <p>Threats and authentication</p>
+                  <h2>{t('Security center')}</h2>
+                  <p>{t('Threats and authentication')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setActiveTab('security')}>
-                  Open
+                  {t('Open')}
                 </button>
               </div>
               <div className="admin-list">
                 {securityEvents.map((item) => (
                   <div key={item.id} className="admin-list__item admin-list__item--tight">
                     <div>
-                      <div className="admin-list__title">{item.item}</div>
-                      <div className="admin-list__meta">{item.detail}</div>
+                      <div className="admin-list__title">{t(item.item)}</div>
+                      <div className="admin-list__meta">{t(item.detail)}</div>
                     </div>
-                    <span className={`admin-severity ${item.severity}`}>{item.severity}</span>
+                    <span className={`admin-severity ${item.severity}`}>{t(item.severity)}</span>
                   </div>
                 ))}
               </div>
@@ -389,19 +395,19 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Announcements</h2>
-                  <p>Global admin messages</p>
+                  <h2>{t('Announcements')}</h2>
+                  <p>{t('Global admin messages')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--primary" onClick={() => setPanel({ type: 'new-announcement' })}>
-                  New announcement
+                  {t('New announcement')}
                 </button>
               </div>
               <div className="admin-list">
                 {announcementItems.map((item) => (
                   <div key={item.id} className="admin-list__item admin-list__item--tight">
                     <div>
-                      <div className="admin-list__title">{item.title}</div>
-                      <div className="admin-list__meta">{item.detail}</div>
+                      <div className="admin-list__title">{t(item.title)}</div>
+                      <div className="admin-list__meta">{t(item.detail)}</div>
                     </div>
                   </div>
                 ))}
@@ -414,22 +420,27 @@ const AdminPage = () => {
           <section className="admin-card admin-table">
             <div className="admin-card__header">
               <div>
-                <h2>Users</h2>
-                <p>Manage access and flags</p>
+                <h2>{t('Users')}</h2>
+                <p>{t('Manage access and flags')}</p>
               </div>
               <div className="admin-table__actions">
-                <input className="admin-input" placeholder="Search user or ID" value={filters.query} onChange={(e) => setFilters((prev) => ({ ...prev, query: e.target.value }))} />
+                <input
+                  className="admin-input"
+                  placeholder={t('Search user or ID')}
+                  value={filters.query}
+                  onChange={(e) => setFilters((prev) => ({ ...prev, query: e.target.value }))}
+                />
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'user-filters' })}>
-                  Filters
+                  {t('Filters')}
                 </button>
               </div>
             </div>
             <div className="admin-table__head">
-              <span>User</span>
-              <span>Role</span>
-              <span>Status</span>
-              <span>Joined</span>
-              <span>Actions</span>
+              <span>{t('User')}</span>
+              <span>{t('Role')}</span>
+              <span>{t('Status')}</span>
+              <span>{t('Joined')}</span>
+              <span>{t('Actions')}</span>
             </div>
             {filteredUsers.map((user) => (
               <div key={user.id} className="admin-table__row">
@@ -440,15 +451,15 @@ const AdminPage = () => {
                     <div className="admin-table__id">{user.id}</div>
                   </div>
                 </div>
-                <span>{user.role}</span>
-                <span className={`admin-status-pill ${user.status.toLowerCase()}`}>{user.status}</span>
+                <span>{t(user.role)}</span>
+                <span className={`admin-status-pill ${user.status.toLowerCase()}`}>{t(user.status)}</span>
                 <span>{user.joined}</span>
                 <div className="admin-table__buttons">
                   <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'user-profile', userId: user.id })}>
-                    View
+                    {t('View')}
                   </button>
                   <button type="button" className="admin-btn admin-btn--danger" onClick={() => setPanel({ type: 'suspend-user', userId: user.id })}>
-                    Suspend
+                    {t('Suspend')}
                   </button>
                 </div>
               </div>
@@ -461,25 +472,25 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Reports center</h2>
-                  <p>Cases, status, and SLA</p>
+                  <h2>{t('Reports center')}</h2>
+                  <p>{t('Cases, status, and SLA')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'assign-reports' })}>
-                  Assign
+                  {t('Assign')}
                 </button>
               </div>
               <div className="admin-table__head admin-table__head--compact">
-                <span>ID</span>
-                <span>Reason</span>
-                <span>Status</span>
-                <span>Owner</span>
+                <span>{t('ID')}</span>
+                <span>{t('Reason')}</span>
+                <span>{t('Status')}</span>
+                <span>{t('Owner')}</span>
               </div>
               {reportItems.map((report) => (
                 <div key={report.id} className="admin-table__row admin-table__row--compact">
                   <span>{report.id}</span>
-                  <span>{report.reason}</span>
-                  <span className="admin-status-pill flagged">{report.status}</span>
-                  <span>{report.owner}</span>
+                  <span>{t(report.reason)}</span>
+                  <span className="admin-status-pill flagged">{t(report.status)}</span>
+                  <span>{t(report.owner)}</span>
                 </div>
               ))}
             </div>
@@ -487,19 +498,19 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Feature flags</h2>
-                  <p>Rollouts and experiments</p>
+                  <h2>{t('Feature flags')}</h2>
+                  <p>{t('Rollouts and experiments')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'manage-flags' })}>
-                  Manage
+                  {t('Manage')}
                 </button>
               </div>
               <div className="admin-flags">
                 {flagItems.map((flag) => (
                   <div key={flag.id} className="admin-flag">
                     <div>
-                      <div className="admin-flag__name">{flag.name}</div>
-                      <div className="admin-flag__meta">Rollout {flag.rollout}</div>
+                      <div className="admin-flag__name">{t(flag.name)}</div>
+                      <div className="admin-flag__meta">{t('Rollout')} {flag.rollout}</div>
                     </div>
                     <button
                       type="button"
@@ -512,7 +523,7 @@ const AdminPage = () => {
                         )
                       }
                     >
-                      {flag.status}
+                      {t(flag.status)}
                     </button>
                   </div>
                 ))}
@@ -526,19 +537,30 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Broadcast tools</h2>
-                  <p>Send alerts or notifications</p>
+                  <h2>{t('Broadcast tools')}</h2>
+                  <p>{t('Send alerts or notifications')}</p>
                 </div>
               </div>
               <div className="admin-form">
-                <input className="admin-input" placeholder="Title" value={broadcastDraft.title} onChange={(e) => setBroadcastDraft((prev) => ({ ...prev, title: e.target.value }))} />
-                <textarea className="admin-textarea" rows={4} placeholder="Message" value={broadcastDraft.message} onChange={(e) => setBroadcastDraft((prev) => ({ ...prev, message: e.target.value }))} />
+                <input
+                  className="admin-input"
+                  placeholder={t('Title')}
+                  value={broadcastDraft.title}
+                  onChange={(e) => setBroadcastDraft((prev) => ({ ...prev, title: e.target.value }))}
+                />
+                <textarea
+                  className="admin-textarea"
+                  rows={4}
+                  placeholder={t('Message')}
+                  value={broadcastDraft.message}
+                  onChange={(e) => setBroadcastDraft((prev) => ({ ...prev, message: e.target.value }))}
+                />
                 <div className="admin-form__row">
                   <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'preview-broadcast' })}>
-                    Preview
+                    {t('Preview')}
                   </button>
                   <button type="button" className="admin-btn admin-btn--primary" onClick={() => setPanel({ type: 'send-broadcast' })}>
-                    Send broadcast
+                    {t('Send broadcast')}
                   </button>
                 </div>
               </div>
@@ -547,17 +569,17 @@ const AdminPage = () => {
             <div className="admin-card">
               <div className="admin-card__header">
                 <div>
-                  <h2>Payments</h2>
-                  <p>Revenue and billing snapshot</p>
+                  <h2>{t('Payments')}</h2>
+                  <p>{t('Revenue and billing snapshot')}</p>
                 </div>
                 <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setActiveTab('payments')}>
-                  Ledger
+                  {t('Ledger')}
                 </button>
               </div>
               <div className="admin-payments">
                 {payments.map((item) => (
                   <div key={item.id} className="admin-payment">
-                    <span>{item.label}</span>
+                    <span>{t(item.label)}</span>
                     <strong>{item.value}</strong>
                   </div>
                 ))}
@@ -570,19 +592,19 @@ const AdminPage = () => {
           <section className="admin-card admin-mt">
             <div className="admin-card__header">
               <div>
-                <h2>Audit log</h2>
-                <p>Admin actions history</p>
+                <h2>{t('Audit log')}</h2>
+                <p>{t('Admin actions history')}</p>
               </div>
               <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setPanel({ type: 'download-audit' })}>
-                Download
+                {t('Download')}
               </button>
             </div>
             <div className="admin-list">
               {auditItems.map((item) => (
                 <div key={item.id} className="admin-list__item admin-list__item--tight">
                   <div>
-                    <div className="admin-list__title">{item.action}</div>
-                    <div className="admin-list__meta">{item.actor}</div>
+                    <div className="admin-list__title">{t(item.action)}</div>
+                    <div className="admin-list__meta">{t(item.actor)}</div>
                   </div>
                   <div className="admin-list__time">{item.time}</div>
                 </div>

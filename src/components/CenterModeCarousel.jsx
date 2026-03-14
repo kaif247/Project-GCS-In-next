@@ -24,7 +24,7 @@ const CenterModeCarousel = ({
   itemWidth = 260,
   gap = 16,
   initialIndex = 1,
-  showNav = false,
+  showNav = true,
 }) => {
   const safeItems = Array.isArray(items) ? items : [];
   const [activeIndex, setActiveIndex] = useState(() =>
@@ -37,6 +37,7 @@ const CenterModeCarousel = ({
   const touchDeltaXRef = useRef(0);
   const touchDeltaYRef = useRef(0);
   const rafRef = useRef(null);
+  const maxDragRef = useRef(Math.round(itemWidth * 0.5));
 
   React.useEffect(() => {
     if (!safeItems.length) return;
@@ -53,18 +54,51 @@ const CenterModeCarousel = ({
     []
   );
 
+  React.useEffect(() => {
+    maxDragRef.current = Math.max(36, Math.round(itemWidth * 0.5));
+  }, [itemWidth]);
+
+  const clampDragDelta = (deltaX) => {
+    const maxDrag = maxDragRef.current;
+    if (deltaX > maxDrag) return maxDrag;
+    if (deltaX < -maxDrag) return -maxDrag;
+    return deltaX;
+  };
+
+  const resetDragState = () => {
+    setIsDragging(false);
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    touchDeltaXRef.current = 0;
+    touchDeltaYRef.current = 0;
+    setDragOffsetX(0);
+  };
+
   const trackStyle = useMemo(
     () => ({
       '--cm-item-width': `${itemWidth}px`,
       '--cm-gap': `${gap}px`,
-      '--cm-active': activeIndex,
+      '--cm-shift': `${-activeIndex * (itemWidth + gap)}px`,
       '--cm-drag-offset': `${dragOffsetX}px`,
     }),
     [activeIndex, itemWidth, gap, dragOffsetX]
   );
 
-  const goNext = () => setActiveIndex((prev) => wrapIndex(prev + 1, safeItems.length));
-  const goPrev = () => setActiveIndex((prev) => wrapIndex(prev - 1, safeItems.length));
+  const animateToIndex = (updater) => {
+    // Ensure click navigation always uses the smooth transition path.
+    if (isDragging || dragOffsetX !== 0) {
+      resetDragState();
+    }
+    const apply = () => setActiveIndex((prev) => wrapIndex(updater(prev), safeItems.length));
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(apply);
+      return;
+    }
+    apply();
+  };
+
+  const goNext = () => animateToIndex((prev) => prev + 1);
+  const goPrev = () => animateToIndex((prev) => prev - 1);
 
   const handleTouchStart = (event) => {
     const point = event.touches?.[0];
@@ -91,7 +125,7 @@ const CenterModeCarousel = ({
     }
     if (rafRef.current != null) return;
     rafRef.current = window.requestAnimationFrame(() => {
-      setDragOffsetX(nextDeltaX);
+      setDragOffsetX(clampDragDelta(nextDeltaX));
       rafRef.current = null;
     });
   };
@@ -110,12 +144,12 @@ const CenterModeCarousel = ({
     ) {
       goPrev();
     }
-    setIsDragging(false);
-    touchStartXRef.current = null;
-    touchStartYRef.current = null;
-    touchDeltaXRef.current = 0;
-    touchDeltaYRef.current = 0;
-    setDragOffsetX(0);
+    resetDragState();
+  };
+
+  const handleTouchCancel = () => {
+    if (touchStartXRef.current == null) return;
+    resetDragState();
   };
 
   const handleSlideTap = (index) => {
@@ -135,7 +169,7 @@ const CenterModeCarousel = ({
           onClick={goPrev}
           aria-label={`Previous ${ariaLabel}`}
         >
-          ‹
+          {'\u2039'}
         </button>
       )}
 
@@ -146,6 +180,7 @@ const CenterModeCarousel = ({
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchCancel}
       >
         <div className={styles.track} style={trackStyle}>
           {safeItems.map((item, index) => {
@@ -179,7 +214,7 @@ const CenterModeCarousel = ({
           onClick={goNext}
           aria-label={`Next ${ariaLabel}`}
         >
-          ›
+          {'\u203A'}
         </button>
       )}
     </div>
@@ -187,3 +222,4 @@ const CenterModeCarousel = ({
 };
 
 export default CenterModeCarousel;
+

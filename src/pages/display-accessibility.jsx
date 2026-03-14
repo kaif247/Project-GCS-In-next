@@ -3,10 +3,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/DisplayAccessibility.module.css';
 import { ThemeContext } from '../context/ThemeContext';
+import { LanguageContext } from '../context/LanguageContext';
 
 const STORAGE_KEY = 'gcs-display-settings';
 
 const DisplayAccessibility = () => {
+  const { t } = useContext(LanguageContext);
   const { isDarkMode, toggleTheme } = useContext(ThemeContext);
   const [settings, setSettings] = useState({
     textSize: 'medium',
@@ -48,19 +50,19 @@ const DisplayAccessibility = () => {
   return (
     <>
       <Head>
-        <title>Display & Accessibility</title>
+        <title>{t('Display & Accessibility')}</title>
       </Head>
       <div className={styles.page}>
         <header className={styles.header}>
           <div>
-            <h1>Display & accessibility</h1>
-            <p>Adjust how GCS looks and feels for your comfort.</p>
+            <h1>{t('Display & accessibility')}</h1>
+            <p>{t('Adjust how GCS looks and feels for your comfort.')}</p>
           </div>
-          <Link href="/profile" className={styles.backLink}>Back to profile</Link>
+          <Link href="/profile" className={styles.backLink}>{t('Back to profile')}</Link>
         </header>
 
         <section className={styles.card}>
-          <h2>Text size</h2>
+          <h2>{t('Text size')}</h2>
           <div className={styles.segmented}>
             {['small', 'medium', 'large'].map((size) => (
               <button
@@ -69,19 +71,19 @@ const DisplayAccessibility = () => {
                 className={`${styles.segmentBtn} ${settings.textSize === size ? styles.segmentActive : ''}`}
                 onClick={() => update('textSize', size)}
               >
-                {size}
+                {t(size)}
               </button>
             ))}
           </div>
         </section>
 
         <section className={styles.card}>
-          <h2>Accessibility</h2>
+          <h2>{t('Accessibility')}</h2>
           <div className={styles.toggleList}>
             <label className={styles.toggleRow}>
               <div>
-                <strong>Dark mode</strong>
-                <p>Switch between light and dark themes.</p>
+                <strong>{t('Dark mode')}</strong>
+                <p>{t('Switch between light and dark themes.')}</p>
               </div>
               <input
                 type="checkbox"
@@ -91,8 +93,8 @@ const DisplayAccessibility = () => {
             </label>
             <label className={styles.toggleRow}>
               <div>
-                <strong>Reduce motion</strong>
-                <p>Minimize animations and transitions.</p>
+                <strong>{t('Reduce motion')}</strong>
+                <p>{t('Minimize animations and transitions.')}</p>
               </div>
               <input
                 type="checkbox"
@@ -102,8 +104,8 @@ const DisplayAccessibility = () => {
             </label>
             <label className={styles.toggleRow}>
               <div>
-                <strong>High contrast</strong>
-                <p>Increase contrast for readability.</p>
+                <strong>{t('High contrast')}</strong>
+                <p>{t('Increase contrast for readability.')}</p>
               </div>
               <input
                 type="checkbox"
@@ -113,8 +115,8 @@ const DisplayAccessibility = () => {
             </label>
             <label className={styles.toggleRow}>
               <div>
-                <strong>Compact mode</strong>
-                <p>Reduce spacing for dense layouts.</p>
+                <strong>{t('Compact mode')}</strong>
+                <p>{t('Reduce spacing for dense layouts.')}</p>
               </div>
               <input
                 type="checkbox"
@@ -124,8 +126,8 @@ const DisplayAccessibility = () => {
             </label>
             <label className={styles.toggleRow}>
               <div>
-                <strong>Always show captions</strong>
-                <p>Enable captions when available.</p>
+                <strong>{t('Always show captions')}</strong>
+                <p>{t('Enable captions when available.')}</p>
               </div>
               <input
                 type="checkbox"

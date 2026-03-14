@@ -1,5 +1,24 @@
 import React, { forwardRef } from 'react';
 import styles from './HomeHero.module.css';
+import CenterModeCarousel from './CenterModeCarousel';
+
+const trinity = [
+  {
+    name: 'H.S.H. Prince Jean II',
+    title: 'Sovereign Architect',
+    image: '/H.S.H. Prince Jean II.svg',
+  },
+  {
+    name: 'H.I.H. Prince Thierry',
+    title: 'Imperial Steward',
+    image: '/H.I.H. Prince Thierry.svg',
+  },
+  {
+    name: 'Cousin Wilson Joseph',
+    title: 'Local Foundation',
+    image: '/Cousin Wilson Joseph.svg',
+  },
+];
 
 const HomeHero = forwardRef((props, ref) => {
   const vaultPercent = 33;
@@ -45,28 +64,42 @@ const HomeHero = forwardRef((props, ref) => {
           </div>
         </div>
 
-        <div className={styles.heroTriptych}>
-          <div className={styles.triptychCard}>
-            <img src="/H.S.H. Prince Jean II.svg" alt="H.S.H. Prince Jean II" />
-            <div>
-              <span>H.S.H. Prince Jean II</span>
-              <strong>Sovereign Architect</strong>
+        <div className={styles.heroTriptychDesktop}>
+          {trinity.map((member) => (
+            <div key={member.name} className={styles.triptychCard}>
+              <img src={member.image} alt={member.name} />
+              <div>
+                <span>{member.name}</span>
+                <strong>{member.title}</strong>
+              </div>
             </div>
-          </div>
-          <div className={styles.triptychCard}>
-            <img src="/H.I.H. Prince Thierry.svg" alt="H.I.H. Prince Thierry" />
-            <div>
-              <span>H.I.H. Prince Thierry</span>
-              <strong>Imperial Steward</strong>
-            </div>
-          </div>
-          <div className={styles.triptychCard}>
-            <img src="/Cousin Wilson Joseph.svg" alt="Cousin Wilson Joseph" />
-            <div>
-              <span>Cousin Wilson Joseph</span>
-              <strong>Local Foundation</strong>
-            </div>
-          </div>
+          ))}
+        </div>
+
+        <div className={styles.heroTriptychMobile}>
+          <CenterModeCarousel
+            items={trinity}
+            ariaLabel="Imperial Trinity"
+            className={styles.heroTriptychCarousel}
+            slideClassName={styles.heroTriptychCarouselSlide}
+            itemWidth={196}
+            gap={10}
+            initialIndex={1}
+            showNav={true}
+            getKey={(member) => member.name}
+            renderItem={(member) => (
+              <div className={styles.triptychCardMobile}>
+                <div className={styles.triptychFrame}>
+                  <img src={member.image} alt={member.name} className={styles.triptychImage} />
+                  <div className={styles.triptychGlow} aria-hidden="true" />
+                </div>
+                <div className={styles.triptychMeta}>
+                  <span>{member.title}</span>
+                  <strong>{member.name}</strong>
+                </div>
+              </div>
+            )}
+          />
         </div>
       </div>
     </section>

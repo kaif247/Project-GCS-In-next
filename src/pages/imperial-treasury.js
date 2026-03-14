@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from 'react';
+﻿import React, { useEffect, useState, useContext, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import styles from '../styles/Treasury.module.css';
@@ -9,6 +9,7 @@ import FounderActivationAnimation from '../components/FounderActivationAnimation
 import { MarketplaceContext } from '../context/MarketplaceContext';
 import ToggleButton from '../components/ToggleButton';
 import CenterModeCarousel from '../components/CenterModeCarousel';
+import { LanguageContext } from '../context/LanguageContext';
 
 const treasuryAssets = [
   {
@@ -67,10 +68,12 @@ function calculateTreasuryFrequency({
 }
 
 const ImperialTreasury = () => {
-  const heroTitle = 'Vault of Sovereign Intelligence';
+  const { t } = useContext(LanguageContext);
+  const heroTitle = t('Vault of Sovereign Intelligence');
   const [showDecree, setShowDecree] = useState(false);
   const [showFounderMoment, setShowFounderMoment] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSocietySignedIn, setIsSocietySignedIn] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [vaultPercent, setVaultPercent] = useState(33);
   const [foundersCount, setFoundersCount] = useState(0);
@@ -99,8 +102,12 @@ const ImperialTreasury = () => {
     if (typeof window === 'undefined') return;
     const authenticated =
       window.localStorage.getItem('gcs-treasury-authenticated') === '1';
+    const signedIn = window.localStorage.getItem('gcs-society-auth') === '1';
     if (authenticated) {
       setIsAuthenticated(true);
+    }
+    if (signedIn) {
+      setIsSocietySignedIn(true);
     }
     const seen = window.localStorage.getItem('gcs-treasury-decree');
     if (!seen) {
@@ -108,6 +115,11 @@ const ImperialTreasury = () => {
       window.localStorage.setItem('gcs-treasury-decree', '1');
     }
   }, []);
+
+  const buildAssetHref = (assetHref) => {
+    if (isSocietySignedIn) return assetHref;
+    return `/signin?next=${encodeURIComponent(assetHref)}`;
+  };
 
   useEffect(() => {
     const holdFullMs = 1200;
@@ -240,10 +252,10 @@ const ImperialTreasury = () => {
   return (
     <>
       <Head>
-        <title>House of Dorvilus | Imperial Treasury</title>
+        <title>{t('House of Dorvilus | Imperial Treasury')}</title>
         <meta
           name="description"
-          content="Imperial Treasury of the House of Dorvilus. Tools for the Restoration."
+          content={t('Imperial Treasury of the House of Dorvilus. Tools for the Restoration.')}
         />
         <meta property="og:image" content="/imperial-seal.svg" />
         <link rel="icon" href="/crowned-hare.svg" />
@@ -258,16 +270,16 @@ const ImperialTreasury = () => {
             </div>
             <div className={landingStyles.navCenter}>
               <div className={landingStyles.navLinks}>
-                <a href="/landing">Home</a>
-                <a href="/imperial-treasury">Imperial Treasury</a>
-                <a href="/landing#nexus">Nexus</a>
-                <a href="/landing#registry">Registry</a>
-                <a href="/landing#roadmap">Roadmap</a>
+                <a href="/landing">{t('Home')}</a>
+                <a href="/imperial-treasury">{t('Imperial Treasury')}</a>
+                <a href="/landing#nexus">{t('Nexus')}</a>
+                <a href="/landing#registry">{t('Registry')}</a>
+                <a href="/landing#roadmap">{t('Roadmap')}</a>
               </div>
             </div>
             <div className={landingStyles.navRight}>
               <a href="/signin" className={landingStyles.navCta}>
-                Sign in
+                {t('Sign in')}
               </a>
             </div>
           </div>
@@ -275,14 +287,14 @@ const ImperialTreasury = () => {
         <ToggleButton
           isOpen={isSidebarOpen}
           onToggle={() => setIsSidebarOpen((prev) => !prev)}
-          label="Toggle navigation"
+          label={t('Toggle navigation')}
           style={{ top: '55px', zIndex: 1301 }}
         />
         {isSidebarOpen && (
           <button
             type="button"
             className={landingStyles.landingSidebarBackdrop}
-            aria-label="Close navigation"
+            aria-label={t('Close navigation')}
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -294,22 +306,22 @@ const ImperialTreasury = () => {
         >
           <div className={landingStyles.landingSidebar}>
             <a href="/landing" onClick={() => setIsSidebarOpen(false)}>
-              Home
+              {t('Home')}
             </a>
             <a href="/imperial-treasury" onClick={() => setIsSidebarOpen(false)}>
-              Imperial Treasury
+              {t('Imperial Treasury')}
             </a>
             <a href="/landing#nexus" onClick={() => setIsSidebarOpen(false)}>
-              Nexus
+              {t('Nexus')}
             </a>
             <a href="/landing#registry" onClick={() => setIsSidebarOpen(false)}>
-              Registry
+              {t('Registry')}
             </a>
             <a href="/landing#roadmap" onClick={() => setIsSidebarOpen(false)}>
-              Roadmap
+              {t('Roadmap')}
             </a>
             <a href="/signin" onClick={() => setIsSidebarOpen(false)}>
-              Sign in
+              {t('Sign in')}
             </a>
           </div>
         </aside>
@@ -319,7 +331,7 @@ const ImperialTreasury = () => {
             <div className={styles.heroGlow} aria-hidden="true" />
             <div className={styles.heroGrid}>
               <div className={styles.heroContent}>
-                <p className={styles.eyebrow}>Imperial Treasury</p>
+                <p className={styles.eyebrow}>{t('Imperial Treasury')}</p>
                 <h1 className={styles.heroTypewriter} data-fulltext={heroTitle}>
                   <span className={styles.heroTypewriterLive}>
                     {heroTitle.slice(0, heroTitleIndex)}
@@ -329,22 +341,22 @@ const ImperialTreasury = () => {
                   </span>
                 </h1>
                 <p className={styles.subhead}>
-                  The vault is not empty. It is a strategic call to action.
+                  {t('The vault is not empty. It is a strategic call to action.')}
                 </p>
                 <p className={styles.subhead}>
-                  Access is free. Items within the Imperial Treasury carry their own cost.
+                  {t('Access is free. Items within the Imperial Treasury carry their own cost.')}
                 </p>
                 <div className={styles.heroTags}>
-                  <span>Treasury Channel</span>
-                  <span>Citizen Access</span>
-                  <span>Founder Protocol</span>
+                  <span>{t('Treasury Channel')}</span>
+                  <span>{t('Citizen Access')}</span>
+                  <span>{t('Founder Protocol')}</span>
                 </div>
                 <div className={styles.heroActions}>
                   <a href="#treasury-assets" className={styles.heroPrimary}>
-                    View Treasury Assets
+                    {t('View Treasury Assets')}
                   </a>
                   <a href="/imperial-founders" className={styles.heroSecondary}>
-                    Founders Wall
+                    {t('Founders Wall')}
                   </a>
                 </div>
               </div>
@@ -357,31 +369,31 @@ const ImperialTreasury = () => {
                 />
                 <div className={styles.heroStats}>
                   <div>
-                    <span>Frequency</span>
-                    <strong>{vaultPercent}%</strong>
+                  <span>{t('Frequency')}</span>
+                  <strong>{vaultPercent}%</strong>
                   </div>
                   <div>
-                    <span>Founders</span>
-                    <strong>{foundersCount}</strong>
+                  <span>{t('Founders')}</span>
+                  <strong>{foundersCount}</strong>
                   </div>
                   <div>
-                    <span>Level</span>
-                    <strong>{frequencyHz}Hz</strong>
+                  <span>{t('Level')}</span>
+                  <strong>{frequencyHz}Hz</strong>
                   </div>
                 </div>
               </aside>
             </div>
             <div className={styles.heroFooterLine}>
               <p>
-                Frequency Level: {frequencyHz}Hz - {stabilityLabel}
+                {t('Frequency Level:')} {frequencyHz}Hz - {t(stabilityLabel)}
               </p>
-              <p>Signal updates every 15 seconds from founder activity and unlock events.</p>
+              <p>{t('Signal updates every 15 seconds from founder activity and unlock events.')}</p>
             </div>
           </section>
 
           <section className={styles.vaultBar}>
             <p className={styles.vaultMeta}>
-              Treasury Frequency Activated
+              {t('Treasury Frequency Activated')}
             </p>
             <div className={styles.vaultTrack}>
               <div className={styles.vaultFill} style={{ width: `${vaultPercent}%` }}>
@@ -392,15 +404,16 @@ const ImperialTreasury = () => {
 
           <section className={styles.keySection}>
             <div>
-              <h2>Sacred Key Access</h2>
+              <h2>{t('Sacred Key Access')}</h2>
               <p>
-                The Sacred Antique Key signals entry into the Imperial Treasury. Every
-                contribution unlocks new tools for restoration.
+                {t(
+                  'The Sacred Antique Key signals entry into the Imperial Treasury. Every contribution unlocks new tools for restoration.'
+                )}
               </p>
             </div>
             <img
               src="/sacred-antique-key.svg"
-              alt="Sacred Key icon"
+              alt={t('Sacred Key icon')}
               className={styles.keyIcon}
             />
           </section>
@@ -410,25 +423,25 @@ const ImperialTreasury = () => {
               <div className={styles.gridDesktop}>
                 {treasuryAssets.map((item) => (
                   <article key={item.id} className={styles.card}>
-                    <h2>{item.title}</h2>
-                    <p>{item.detail}</p>
+                    <h2>{t(item.title)}</h2>
+                    <p>{t(item.detail)}</p>
                     {isAuthenticated ? (
                       <a
-                        href={item.href}
+                        href={buildAssetHref(item.href)}
                         className={`${styles.cardLink} ${styles.cardActive}`}
-                        aria-label={`Access ${item.title}`}
-                        download={item.download || undefined}
+                        aria-label={`${t('Access')} ${t(item.title)}`}
+                        download={isSocietySignedIn ? item.download || undefined : undefined}
                       >
-                        {item.actionText}
+                        {t(item.actionText)}
                       </a>
                     ) : (
                       <button
                         type="button"
-                        aria-label={`Authenticate to unlock ${item.title}`}
+                        aria-label={`${t('Authenticate to unlock')} ${t(item.title)}`}
                         className={styles.cardLocked}
                         onClick={handleAuthenticate}
                       >
-                        Authenticate to Unlock
+                        {t('Authenticate to Unlock')}
                       </button>
                     )}
                   </article>
@@ -438,7 +451,7 @@ const ImperialTreasury = () => {
             <div className={styles.mobileOnly}>
               <CenterModeCarousel
                 items={treasuryAssets}
-                ariaLabel="Treasury Access Items"
+                ariaLabel={t('Treasury Access Items')}
                 className={styles.treasuryCarousel}
                 slideClassName={styles.treasuryCarouselSlide}
                 itemWidth={264}
@@ -447,25 +460,25 @@ const ImperialTreasury = () => {
                 getKey={(item) => item.id}
                 renderItem={(item) => (
                   <article className={styles.card}>
-                    <h2>{item.title}</h2>
-                    <p>{item.detail}</p>
+                    <h2>{t(item.title)}</h2>
+                    <p>{t(item.detail)}</p>
                     {isAuthenticated ? (
                       <a
-                        href={item.href}
+                        href={buildAssetHref(item.href)}
                         className={`${styles.cardLink} ${styles.cardActive}`}
-                        aria-label={`Access ${item.title}`}
-                        download={item.download || undefined}
+                        aria-label={`${t('Access')} ${t(item.title)}`}
+                        download={isSocietySignedIn ? item.download || undefined : undefined}
                       >
-                        {item.actionText}
+                        {t(item.actionText)}
                       </a>
                     ) : (
                       <button
                         type="button"
-                        aria-label={`Authenticate to unlock ${item.title}`}
+                        aria-label={`${t('Authenticate to unlock')} ${t(item.title)}`}
                         className={styles.cardLocked}
                         onClick={handleAuthenticate}
                       >
-                        Authenticate to Unlock
+                        {t('Authenticate to Unlock')}
                       </button>
                     )}
                   </article>
@@ -477,15 +490,19 @@ const ImperialTreasury = () => {
           <section id="treasury-assets" className={styles.marketplaceSection}>
             <div className={styles.marketplaceHeader}>
               <div>
-                <h2>Imperial Treasury Assets</h2>
-                <p>Curated marketplace items presented as sovereign offerings.</p>
+                <h2>{t('Imperial Treasury Assets')}</h2>
+                <p>{t('Curated marketplace items presented as sovereign offerings.')}</p>
               </div>
               <Link href="/signin" className={styles.marketplaceLink}>
-                See all
+                {t('See all')}
               </Link>
             </div>
             <div className={styles.desktopOnly}>
-              <div className={styles.marketplaceSlider} role="region" aria-label="Treasury items">
+              <div
+                className={styles.marketplaceSlider}
+                role="region"
+                aria-label={t('Treasury items')}
+              >
                 {treasuryProducts.map((product) => (
                   <div key={product.id} className={styles.marketplaceSlide}>
                     <MarketplaceCard product={product} />
@@ -496,7 +513,7 @@ const ImperialTreasury = () => {
             <div className={styles.mobileOnly}>
               <CenterModeCarousel
                 items={treasuryProducts}
-                ariaLabel="Imperial Treasury Assets"
+                ariaLabel={t('Imperial Treasury Assets')}
                 className={styles.marketplaceCoverflow}
                 slideClassName={styles.marketplaceCoverflowSlide}
                 itemWidth={250}
@@ -510,25 +527,26 @@ const ImperialTreasury = () => {
 
           <section className={styles.founderCallout}>
             <div>
-              <h3>Sovereign Founder Activation</h3>
+              <h3>{t('Sovereign Founder Activation')}</h3>
               <p>
-                The $1,849 covenant triggers a sovereign ceremony and unlocks the Founders
-                Wall.
+                {t(
+                  'The $1,849 covenant triggers a sovereign ceremony and unlocks the Founders Wall.'
+                )}
               </p>
             </div>
             <button type="button" onClick={handleFounderActivation}>
-              Activate Founder Ceremony
+              {t('Activate Founder Ceremony')}
             </button>
           </section>
 
           <InnovatorPortal />
 
           <section className={styles.transparency}>
-            <h3>Local Governance & Transparency</h3>
+            <h3>{t('Local Governance & Transparency')}</h3>
             <p>
-              Administrative Oversight: Office of the DAIC. Local Foundation: Overseen
-              by the CASEC of Morn Chandelle, Gressier. Built upon the Soulouque Legacy
-              (1849).
+              {t(
+                'Administrative Oversight: Office of the DAIC. Local Foundation: Overseen by the CASEC of Morn Chandelle, Gressier. Built upon the Soulouque Legacy (1849).'
+              )}
             </p>
           </section>
         </div>
@@ -536,27 +554,29 @@ const ImperialTreasury = () => {
         {showDecree && (
           <div className={styles.decreeOverlay} role="dialog" aria-modal="true">
             <div className={styles.decreeCard}>
-              <h3>Sovereign Decree of the Treasury</h3>
+              <h3>{t('Sovereign Decree of the Treasury')}</h3>
               <p>
-                The gold of the past has been liquidated into the tools of the future.
-                Every enrollment is a digital spark.
+                {t(
+                  'The gold of the past has been liquidated into the tools of the future. Every enrollment is a digital spark.'
+                )}
               </p>
               <p>
-                By decree, access to the vault is granted only to verified contributors
-                who uphold the restoration mandate and protect the registry.
+                {t(
+                  'By decree, access to the vault is granted only to verified contributors who uphold the restoration mandate and protect the registry.'
+                )}
               </p>
               <button type="button" onClick={() => setShowDecree(false)}>
-                Enter the Vault
+                {t('Enter the Vault')}
               </button>
             </div>
           </div>
         )}
 
-        <nav className={landingStyles.mobileDock} aria-label="Treasury quick navigation">
-          <a href="/landing">Home</a>
-          <a href="/imperial-treasury">Treasury</a>
-          <a href="/landing#registry">Registry</a>
-          <a href="/signin">Sign in</a>
+        <nav className={landingStyles.mobileDock} aria-label={t('Treasury quick navigation')}>
+          <a href="/landing">{t('Home')}</a>
+          <a href="/imperial-treasury">{t('Treasury')}</a>
+          <a href="/landing#registry">{t('Registry')}</a>
+          <a href="/signin">{t('Sign in')}</a>
         </nav>
 
         <FounderActivationAnimation
@@ -569,3 +589,4 @@ const ImperialTreasury = () => {
 };
 
 export default ImperialTreasury;
+

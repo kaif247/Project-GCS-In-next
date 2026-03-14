@@ -18,15 +18,14 @@
   align-items: stretch;
   gap: var(--cm-gap, 16px);
   width: max-content;
-  margin-left: calc(
-    50% - (var(--cm-item-width, 260px) / 2) -
-      (var(--cm-active, 0) * (var(--cm-item-width, 260px) + var(--cm-gap, 16px)))
+  margin-left: calc(50% - (var(--cm-item-width, 260px) / 2));
+  transform: translate3d(
+    calc(var(--cm-shift, 0px) + var(--cm-drag-offset, 0px)),
+    0,
+    0
   );
-  transform: translate3d(var(--cm-drag-offset, 0px), 0, 0);
-  transition:
-    margin-left 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.12s linear;
-  will-change: margin-left, transform;
+  transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
 }
 
 .dragging .track {
@@ -86,18 +85,38 @@
   border-color: rgba(0, 245, 255, 0.65);
 }
 
+
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 38px;
+  height: 38px;
+  touch-action: manipulation;
+}
+
+.navPrev {
+  left: 4px;
+}
+
+.navNext {
+  right: 4px;
+}
+
 @media (max-width: 900px) {
   .navBtn {
-    position: absolute;
-    top: calc(50% - 24px);
-    z-index: 3;
+    width: 42px;
+    height: 42px;
+    font-size: 23px;
   }
 
   .navPrev {
-    left: 2px;
+    left: 1px;
   }
 
   .navNext {
-    right: 2px;
+    right: 1px;
   }
 }

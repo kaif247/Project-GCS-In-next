@@ -9,7 +9,17 @@ from accounts.views import (
     WorkListCreateView, WorkDetailView,
     EducationListCreateView, EducationDetailView, ResetPasswordView
 )
+from django.contrib import admin
 
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Backend is running successfully")
+
+urlpatterns = [
+    path('', home),
+    path('admin/', admin.site.urls),
+]
 
 urlpatterns = [  
     path('register/', RegisterView.as_view(), name='register'),

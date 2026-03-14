@@ -854,6 +854,27 @@
     gap: 10px !important;
   }
 
+  .mobileAppPage .marketplaceHeader {
+    margin-top: 14px !important;
+    margin-bottom: 16px !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 10px !important;
+  }
+
+  .mobileAppPage .marketplaceHeader h2,
+  .mobileAppPage .marketplaceHeader p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .mobileAppPage .marketplaceLink {
+    align-self: center !important;
+  }
+
   .mobileAppPage .transparency {
     margin: 16px auto 6px !important;
     padding-top: 12px !important;

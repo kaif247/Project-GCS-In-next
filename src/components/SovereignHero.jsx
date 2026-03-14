@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './SovereignHero.module.css';
+import CenterModeCarousel from './CenterModeCarousel';
 
 const trinity = [
   {
@@ -35,15 +36,38 @@ const SovereignHero = ({ sticky = false }) => {
         </div>
 
         <div className={styles.heroTrinity}>
-          {trinity.map((member) => (
-            <article key={member.name} className={styles.trinityCard}>
-              <img src={member.image} alt={member.name} />
-              <div>
-                <span>{member.title}</span>
-                <strong>{member.name}</strong>
-              </div>
-            </article>
-          ))}
+          <div className={styles.trinityDesktop}>
+            {trinity.map((member) => (
+              <article key={member.name} className={styles.trinityCard}>
+                <img src={member.image} alt={member.name} />
+                <div>
+                  <span>{member.title}</span>
+                  <strong>{member.name}</strong>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className={styles.trinityMobile}>
+            <CenterModeCarousel
+              items={trinity}
+              ariaLabel="Imperial Trinity"
+              className={styles.trinityCarousel}
+              slideClassName={styles.trinityCarouselSlide}
+              itemWidth={248}
+              gap={12}
+              initialIndex={1}
+              getKey={(member) => member.name}
+              renderItem={(member) => (
+                <article className={styles.trinityCard}>
+                  <img src={member.image} alt={member.name} />
+                  <div>
+                    <span>{member.title}</span>
+                    <strong>{member.name}</strong>
+                  </div>
+                </article>
+              )}
+            />
+          </div>
         </div>
       </div>
     </section>

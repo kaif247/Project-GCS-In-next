@@ -17,11 +17,11 @@
   position: absolute;
   inset: 0;
   background:
-    url('/crowned-hare.svg') center/240px no-repeat,
+    url('/crowned-hare.svg') center/300px no-repeat,
     radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 60%);
   opacity: 0.2;
   filter: blur(0.5px);
-  animation: slowPulse 12s ease-in-out infinite;
+  animation: slowPulse 9s ease-in-out infinite;
 }
 
 .heroInner {
@@ -33,12 +33,14 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 32px;
   z-index: 1;
+  min-width: 0;
 }
 
 .heroContent {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .eyebrow {
@@ -158,9 +160,24 @@
   animation: barGlow 4s ease-in-out infinite;
 }
 
-.heroTriptych {
+.heroTriptychDesktop {
   display: grid;
   gap: 18px;
+}
+
+.heroTriptychMobile {
+  display: none;
+}
+
+.heroTriptychCarousel {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2px 0 0;
+}
+
+.heroTriptychCarouselSlide {
+  padding: 4px 0;
 }
 
 .triptychCard {
@@ -199,6 +216,56 @@
 .triptychCard strong {
   color: var(--primary);
   font-family: var(--font-serif);
+}
+
+.triptychCardMobile {
+  background: rgba(5, 5, 5, 0.75);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+  position: relative;
+  overflow: hidden;
+}
+
+.triptychFrame {
+  position: relative;
+  border-radius: 16px;
+  padding: 18px;
+  background: radial-gradient(circle at top, rgba(212, 175, 55, 0.2), transparent 70%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.triptychImage {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+}
+
+.triptychGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(0, 245, 255, 0.2), transparent 70%);
+  opacity: 0.5;
+}
+
+.triptychMeta span {
+  display: block;
+  color: #c6bda4;
+  font-size: 12px;
+}
+
+.triptychMeta strong {
+  color: var(--primary);
+  display: block;
+  font-family: var(--font-serif);
+  margin-top: 4px;
 }
 
 @keyframes slowPulse {
@@ -255,8 +322,41 @@
     min-height: 90vh;
   }
 
-  .heroTriptych {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .heroTriptychDesktop {
+    display: none;
+  }
+
+  .heroTriptychMobile {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .triptychCardMobile {
+    padding: 12px 10px;
+    min-height: 190px;
+  }
+
+  .triptychFrame {
+    padding: 8px;
+  }
+
+  .triptychImage {
+    max-height: 86px;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .triptychMeta strong {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .heroContent,
+  .heroTriptychMobile,
+  .heroTriptychCarousel {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -266,18 +366,9 @@
     min-height: 92vh;
   }
 
-  .heroTriptych {
-    grid-template-columns: 1fr;
-  }
-
-  .triptychCard {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-
-  .triptychCard img {
-    width: 64px;
-    height: 64px;
+  .triptychCardMobile {
+    min-height: 176px;
+    padding: 10px;
   }
 
   .heroActions {

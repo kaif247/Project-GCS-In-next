@@ -54,6 +54,23 @@
   gap: 10px;
 }
 
+.trinityDesktop {
+  display: grid;
+  gap: 10px;
+}
+
+.trinityMobile {
+  display: none;
+}
+
+.trinityCarousel {
+  width: 100%;
+}
+
+.trinityCarouselSlide {
+  padding: 6px 0;
+}
+
 .trinityCard {
   display: flex;
   align-items: center;
@@ -90,5 +107,15 @@
   .heroInner {
     grid-template-columns: 1fr;
     padding: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .trinityDesktop {
+    display: none;
+  }
+
+  .trinityMobile {
+    display: block;
   }
 }

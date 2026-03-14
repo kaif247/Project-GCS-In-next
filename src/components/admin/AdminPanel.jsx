@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { LanguageContext } from '../../context/LanguageContext';
 
 const titleMap = {
   'create-alert': 'Create alert',
@@ -37,6 +38,7 @@ const AdminPanel = ({
   filters,
   usageSeries,
 }) => {
+  const { t } = useContext(LanguageContext);
   if (!panel) return null;
 
   return (
@@ -44,35 +46,35 @@ const AdminPanel = ({
       <div className="admin-modal__backdrop" onClick={onClose} />
       <div className="admin-modal__card">
         <div className="admin-modal__header">
-          <h3>{titleMap[panel.type] || 'Panel'}</h3>
+          <h3>{t(titleMap[panel.type] || 'Panel')}</h3>
           <button type="button" className="admin-btn admin-btn--ghost" onClick={onClose}>
-            Close
+            {t('Close')}
           </button>
         </div>
 
         <div className="admin-modal__body admin-panel">
           {panel.type === 'create-alert' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Title</label>
+              <label className="admin-label">{t('Title')}</label>
               <input
                 className="admin-input"
-                placeholder="Alert title"
+                placeholder={t('Alert title')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, title: e.target.value }))}
               />
-              <label className="admin-label">Severity</label>
+              <label className="admin-label">{t('Severity')}</label>
               <select
                 className="admin-select"
                 onChange={(e) => setPanel((prev) => ({ ...prev, severity: e.target.value }))}
               >
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
+                <option>{t('Low')}</option>
+                <option>{t('Medium')}</option>
+                <option>{t('High')}</option>
               </select>
-              <label className="admin-label">Message</label>
+              <label className="admin-label">{t('Message')}</label>
               <textarea
                 className="admin-textarea"
                 rows={4}
-                placeholder="Describe the alert"
+                placeholder={t('Describe the alert')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, message: e.target.value }))}
               />
             </div>
@@ -80,42 +82,42 @@ const AdminPanel = ({
 
           {panel.type === 'export' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Export range</label>
+              <label className="admin-label">{t('Export range')}</label>
               <div className="admin-grid admin-grid--two">
-                <input className="admin-input" placeholder="From (YYYY-MM-DD)" />
-                <input className="admin-input" placeholder="To (YYYY-MM-DD)" />
+                <input className="admin-input" placeholder={t('From (YYYY-MM-DD)')} />
+                <input className="admin-input" placeholder={t('To (YYYY-MM-DD)')} />
               </div>
-              <label className="admin-label">Data type</label>
+              <label className="admin-label">{t('Data type')}</label>
               <div className="admin-chips">
-                <span className="admin-chip">Reports</span>
-                <span className="admin-chip">Users</span>
-                <span className="admin-chip">Audit logs</span>
+                <span className="admin-chip">{t('Reports')}</span>
+                <span className="admin-chip">{t('Users')}</span>
+                <span className="admin-chip">{t('Audit logs')}</span>
               </div>
             </div>
           )}
 
           {panel.type === 'new-policy' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Title</label>
+              <label className="admin-label">{t('Title')}</label>
               <input
                 className="admin-input"
-                placeholder="Policy title"
+                placeholder={t('Policy title')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, title: e.target.value }))}
               />
-              <label className="admin-label">Category</label>
+              <label className="admin-label">{t('Category')}</label>
               <select
                 className="admin-select"
                 onChange={(e) => setPanel((prev) => ({ ...prev, category: e.target.value }))}
               >
-                <option>Safety</option>
-                <option>Integrity</option>
-                <option>Privacy</option>
+                <option>{t('Safety')}</option>
+                <option>{t('Integrity')}</option>
+                <option>{t('Privacy')}</option>
               </select>
-              <label className="admin-label">Summary</label>
+              <label className="admin-label">{t('Summary')}</label>
               <textarea
                 className="admin-textarea"
                 rows={4}
-                placeholder="Short summary"
+                placeholder={t('Short summary')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, summary: e.target.value }))}
               />
             </div>
@@ -128,15 +130,15 @@ const AdminPanel = ({
               <div className="admin-panel__section">
                 <div className="admin-kv">
                   <div>
-                    <div className="admin-label">Report</div>
+                    <div className="admin-label">{t('Report')}</div>
                     <strong>{report.id}</strong>
                   </div>
                   <div>
-                    <div className="admin-label">User</div>
+                    <div className="admin-label">{t('User')}</div>
                     <strong>{report.user}</strong>
                   </div>
                 </div>
-                <label className="admin-label">Status</label>
+                <label className="admin-label">{t('Status')}</label>
                 <select
                   className="admin-select"
                   value={report.status}
@@ -148,11 +150,11 @@ const AdminPanel = ({
                     )
                   }
                 >
-                  <option>Open</option>
-                  <option>In review</option>
-                  <option>Resolved</option>
+                  <option>{t('Open')}</option>
+                  <option>{t('In review')}</option>
+                  <option>{t('Resolved')}</option>
                 </select>
-                <label className="admin-label">Owner</label>
+                <label className="admin-label">{t('Owner')}</label>
                 <select
                   className="admin-select"
                   value={report.owner}
@@ -164,7 +166,7 @@ const AdminPanel = ({
                     )
                   }
                 >
-                  <option>Unassigned</option>
+                  <option>{t('Unassigned')}</option>
                   <option>Kaif Islam</option>
                   <option>Mariam L.</option>
                 </select>
@@ -174,66 +176,66 @@ const AdminPanel = ({
 
           {panel.type === 'block-user' && (
             <div className="admin-panel__section">
-              <div className="admin-label">User</div>
+              <div className="admin-label">{t('User')}</div>
               <strong>{panel.userName}</strong>
-              <label className="admin-label">Reason</label>
+              <label className="admin-label">{t('Reason')}</label>
               <select className="admin-select">
-                <option>Spam</option>
-                <option>Harassment</option>
-                <option>Hate speech</option>
+                <option>{t('Spam')}</option>
+                <option>{t('Harassment')}</option>
+                <option>{t('Hate speech')}</option>
               </select>
-              <label className="admin-label">Duration</label>
+              <label className="admin-label">{t('Duration')}</label>
               <select className="admin-select">
-                <option>7 days</option>
-                <option>30 days</option>
-                <option>Permanent</option>
+                <option>{t('7 days')}</option>
+                <option>{t('30 days')}</option>
+                <option>{t('Permanent')}</option>
               </select>
             </div>
           )}
 
           {panel.type === 'incident-room' && (
             <div className="admin-panel__section">
-              <div className="admin-label">Active incidents</div>
+              <div className="admin-label">{t('Active incidents')}</div>
               <div className="admin-list">
                 {incidents.map((item) => (
                   <div key={item.id} className="admin-list__item admin-list__item--tight">
                     <div>
-                      <div className="admin-list__title">{item.title}</div>
-                      <div className="admin-list__meta">{item.severity} - {item.status}</div>
+                      <div className="admin-list__title">{t(item.title)}</div>
+                      <div className="admin-list__meta">{t(item.severity)} - {t(item.status)}</div>
                     </div>
                   </div>
                 ))}
               </div>
-              <label className="admin-label">Create new incident</label>
+              <label className="admin-label">{t('Create new incident')}</label>
               <input
                 className="admin-input"
-                placeholder="Incident title"
+                placeholder={t('Incident title')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, incidentTitle: e.target.value }))}
               />
               <select
                 className="admin-select"
                 onChange={(e) => setPanel((prev) => ({ ...prev, incidentSeverity: e.target.value }))}
               >
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
+                <option>{t('Low')}</option>
+                <option>{t('Medium')}</option>
+                <option>{t('High')}</option>
               </select>
             </div>
           )}
 
           {panel.type === 'trends' && (
             <div className="admin-panel__section">
-              <div className="admin-label">Trend ranges</div>
+              <div className="admin-label">{t('Trend ranges')}</div>
               <div className="admin-chips">
-                <span className="admin-chip">7 days</span>
-                <span className="admin-chip">30 days</span>
-                <span className="admin-chip">90 days</span>
+                <span className="admin-chip">{t('7 days')}</span>
+                <span className="admin-chip">{t('30 days')}</span>
+                <span className="admin-chip">{t('90 days')}</span>
               </div>
               <div className="admin-chart admin-chart--modal">
                 {usageSeries.map((item) => (
                   <div key={item.label} className="admin-chart__bar">
                     <div style={{ height: `${item.value}%` }} />
-                    <span>{item.label}</span>
+                    <span>{t(item.label)}</span>
                   </div>
                 ))}
               </div>
@@ -242,17 +244,17 @@ const AdminPanel = ({
 
           {panel.type === 'new-announcement' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Title</label>
+              <label className="admin-label">{t('Title')}</label>
               <input
                 className="admin-input"
-                placeholder="Announcement title"
+                placeholder={t('Announcement title')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, title: e.target.value }))}
               />
-              <label className="admin-label">Detail</label>
+              <label className="admin-label">{t('Detail')}</label>
               <textarea
                 className="admin-textarea"
                 rows={3}
-                placeholder="Announcement detail"
+                placeholder={t('Announcement detail')}
                 onChange={(e) => setPanel((prev) => ({ ...prev, detail: e.target.value }))}
               />
             </div>
@@ -265,16 +267,16 @@ const AdminPanel = ({
               <div className="admin-panel__section">
                 <div className="admin-kv">
                   <div>
-                    <div className="admin-label">Name</div>
+                    <div className="admin-label">{t('Name')}</div>
                     <strong>{user.name}</strong>
                   </div>
                   <div>
-                    <div className="admin-label">Role</div>
-                    <strong>{user.role}</strong>
+                    <div className="admin-label">{t('Role')}</div>
+                    <strong>{t(user.role)}</strong>
                   </div>
                   <div>
-                    <div className="admin-label">Status</div>
-                    <strong>{user.status}</strong>
+                    <div className="admin-label">{t('Status')}</div>
+                    <strong>{t(user.status)}</strong>
                   </div>
                 </div>
                 <div className="admin-panel__actions">
@@ -289,7 +291,7 @@ const AdminPanel = ({
                       )
                     }
                   >
-                    Flag user
+                    {t('Flag user')}
                   </button>
                   <button
                     type="button"
@@ -302,7 +304,7 @@ const AdminPanel = ({
                       )
                     }
                   >
-                    Suspend
+                    {t('Suspend')}
                   </button>
                 </div>
               </div>
@@ -314,13 +316,13 @@ const AdminPanel = ({
             if (!user) return null;
             return (
               <div className="admin-panel__section">
-                <div className="admin-label">User</div>
+                <div className="admin-label">{t('User')}</div>
                 <strong>{user.name}</strong>
-                <label className="admin-label">Duration</label>
+                <label className="admin-label">{t('Duration')}</label>
                 <select className="admin-select">
-                  <option>7 days</option>
-                  <option>30 days</option>
-                  <option>Permanent</option>
+                  <option>{t('7 days')}</option>
+                  <option>{t('30 days')}</option>
+                  <option>{t('Permanent')}</option>
                 </select>
               </div>
             );
@@ -329,21 +331,23 @@ const AdminPanel = ({
           {panel.type === 'preview-broadcast' && (
             <div className="admin-panel__section">
               <div className="admin-preview">
-                <div className="admin-preview__title">{broadcastDraft.title || 'Broadcast preview'}</div>
-                <div className="admin-preview__body">{broadcastDraft.message || 'No message yet.'}</div>
+                <div className="admin-preview__title">{broadcastDraft.title || t('Broadcast preview')}</div>
+                <div className="admin-preview__body">{broadcastDraft.message || t('No message yet.')}</div>
               </div>
             </div>
           )}
 
           {panel.type === 'send-broadcast' && (
             <div className="admin-panel__section">
-              <div className="admin-label">Broadcast queue</div>
+              <div className="admin-label">{t('Broadcast queue')}</div>
               <div className="admin-list">
-                {broadcasts.length === 0 && <div className="admin-list__meta">No broadcasts sent yet.</div>}
+                {broadcasts.length === 0 && (
+                  <div className="admin-list__meta">{t('No broadcasts sent yet.')}</div>
+                )}
                 {broadcasts.map((item) => (
                   <div key={item.id} className="admin-list__item admin-list__item--tight">
                     <div>
-                      <div className="admin-list__title">{item.title}</div>
+                      <div className="admin-list__title">{t(item.title)}</div>
                       <div className="admin-list__meta">{item.time}</div>
                     </div>
                   </div>
@@ -354,22 +358,22 @@ const AdminPanel = ({
 
           {panel.type === 'download-audit' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Format</label>
+              <label className="admin-label">{t('Format')}</label>
               <select className="admin-select">
                 <option>CSV</option>
                 <option>JSON</option>
               </select>
-              <label className="admin-label">Range</label>
+              <label className="admin-label">{t('Range')}</label>
               <div className="admin-grid admin-grid--two">
-                <input className="admin-input" placeholder="From" />
-                <input className="admin-input" placeholder="To" />
+                <input className="admin-input" placeholder={t('From')} />
+                <input className="admin-input" placeholder={t('To')} />
               </div>
             </div>
           )}
 
           {panel.type === 'assign-reports' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Assign all open reports to</label>
+              <label className="admin-label">{t('Assign all open reports to')}</label>
               <select className="admin-select" onChange={(e) => setPanel((prev) => ({ ...prev, owner: e.target.value }))}>
                 <option>Kaif Islam</option>
                 <option>Mariam L.</option>
@@ -383,8 +387,8 @@ const AdminPanel = ({
                 {flagItems.map((flag) => (
                   <div key={flag.id} className="admin-list__item admin-list__item--tight">
                     <div>
-                      <div className="admin-list__title">{flag.name}</div>
-                      <div className="admin-list__meta">Rollout {flag.rollout}</div>
+                      <div className="admin-list__title">{t(flag.name)}</div>
+                      <div className="admin-list__meta">{t('Rollout')} {flag.rollout}</div>
                     </div>
                     <button
                       type="button"
@@ -399,7 +403,7 @@ const AdminPanel = ({
                         )
                       }
                     >
-                      {flag.status}
+                      {t(flag.status)}
                     </button>
                   </div>
                 ))}
@@ -409,27 +413,27 @@ const AdminPanel = ({
 
           {panel.type === 'user-filters' && (
             <div className="admin-panel__section">
-              <label className="admin-label">Role</label>
+              <label className="admin-label">{t('Role')}</label>
               <select
                 className="admin-select"
                 value={filters.role}
                 onChange={(e) => setFilters((prev) => ({ ...prev, role: e.target.value }))}
               >
-                <option>All</option>
-                <option>Admin</option>
-                <option>Moderator</option>
-                <option>User</option>
+                <option>{t('All')}</option>
+                <option>{t('Admin')}</option>
+                <option>{t('Moderator')}</option>
+                <option>{t('User')}</option>
               </select>
-              <label className="admin-label">Status</label>
+              <label className="admin-label">{t('Status')}</label>
               <select
                 className="admin-select"
                 value={filters.status}
                 onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
               >
-                <option>All</option>
-                <option>Active</option>
-                <option>Flagged</option>
-                <option>Suspended</option>
+                <option>{t('All')}</option>
+                <option>{t('Active')}</option>
+                <option>{t('Flagged')}</option>
+                <option>{t('Suspended')}</option>
               </select>
             </div>
           )}
@@ -437,10 +441,10 @@ const AdminPanel = ({
 
         <div className="admin-modal__footer">
           <button type="button" className="admin-btn admin-btn--ghost" onClick={onClose}>
-            Cancel
+            {t('Cancel')}
           </button>
           <button type="button" className="admin-btn admin-btn--primary" onClick={onSave}>
-            Save
+            {t('Save')}
           </button>
         </div>
       </div>
